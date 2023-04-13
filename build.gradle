@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.json:json:20200518' //json
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 	implementation 'org.springframework.boot:spring-boot-starter'
