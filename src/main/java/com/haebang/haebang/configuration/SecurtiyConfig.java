@@ -28,6 +28,8 @@ public class SecurtiyConfig {
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/img/**", "/templates/**", "/").permitAll()
                 .antMatchers("/map*", "/hello").permitAll()
+                .antMatchers("/api/member/test").authenticated()
+                .antMatchers("/api/member/*").anonymous()
                 .and()
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -35,5 +37,6 @@ public class SecurtiyConfig {
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
                 // usernamepasswordAuthen 필터를 거치기 전에 jwt필터를 거치도록 설정
         return http.build();
+        // 로그인 실패시 엔드포인트 or exception ?
     }
 }

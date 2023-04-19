@@ -4,7 +4,7 @@ haebang:
   secret:
     key: KBjgSljEaP7OR%2B2GEj6BTe5T1OQBdskZcWQmvlf9GGx7Foum9BldjdwJpMGIramTZPk7yumJUIdFrXnsROuhsw%3D%3D
   kakaomap:
-    key: 2e1ab347af966350cd08e84de51d9fdb
+    key: ${KAKAO_MAP_APIKEY}
 
 spring:
   h2:
