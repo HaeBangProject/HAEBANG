@@ -55,7 +55,7 @@ public class MapController {
             }
             deal_ymd = year+month;
         }
-        StringBuilder urlBuilder = new StringBuilder("http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?serviceKey="+haebang_key+"&pageNo=1&numOfRows=10&LAWD_CD="+local_code+"&DEAL_YMD="+deal_ymd);
+        StringBuilder urlBuilder = new StringBuilder("http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?serviceKey="+haebang_key+"&pageNo=1&numOfRows=1000&LAWD_CD="+local_code+"&DEAL_YMD="+deal_ymd);
         System.out.println(urlBuilder);
         //urlBuilder.append("&DEAL_YMD=" + URLEncoder.encode("202304","UTF-8"));
 
@@ -93,17 +93,34 @@ public class MapController {
         System.out.println(item);
 
         List<String> address = new ArrayList<String>();
-        List<String> area_code = new ArrayList<String>();
+        List<String> contract = new ArrayList<String>();
+        List<String> apart = new ArrayList<String>();
+        List<String> build = new ArrayList<String>();
+        List<String> area = new ArrayList<String>();
+        List<String> amount = new ArrayList<String>();
 
+
+
+        String test_dong = "역삼동";
         for(int i=0; i<item.length(); i++){
             jsonObject = item.getJSONObject(i);
-            String value = jsonObject.getString("법정동");
+            String value = jsonObject.getString("법정동"); //법정 주소
+            if (value.equals(test_dong)){
             String value2 = String.valueOf(jsonObject.getInt("법정동본번코드"));
             String value3 = String.valueOf(jsonObject.getInt("법정동부번코드"));
+            String contract_year = String.valueOf(jsonObject.getInt("년")); //계약 날짜
+            String contract_month = String.valueOf(jsonObject.getInt("월"));
+            String contract_day = String.valueOf(jsonObject.getInt("일"));
+            String build_year = String.valueOf(jsonObject.getInt("건축년도"));
+            String value6 = String.valueOf(jsonObject.getInt("전용면적"));
+            String value7 = String.valueOf(jsonObject.getString("거래금액"));
+            String dp = String.valueOf(jsonObject.getString("아파트"));
 
-            System.out.println(value);
-            System.out.println(value2);
-            System.out.println(value3);
+
+
+
+
+            
             String test = "0";
             if (value3.equals(test)){
                 address.add(value+value2);
@@ -112,19 +129,61 @@ public class MapController {
                 address.add(value+value2+"-"+value3);
             }
 
+            contract.add(contract_year+"년"+contract_month+"월"+contract_day+"일"); //계약한 날짜
+            apart.add(dp+"아파트"); //아파트
+            build.add(build_year); //건축년도
+            area.add(value6+"㎡"); //전용 면적
+            amount.add(value7+"만원"); //거래금액
+            }
 
         }
         System.out.println(address);
+        System.out.println(contract);
+        System.out.println(apart);
+        System.out.println(build);
+        System.out.println(area);
+        System.out.println(amount);
+
+
         model.addAttribute("address1",address.get(0));
         model.addAttribute("address2",address.get(1));
         model.addAttribute("address3",address.get(2));
         model.addAttribute("address4",address.get(3));
         model.addAttribute("address5",address.get(4));
-//        model.addAttribute("address6",address.get(5));
-//        model.addAttribute("address7",address.get(6));
-//        model.addAttribute("address8",address.get(7));
-//        model.addAttribute("address9",address.get(8));
-//        model.addAttribute("address10",address.get(9));
+
+        model.addAttribute("contract1",contract.get(0));
+        model.addAttribute("contract2",contract.get(1));
+        model.addAttribute("contract3",contract.get(2));
+        model.addAttribute("contract4",contract.get(3));
+        model.addAttribute("contract5",contract.get(4));
+
+        model.addAttribute("apart1",apart.get(0));
+        model.addAttribute("apart2",apart.get(1));
+        model.addAttribute("apart3",apart.get(2));
+        model.addAttribute("apart4",apart.get(3));
+        model.addAttribute("apart5",apart.get(4));
+
+        model.addAttribute("build1",build.get(0));
+        model.addAttribute("build2",build.get(1));
+        model.addAttribute("build3",build.get(2));
+        model.addAttribute("build4",build.get(3));
+        model.addAttribute("build5",build.get(4));
+
+        model.addAttribute("area1",area.get(0));
+        model.addAttribute("area2",area.get(1));
+        model.addAttribute("area3",area.get(2));
+        model.addAttribute("area4",area.get(3));
+        model.addAttribute("area5",area.get(4));
+
+        model.addAttribute("amount1",amount.get(0));
+        model.addAttribute("amount2",amount.get(1));
+        model.addAttribute("amount3",amount.get(2));
+        model.addAttribute("amount4",amount.get(3));
+        model.addAttribute("amount5",amount.get(4));
+
+
+
+
 
         return "map";
     }

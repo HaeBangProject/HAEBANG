@@ -110,12 +110,12 @@
 
 <div id="map" style="width:100%;height:700px;"></div>
 
-<script th:inline="javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=&libraries=services"></script>
+<script th:inline="javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2e1ab347af966350cd08e84de51d9fdb&libraries=services"></script>
 <script th:inline="javascript">
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
             center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-            level: 3 // 지도의 확대 레벨
+            level: 5 // 지도의 확대 레벨 , 250m
         };
 
     // 지도를 생성합니다
@@ -138,7 +138,9 @@
                 position: coords
             });
             // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-            var iwContent = '<div style="padding:5px;">1</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            var iwContent = '<div style="padding:5px;">' +
+                    '주소:[[${address1}]],계약날짜:[[${contract1}]],아파트:[[${apart1}]],건축년도:[[${build1}]],전용면적:[[${area1}]],거래금액:[[${amount1}]]' +
+                    '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                 iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
             // 인포윈도우를 생성합니다
             var infowindow = new kakao.maps.InfoWindow({
@@ -171,7 +173,9 @@
                 position: coords
             });
             // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-            var iwContent = '<div style="padding:5px;">2</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            var iwContent = '<div style="padding:5px;">' +
+                    '주소:[[${address2}]],계약날짜:[[${contract2}]],아파트:[[${apart2}]],건축년도:[[${build2}]],전용면적:[[${area2}]],거래금액:[[${amount2}]]' +
+                    '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                 iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
             // 인포윈도우를 생성합니다
             var infowindow = new kakao.maps.InfoWindow({
@@ -204,7 +208,9 @@
                 position: coords
             });
             // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-            var iwContent = '<div style="padding:5px;">3</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            var iwContent = '<div style="padding:5px;">' +
+                    '주소:[[${address3}]],계약날짜:[[${contract3}]],아파트:[[${apart3}]],건축년도:[[${build3}]],전용면적:[[${area3}]],거래금액:[[${amount3}]]' +
+                    '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                 iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
             // 인포윈도우를 생성합니다
             var infowindow = new kakao.maps.InfoWindow({
@@ -237,7 +243,9 @@
                 position: coords
             });
             // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-            var iwContent = '<div style="padding:5px;">4</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            var iwContent = '<div style="padding:5px;">' +
+                    '주소:[[${address4}]],계약날짜:[[${contract4}]],아파트:[[${apart4}]],건축년도:[[${build4}]],전용면적:[[${area4}]],거래금액:[[${amount4}]]' +
+                    '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                 iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
             // 인포윈도우를 생성합니다
             var infowindow = new kakao.maps.InfoWindow({
@@ -270,7 +278,9 @@
                 position: coords
             });
             // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-            var iwContent = '<div style="padding:5px;">5</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            var iwContent = '<div style="padding:5px;">' +
+                    '주소:[[${address5}]],계약날짜:[[${contract5}]],아파트:[[${apart5}]],건축년도:[[${build5}]],전용면적:[[${area5}]],거래금액:[[${amount5}]]' +
+                    '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                 iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
             // 인포윈도우를 생성합니다
             var infowindow = new kakao.maps.InfoWindow({
