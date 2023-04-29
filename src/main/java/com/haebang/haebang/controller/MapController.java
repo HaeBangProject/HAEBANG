@@ -24,8 +24,6 @@ import org.json.XML;
 @Controller
 public class MapController {
 
-    @Value("${haebang.kakaomap.key}")
-    public String kakaomap_key;
 
     @Value("${haebang.secret.key}")
     private String haebang_key;
@@ -35,7 +33,7 @@ public class MapController {
         System.out.println(month);
         System.out.println(sggCd);
 
-        model.addAttribute("kakaomap_key",kakaomap_key);
+
 
         int local_code;//지역 코드
         if (sggCd==null){
@@ -105,21 +103,16 @@ public class MapController {
         for(int i=0; i<item.length(); i++){
             jsonObject = item.getJSONObject(i);
             String value = jsonObject.getString("법정동"); //법정 주소
-            if (value.equals(test_dong)){
-            String value2 = String.valueOf(jsonObject.getInt("법정동본번코드"));
-            String value3 = String.valueOf(jsonObject.getInt("법정동부번코드"));
-            String contract_year = String.valueOf(jsonObject.getInt("년")); //계약 날짜
-            String contract_month = String.valueOf(jsonObject.getInt("월"));
-            String contract_day = String.valueOf(jsonObject.getInt("일"));
-            String build_year = String.valueOf(jsonObject.getInt("건축년도"));
-            String value6 = String.valueOf(jsonObject.getInt("전용면적"));
-            String value7 = String.valueOf(jsonObject.getString("거래금액"));
-            String dp = String.valueOf(jsonObject.getString("아파트"));
-
-
-
-
-
+            //if (value.equals(test_dong)) {
+                String value2 = String.valueOf(jsonObject.getInt("법정동본번코드"));
+                String value3 = String.valueOf(jsonObject.getInt("법정동부번코드"));
+                String contract_year = String.valueOf(jsonObject.getInt("년")); //계약 날짜
+                String contract_month = String.valueOf(jsonObject.getInt("월"));
+                String contract_day = String.valueOf(jsonObject.getInt("일"));
+                String build_year = String.valueOf(jsonObject.getInt("건축년도"));
+                String value6 = String.valueOf(jsonObject.getInt("전용면적"));
+                String value7 = String.valueOf(jsonObject.getString("거래금액"));
+                String dp = String.valueOf(jsonObject.getString("아파트"));
             
             String test = "0";
             if (value3.equals(test)){
@@ -134,7 +127,8 @@ public class MapController {
             build.add(build_year); //건축년도
             area.add(value6+"㎡"); //전용 면적
             amount.add(value7+"만원"); //거래금액
-            }
+            //}
+
 
         }
         System.out.println(address);
