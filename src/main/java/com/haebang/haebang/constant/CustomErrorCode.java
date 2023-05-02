@@ -10,7 +10,11 @@ public enum CustomErrorCode {
     EMPTY_ACCESS_TOKEN(000, "토큰이 비어있습니다"),
     ALREADY_JOINED_MEMBER(000, "이미 가입한 회원입니다"),
     INVALID_MEMBER_INFO(000, "잘못된 회원정보 입니다"),
-    UNSUPPORTED_TOKEN(000, "지원하지 않는 토큰입니다");
+    UNSUPPORTED_TOKEN(000, "지원하지 않는 토큰입니다"),
+
+    INVALID_EDIT_USER(000, "수정 불가능한 사용자 입니다"),
+    INSUFFICIENT_ITEM_INFO(000, "집 내놓기 정보가 부족합니다");
+    
     final private int code;
     final private String message;
 }
