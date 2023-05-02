@@ -1,5 +1,6 @@
 package com.haebang.haebang.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.Collection;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
 public class Member implements UserDetails {// user은 ddl예약어로 member로 변경함
@@ -22,12 +24,6 @@ public class Member implements UserDetails {// user은 ddl예약어로 member로
     private Long userId;
     private String password;
     private String username;
-
-    public Member(Long userId, String password, String username){
-        this.userId = userId;
-        this.password = password;
-        this.username = username;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
