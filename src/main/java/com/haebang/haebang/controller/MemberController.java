@@ -1,5 +1,6 @@
 package com.haebang.haebang.controller;
 
+import com.haebang.haebang.dto.JwtDto;
 import com.haebang.haebang.dto.MemberReqDto;
 import com.haebang.haebang.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class MemberController {
     // 로그인
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody MemberReqDto dto){
-        String token = userService.login(dto.getUsername(), dto.getPassword());
+        JwtDto token = userService.login(dto.getUsername(), dto.getPassword());
         return ResponseEntity.ok().body(token);
     }
     //인중

@@ -1,6 +1,7 @@
 package com.haebang.haebang.service;
 
 import com.haebang.haebang.constant.CustomErrorCode;
+import com.haebang.haebang.dto.JwtDto;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.MemberRepository;
 import com.haebang.haebang.entity.Member;
@@ -31,13 +32,18 @@ public class MemberService {
         return "회원가입 성공";
     }
 
-    public String login(String username, String password){
+    public JwtDto login(String username, String password){
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(()-> new CustomException(CustomErrorCode.INVALID_MEMBER_INFO) );// 존재하지 않는 사용자
         if( !encoder.matches(  password, member.getPassword()) ){
             throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
         }
-        String token = jwtUtil.createToken(member.getUsername());
-        return token;
+        String accessToken = jwtUtil.createToken(member.getUsername(), "ATK", 60L);
+        String refreshToken = jwtUtil.createToken(member.getUsername(), "RFT", 60L);
+
+        return JwtDto.builder()
+                .refreshToken(refreshToken)
+                .accessToken(accessToken)
+                .build();
     }
 }

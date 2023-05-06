@@ -4,13 +4,14 @@ import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.dto.AptItemReq;
 import com.haebang.haebang.entity.Apt;
 import com.haebang.haebang.entity.Item;
-import com.haebang.haebang.entity.Member;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.AptRepository;
 import com.haebang.haebang.repository.ItemRepository;
 import com.haebang.haebang.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -37,7 +38,7 @@ public class AptService {
                 .title(req.getTitle())
                 .price(req.getPrice())
                 .dong(req.getDong())
-                .ho(req.getHo())
+                .floor(req.getFloor())
                 .build();
 
         itemRepository.save(item);
@@ -52,16 +53,23 @@ public class AptService {
     }
 
     public Item updateItem(String username, Long idx, AptItemReq req){
-        // 아파트 정보는 수정 불가능
+        // 아파트 정보는 수정 x
         Item item = itemRepository.findById(idx).orElseThrow();
-        if(item.getUsername() != username) throw new CustomException(CustomErrorCode.INVALID_EDIT_USER);
+        if(!item.getUsername().equals(username)) throw new CustomException(CustomErrorCode.INVALID_EDIT_USER);
 
         item.update(req);
         itemRepository.save(item);
         return item;
     }
 
-//    public List<Item> findItemsByParams(){
-//
-//    }
+    public List<Item> findItemsByParams(){
+        return itemRepository.findAll();
+    }
+
+    public boolean deleteItem(String username, Long idx){
+        Item item = itemRepository.findById(idx).orElseThrow();
+        if(!item.getUsername().equals(username)) throw new CustomException(CustomErrorCode.INVALID_EDIT_USER);
+        itemRepository.delete(item);
+        return true;
+    }
 }

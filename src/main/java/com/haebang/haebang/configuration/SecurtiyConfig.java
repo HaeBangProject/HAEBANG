@@ -28,7 +28,7 @@ public class SecurtiyConfig {
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/img/**", "/templates/**", "/").permitAll()
                 .antMatchers("/map*", "/hello").permitAll()
-                .antMatchers("/api/member/test").authenticated()
+                .antMatchers("/api/member/test","/api/apt/item", "/api/apt/item/**").authenticated()
                 .antMatchers("/api/member/*").anonymous()
                 .and()
                 .formLogin().disable()
