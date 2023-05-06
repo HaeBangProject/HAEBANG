@@ -1,7 +1,6 @@
 package com.haebang.haebang.service;
 
-import com.haebang.haebang.controller.MapController;
-import lombok.RequiredArgsConstructor;
+import com.haebang.haebang.dto.MapDto;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
@@ -13,34 +12,35 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@RequiredArgsConstructor
 @Service
 public class MapService {
     @Value("${haebang.secret.key}")
     private String haebang_key;
 
-    public String map(String year,String month,Integer sggCd,String dong) throws IOException {
-        int local_code;//지역 코드
-        if (sggCd==null){
-            local_code=11320;
-        }
-        else {
-            local_code = sggCd;
-        }
+    public MapDto search_map(String year, String month, Integer sggCd, String dong) throws IOException {
 
+
+        int local_code;//지역 코드
         String deal_ymd ; //계약년월
-        if (year==null || month==null){
-            deal_ymd="202304";
-        }
-        else {
+//        if (sggCd==null && year==null&& month==null && dong==null){
+//            local_code=11320;
+//            deal_ymd="202304";
+//            dong="쌍문동";
+//        }
+
+            local_code = sggCd;
             if (month.length()==1){
                 month="0"+month;
             }
             deal_ymd = year+month;
-        }
+
+
+
         StringBuilder urlBuilder = new StringBuilder("http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?serviceKey="+haebang_key+"&pageNo=1&numOfRows=1000&LAWD_CD="+local_code+"&DEAL_YMD="+deal_ymd);
         System.out.println(urlBuilder);
 
@@ -68,14 +68,14 @@ public class MapService {
 
         JSONObject json = XML.toJSONObject(sb.toString());
         String jsonStr = json.toString();
-        System.out.println(jsonStr);
+        //System.out.println(jsonStr);
 
         JSONObject jsonObject = new JSONObject(jsonStr);
         JSONObject response = (JSONObject)jsonObject.get("response");
         JSONObject body = (JSONObject)response.get("body");
         JSONObject items = (JSONObject)body.get("items");
         JSONArray item = (JSONArray) items.get("item");
-        System.out.println(item);
+
 
         List<String> address = new ArrayList<String>();
         List<String> contract = new ArrayList<String>();
@@ -87,6 +87,7 @@ public class MapService {
 
 
         String test_dong = dong; //동
+
         for(int i=0; i<item.length(); i++){
             jsonObject = item.getJSONObject(i);
             String value = jsonObject.getString("법정동"); //법정 주소
@@ -118,16 +119,23 @@ public class MapService {
 
 
 
+
+
         }
-        System.out.println(address);
-        System.out.println(contract);
-        System.out.println(apart);
-        System.out.println(build);
-        System.out.println(area);
-        System.out.println(amount);
+
+
+        MapDto mapDto = new MapDto();
+        mapDto.setAddress(address);
+        mapDto.setContract(contract);
+        mapDto.setApart(apart);
+        mapDto.setBuild(build);
+        mapDto.setArea(area);
+        mapDto.setAmount(amount);
 
 
 
-        return "";
+
+        return mapDto;
     }
+
 }

@@ -35,6 +35,11 @@ dependencies {
 
 	implementation 'mysql:mysql-connector-java'
 
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'io.lettuce:lettuce-core:6.1.5.RELEASE'
+
+
 //	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359' //데이터 타입 컨버터 문제
 }
 
