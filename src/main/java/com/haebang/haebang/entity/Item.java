@@ -1,5 +1,6 @@
 package com.haebang.haebang.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.haebang.haebang.dto.AptItemReq;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,7 +20,7 @@ public class Item {
     String title;
     String text;
     String dong;
-    String ho;
+    int floor;
     Long price;
     Long hits;
 
@@ -28,6 +29,7 @@ public class Item {
 
     String username;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "apt_id")
     Apt apt;
@@ -37,7 +39,7 @@ public class Item {
         this.title = req.getTitle();
         this.text = req.getText();
         this.dong = req.getDong();
-        this.ho = req.getHo();
+        this.floor = req.getFloor();
         this.price = req.getPrice();
     }
 }

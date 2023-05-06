@@ -1,6 +1,7 @@
 package com.haebang.haebang.utils;
 
 import com.haebang.haebang.constant.CustomErrorCode;
+import com.haebang.haebang.dto.JwtDto;
 import com.haebang.haebang.exception.CustomException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -18,21 +19,29 @@ public class JwtProvider {
     final private Key key;
 
     public JwtProvider(@Value("${jwt.secret}") String secretKey){
-        System.out.println("jwt 시크릿 키는 ="+secretKey);
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(String username){
+    /**
+     * @param username username
+     * @param typ ATK, RFT 타입
+     * @param duration 1시간 단위
+     * @return 토큰
+     */
+    public String createToken(String username, String typ, Long duration){
         Claims claims = Jwts.claims();
         claims.put("username", username);
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setClaims(claims)
+                .setHeaderParam("typ", typ)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*60L))// 한시간
+                .setExpiration(new Date(System.currentTimeMillis() + duration * 1000*60*60L))// 한시간
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+
+        return token;
     }
 
     public String getUsername(String token){
