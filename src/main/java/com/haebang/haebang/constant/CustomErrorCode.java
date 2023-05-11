@@ -13,8 +13,11 @@ public enum CustomErrorCode {
     UNSUPPORTED_TOKEN(000, "지원하지 않는 토큰입니다"),
 
     INVALID_EDIT_USER(000, "수정 불가능한 사용자 입니다"),
-    INSUFFICIENT_ITEM_INFO(000, "집 내놓기 정보가 부족합니다");
-    
+    INSUFFICIENT_ITEM_INFO(000, "집 내놓기 정보가 부족합니다"),
+
+    LOGOUTED_MEMBER_WARN(000, "경고 : 로그아웃한 회원으로 재로그인 바랍니다"),
+    RTK_REISSUE_ERROR(000, "경고 : 재발급 불가 재로그인 바랍니다");
+
     final private int code;
     final private String message;
 }

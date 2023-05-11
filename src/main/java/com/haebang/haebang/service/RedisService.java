@@ -1,8 +1,12 @@
 package com.haebang.haebang.service;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,5 +44,28 @@ public class RedisService {
         return new ArrayList<>(Objects.requireNonNull(scoreRange));
 
     }
+    public void getRedisStringValue(String key) {
+        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
+        System.out.println("Redis key : " + key);
+        System.out.println("Redis value : " + stringValueOperations.get(key));
+    }
 
+    public void setRedisStringValue(String key, String value) {
+        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
+        stringValueOperations.set(key, value);
+        System.out.println("Redis key : " + key);
+        System.out.println("Redis value : " + stringValueOperations.get(key));
+    }
+    public void setRedisStringValueExpire(String key, String value, Long duraionTime) {
+        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
+        stringValueOperations.set(key, value, duraionTime);
+        System.out.println("Redis key : " + key);
+        System.out.println("Redis value : " + stringValueOperations.get(key));
+    }
+
+    public void deleteKey(String key){
+        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
+        stringValueOperations.getAndDelete(key);
+        System.out.println("Delete Key : "+key);
+    }
 }

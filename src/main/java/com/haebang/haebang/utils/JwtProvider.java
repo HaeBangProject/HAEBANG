@@ -1,13 +1,19 @@
 package com.haebang.haebang.utils;
 
-
+import com.haebang.haebang.constant.CustomErrorCode;
+import com.haebang.haebang.dto.JwtDto;
+import com.haebang.haebang.exception.CustomException;
+import com.haebang.haebang.service.CustomRedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 
@@ -15,10 +21,12 @@ import java.util.Date;
 @Component
 public class JwtProvider {
     final private Key key;
+    final private CustomRedisService redisService;
 
-    public JwtProvider(@Value("${jwt.secret}") String secretKey){
+    public JwtProvider(@Value("${jwt.secret}") String secretKey, CustomRedisService redisService){
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(keyBytes);
+        this.redisService = redisService;
     }
 
     /**
@@ -63,4 +71,32 @@ public class JwtProvider {
         }
         return false;
     }
+
+    public Long getExpireTime(String token){
+        Date expire = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
+                .getBody().getExpiration();
+        return expire.getTime();
+    }
+    public String getTokenType(String token){
+        return Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token).getHeader().getType();
+    }
+
+    public String getValueFromToken(String token){
+        String value = redisService.getStringValue(token);
+        if(value!=null) return redisService.getStringValue(token);// logout , username
+
+        new CustomException(CustomErrorCode.LOGOUTED_MEMBER_WARN);
+        return null;
+    }
+
+    /**
+     * @param token ATK, RTK
+     * @param value logout, username
+     */
+    public void setTokenValueAndTime(String token, String value){
+        Long duration = getExpireTime(token) - new Date(System.currentTimeMillis()).getTime();
+        redisService.setStringKey(token, value, Duration.ofMillis(duration));
+    }
+
 }
