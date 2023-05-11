@@ -1,50 +1,44 @@
 package com.haebang.haebang.service;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Service
+@RequiredArgsConstructor
 public class RedisService {
+    final StringRedisTemplate redisTemplate;
 
-
-
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
-    
-    //검색시마다 key의 value값 카운트
     public void ranking(String content){
-        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
-        if(!Objects.equals(stringValueOperations.get(content), null)) {
-            int score = Integer.parseInt(Objects.requireNonNull(stringValueOperations.get(content)))+1;
-            stringValueOperations.set(content, String.valueOf(score));
+        ZSetOperations<String,String> stringStringZSetOperations = redisTemplate.opsForZSet();
 
+        double score = 0.0;
+
+        try{
+            // 검색을하면 해당검색어를 value에 저장하고, score에 1을 준다
+            redisTemplate.opsForZSet().incrementScore("ranking",content,1);
         }
-        else{
-            stringValueOperations.set(content, "1");
-
+        catch (Exception e){
+            System.out.println(e.toString());
         }
-        System.out.println("Redis key : " + content);
-        System.out.println("Redis value : " + stringValueOperations.get(content));
-    }
-    public void getRedisStringValue(String key) {
+        //score를 1씩 올려준다.
+        redisTemplate.opsForZSet().incrementScore("ranking",content,score);
 
-        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
-        System.out.println("Redis key : " + key);
-        System.out.println("Redis value : " + stringValueOperations.get(key));
+        Set<ZSetOperations.TypedTuple<String>> rankSet = stringStringZSetOperations.reverseRangeWithScores("ranking",0,9);
+        System.out.println(rankSet);
+
     }
 
-    public void setRedisStringValue(String key, String value) {
-        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
-        stringValueOperations.set(key, value);
-        System.out.println("Redis key : " + key);
-        System.out.println("Redis value : " + stringValueOperations.get(key));
+    public List<String> rank_list(){
+        ZSetOperations<String,String> stringStringZSetOperations = redisTemplate.opsForZSet();
+        Set<String> scoreRange = stringStringZSetOperations.reverseRange("ranking",0,9);
+        return new ArrayList<>(Objects.requireNonNull(scoreRange));
+
     }
-
-
 
 }

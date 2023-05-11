@@ -12,10 +12,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class MapService {
@@ -24,22 +22,14 @@ public class MapService {
 
     public MapDto search_map(String year, String month, Integer sggCd, String dong) throws IOException {
 
-
         int local_code;//지역 코드
         String deal_ymd ; //계약년월
-//        if (sggCd==null && year==null&& month==null && dong==null){
-//            local_code=11320;
-//            deal_ymd="202304";
-//            dong="쌍문동";
-//        }
 
-            local_code = sggCd;
-            if (month.length()==1){
-                month="0"+month;
-            }
-            deal_ymd = year+month;
-
-
+        local_code = sggCd;
+        if (month.length()==1){
+            month="0"+month;
+        }
+        deal_ymd = year+month;
 
         StringBuilder urlBuilder = new StringBuilder("http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?serviceKey="+haebang_key+"&pageNo=1&numOfRows=1000&LAWD_CD="+local_code+"&DEAL_YMD="+deal_ymd);
         System.out.println(urlBuilder);
@@ -51,7 +41,7 @@ public class MapService {
         System.out.println("Response code: " + conn.getResponseCode()); /* 연결 자체에 대한 확인이 필요하므로 추가합니다.*/
 
         BufferedReader rd;
-// 서비스코드가 정상이면 200~300사이의 숫자가 나옵니다.
+        // 서비스코드가 정상이면 200~300사이의 숫자가 나옵니다.
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
             rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         } else {
@@ -64,11 +54,9 @@ public class MapService {
         }
         rd.close();
         conn.disconnect();
-        //System.out.println(sb.toString());
 
         JSONObject json = XML.toJSONObject(sb.toString());
         String jsonStr = json.toString();
-        //System.out.println(jsonStr);
 
         JSONObject jsonObject = new JSONObject(jsonStr);
         JSONObject response = (JSONObject)jsonObject.get("response");
@@ -84,45 +72,38 @@ public class MapService {
         List<String> area = new ArrayList<String>();
         List<String> amount = new ArrayList<String>();
 
-
-
         String test_dong = dong; //동
 
         for(int i=0; i<item.length(); i++){
             jsonObject = item.getJSONObject(i);
             String value = jsonObject.getString("법정동"); //법정 주소
             if (value.equals(test_dong)) {
-            String value2 = String.valueOf(jsonObject.getInt("법정동본번코드"));
-            String value3 = String.valueOf(jsonObject.getInt("법정동부번코드"));
+            String code_main = String.valueOf(jsonObject.getInt("법정동본번코드"));
+            String code_sub = String.valueOf(jsonObject.getInt("법정동부번코드"));
             String contract_year = String.valueOf(jsonObject.getInt("년")); //계약 날짜
             String contract_month = String.valueOf(jsonObject.getInt("월"));
             String contract_day = String.valueOf(jsonObject.getInt("일"));
             String build_year = String.valueOf(jsonObject.getInt("건축년도"));
-            String value6 = String.valueOf(jsonObject.getInt("전용면적"));
-            String value7 = String.valueOf(jsonObject.getString("거래금액"));
+            String dp_area = String.valueOf(jsonObject.getInt("전용면적"));
+            String dp_amount = String.valueOf(jsonObject.getString("거래금액"));
             String dp = String.valueOf(jsonObject.getString("아파트"));
 
             String test = "0";
-            if (value3.equals(test)){
-                address.add(value+value2);
+            if (code_sub.equals(test)){
+                address.add(value+code_main);
             }
             else{
-                address.add(value+value2+"-"+value3);
+                address.add(value+code_main+"-"+code_sub);
             }
 
             contract.add(contract_year+"년"+contract_month+"월"+contract_day+"일"); //계약한 날짜
             apart.add(dp+"아파트"); //아파트
             build.add(build_year); //건축년도
-            area.add(value6+"㎡"); //전용 면적
-            amount.add(value7+"만원"); //거래금액
+            area.add(dp_area+"㎡"); //전용 면적
+            amount.add(dp_amount+"만원"); //거래금액
             }
 
-
-
-
-
         }
-
 
         MapDto mapDto = new MapDto();
         mapDto.setAddress(address);
@@ -131,9 +112,6 @@ public class MapService {
         mapDto.setBuild(build);
         mapDto.setArea(area);
         mapDto.setAmount(amount);
-
-
-
 
         return mapDto;
     }

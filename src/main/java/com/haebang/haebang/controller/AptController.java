@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestController()
+@RestController
 @RequestMapping("api/apt")
 public class AptController {
     final AptService aptService;
