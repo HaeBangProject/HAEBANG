@@ -45,26 +45,26 @@ public class RedisService {
 
     }
     public void getRedisStringValue(String key) {
-        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
+        ValueOperations<String, String> stringValueOperations = redisTemplate.opsForValue();
         System.out.println("Redis key : " + key);
         System.out.println("Redis value : " + stringValueOperations.get(key));
     }
 
     public void setRedisStringValue(String key, String value) {
-        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
+        ValueOperations<String, String> stringValueOperations = redisTemplate.opsForValue();
         stringValueOperations.set(key, value);
         System.out.println("Redis key : " + key);
         System.out.println("Redis value : " + stringValueOperations.get(key));
     }
     public void setRedisStringValueExpire(String key, String value, Long duraionTime) {
-        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
+        ValueOperations<String, String> stringValueOperations = redisTemplate.opsForValue();
         stringValueOperations.set(key, value, duraionTime);
         System.out.println("Redis key : " + key);
         System.out.println("Redis value : " + stringValueOperations.get(key));
     }
 
     public void deleteKey(String key){
-        ValueOperations<String, String> stringValueOperations = stringRedisTemplate.opsForValue();
+        ValueOperations<String, String> stringValueOperations = redisTemplate.opsForValue();
         stringValueOperations.getAndDelete(key);
         System.out.println("Delete Key : "+key);
     }

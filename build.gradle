@@ -15,9 +15,11 @@ repositories {
 dependencies {
 	implementation 'org.json:json:20200518' //json
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
 	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	annotationProcessor 'org.projectlombok:lombok'
@@ -38,7 +40,14 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'io.lettuce:lettuce-core:6.1.5.RELEASE'
 
+	//web socket
+	//implementation "com.fasterxml.jackson.core:jackson-databind:2.11.3"
+
+	//stomp
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 //	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359' //데이터 타입 컨버터 문제
+
 }
 
 tasks.named('test') {
