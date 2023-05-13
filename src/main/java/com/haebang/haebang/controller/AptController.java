@@ -2,16 +2,21 @@ package com.haebang.haebang.controller;
 
 import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.dto.AptItemReq;
+import com.haebang.haebang.entity.Item;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.service.AptService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
+import org.json.HTTP;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.model.ITemplateStart;
 
+import javax.annotation.security.PermitAll;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -43,10 +48,15 @@ public class AptController {
     }
 
     @GetMapping("items")// 검색 조건 params
-    public ResponseEntity getAptItems(@RequestParam Map<String, Object> params
+    public ResponseEntity getAptItems(@RequestParam Map<String, String> params
     ){
-        // TODO: 현재 전체 조회임. 검색조건 어떻게 할지 정해서 조회 수정하기
-        return new ResponseEntity( aptService.findItemsByParams(), HttpStatus.OK);
+        if(params.isEmpty()){// param없으면
+            return new ResponseEntity( aptService.findAllItems(), HttpStatus.OK);
+        }
+        // TODO: 아파트 정보 받아서 해당 아파트 매물 조회 하기로 바꿈
+        List<Item> items = aptService.findItemsByRoadAddress(params.get("roadAddress"));
+        if(items==null) return new ResponseEntity("동일한 주소의 매물이 없습니다", HttpStatus.OK);
+        return new ResponseEntity(items, HttpStatus.OK);
     }
 
     @GetMapping("item/{id}")// 하나만 조회

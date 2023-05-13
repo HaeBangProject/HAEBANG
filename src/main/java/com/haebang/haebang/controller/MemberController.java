@@ -6,15 +6,13 @@ import com.haebang.haebang.dto.MemberReqDto;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.service.MemberService;
 import com.haebang.haebang.utils.JwtProvider;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,7 +42,7 @@ public class MemberController {
         return ResponseEntity.ok().body(authentication.getName()+"님 로그인이 완료되었습니다");
     }
 
-    @PostMapping("reissue")
+    @GetMapping("reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request){
         String accessToken = memberService.reissue(
                 request.getHeader(HttpHeaders.AUTHORIZATION).split(" ")[1]

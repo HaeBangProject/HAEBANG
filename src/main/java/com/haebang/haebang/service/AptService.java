@@ -9,9 +9,12 @@ import com.haebang.haebang.repository.AptRepository;
 import com.haebang.haebang.repository.ItemRepository;
 import com.haebang.haebang.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,12 +24,19 @@ public class AptService {
     final ItemRepository itemRepository;
 
     public Item createItem(String username, AptItemReq req) {
-        Apt apt;
-        if (req.getAptId() == null) {
-            apt = new Apt();
+        Apt apt = new Apt();
+        if (req.getRoadAddress() == null) {// 주소가 있어야 함
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "도로명주소를 적어주세요");
+        }
+
+        Optional<Apt> optional = aptRepository.findByRoadAddress(req.getRoadAddress());
+        if(optional.isPresent()){// 이미 저장된 apt 가 있을때
+            apt = optional.get();
+        }else{// 새 아파트 등록할때
+            apt.setRoadAddress(req.getRoadAddress());
+            apt.setDp(req.getDp());
+            System.out.println("아파트 새로 저장"+apt.getRoadAddress()+" "+apt.getDp());
             aptRepository.save(apt);
-        } else {
-            apt = aptRepository.findById(req.getAptId()).orElseThrow();
         }
 
         Item item = Item.builder()
@@ -62,9 +72,16 @@ public class AptService {
         return item;
     }
 
-    public List<Item> findItemsByParams(){
+    public List<Item> findAllItems(){
         return itemRepository.findAll();
     }
+    public List<Item> findItemsByRoadAddress(String roadAddress){
+        // apt 리포지토리에서 꺼내서 item list 반환
+        Optional<Apt> entity = aptRepository.findByRoadAddress(roadAddress);
+        if(entity.isEmpty()) return null;
+        return entity.get().getItems();
+    }
+
 
     public boolean deleteItem(String username, Long idx){
         Item item = itemRepository.findById(idx).orElseThrow();

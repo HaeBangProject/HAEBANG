@@ -30,7 +30,7 @@ public class Item {
     String username;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "apt_id")
     Apt apt;
 

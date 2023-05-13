@@ -6,10 +6,12 @@ import lombok.Data;
 
 @Data
 public class AptItemReq {
+    // 아파트 정보
     Long aptId;
-    // 지도에서 찾은 아파트 지도 정보
-    //...
+    String roadAddress;
+    String dp;// 아파트 이름
 
+    // 매물 정보
     String phoneNumber;
     String title;
     String text;
