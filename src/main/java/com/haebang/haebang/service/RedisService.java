@@ -16,7 +16,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class RedisService {
-    final StringRedisTemplate redisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
     public void ranking(String content){
         ZSetOperations<String,String> stringStringZSetOperations = redisTemplate.opsForZSet();
