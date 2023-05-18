@@ -6,10 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -22,12 +26,19 @@ public class Member implements UserDetails {// user은 ddl예약어로 member로
     private Long userId;
     @NotNull
     private String password;
+    @NotNull
     @Column(unique = true)
     private String username;
+    @NotNull
+    @Column(unique = true)
+    private String email;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public Collection<? extends GrantedAuthority> getAuthorities()
+    {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        return authorities;
     }
 
     @Override

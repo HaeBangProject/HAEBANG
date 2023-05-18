@@ -28,6 +28,7 @@ public class UserService implements UserDetailsService {
         return Member.builder()
                 .userId(entity.getUserId())
                 .username(entity.getUsername())
+                .email(entity.getEmail())
                 .password(bCryptPasswordEncoder.encode( entity.getPassword()) )
                 .build();
     }

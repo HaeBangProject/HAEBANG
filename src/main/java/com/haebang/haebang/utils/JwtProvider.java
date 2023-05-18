@@ -2,6 +2,7 @@ package com.haebang.haebang.utils;
 
 import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.dto.JwtDto;
+import com.haebang.haebang.dto.MemberReqDto;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.service.CustomRedisService;
 import io.jsonwebtoken.*;
@@ -30,14 +31,16 @@ public class JwtProvider {
     }
 
     /**
-     * @param username username
+     * @param dto 로그인 한 사람의 정보
      * @param typ ATK, RFT 타입
      * @param duration 1시간 단위
      * @return 토큰
      */
-    public String createToken(String username, String typ, Long duration){
+    public String createToken(MemberReqDto dto, String typ, Long duration){
         Claims claims = Jwts.claims();
-        claims.put("username", username);
+        claims.put("username", dto.getUsername());
+        claims.put("auth", "ROLE_USER");
+        claims.put("email", dto.getEmail());
 
         String token = Jwts.builder()
                 .setClaims(claims)
@@ -54,6 +57,11 @@ public class JwtProvider {
         return Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token)
                 .getBody().get("username", String.class);
+    }
+    public String getEmail(String token){
+        return Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token)
+                .getBody().get("email", String.class);
     }
 
     public boolean validateToken(String token){
@@ -84,7 +92,7 @@ public class JwtProvider {
 
     public String getValueFromToken(String token){
         String value = redisService.getStringValue(token);
-        if(value!=null) return redisService.getStringValue(token);// logout , username
+        if(value!=null) return redisService.getStringValue(token);// logout(ATK) or email(RTK)
 
         new CustomException(CustomErrorCode.LOGOUTED_MEMBER_WARN);
         return null;
@@ -92,7 +100,7 @@ public class JwtProvider {
 
     /**
      * @param token ATK, RTK
-     * @param value logout, username
+     * @param value logout, email
      */
     public void setTokenValueAndTime(String token, String value){
         Long duration = getExpireTime(token) - new Date(System.currentTimeMillis()).getTime();

@@ -15,17 +15,17 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping(value = "/chat")
+@RequestMapping(value = "chat")
 public class RoomController {
 
     private final ChatRoomRepository repository;
 
     //채팅방 목록 조회
-    @RequestMapping(value = "/rooms")
+    @RequestMapping(value = "rooms")
     public ModelAndView rooms(){
         System.out.println("test");
         log.info("# All Chat Rooms");
-        ModelAndView mv = new ModelAndView("rooms");
+        ModelAndView mv = new ModelAndView("chat/rooms");
 
         mv.addObject("list", repository.findAllRooms());
 
@@ -33,7 +33,7 @@ public class RoomController {
     }
 
     //채팅방 개설
-    @PostMapping(value = "/room")
+    @PostMapping(value = "room")
     public String create(@RequestParam String name, @NotNull RedirectAttributes rttr){
 
         log.info("# Create Chat Room , name: " + name);
@@ -42,11 +42,12 @@ public class RoomController {
     }
 
     //채팅방 조회
-    @GetMapping("/room")
+    @GetMapping("room")
     public void getRoom(String roomId, Model model){
 
         log.info("# get Chat Room, roomID : " + roomId);
 
         model.addAttribute("room", repository.findRoomById(roomId));
+
     }
 }

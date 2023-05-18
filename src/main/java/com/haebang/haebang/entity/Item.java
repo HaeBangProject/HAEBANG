@@ -3,9 +3,11 @@ package com.haebang.haebang.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.haebang.haebang.dto.AptItemReq;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -24,8 +26,8 @@ public class Item {
     Long price;
     Long hits;
 
-    @CreatedDate
-    Date date;
+    @CreationTimestamp
+    LocalDateTime createdDate;
 
     String username;
 

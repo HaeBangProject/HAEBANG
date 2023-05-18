@@ -27,20 +27,18 @@ public class SecurtiyConfig {
                 .headers().frameOptions().disable()// h2 사용 iframe 허용
                 .and()
                 .authorizeRequests()
-                .antMatchers("/css/**", "/js/**", "/img/**", "/templates/**", "/").permitAll()
-                .antMatchers("/map*", "/hello", "/chat/**").permitAll()
+                .antMatchers("/css/**", "/js/**", "/img/**", "/").permitAll()
+                .antMatchers( "/hello", "/chat/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/apt/item/*", "/api/apt/items", "/api/apt/items?**").permitAll()
                 .antMatchers("/api/apt/item**").authenticated()
                 .antMatchers("/api/member/test").authenticated()
                 .antMatchers("/api/member/*").anonymous()
-                .anyRequest().permitAll()
                 .and()
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
-                // usernamepasswordAuthen 필터를 거치기 전에 jwt필터를 거치도록 설정
+                // UsernamePasswordAuthenticationFilter 필터를 거치기 전에 jwt필터를 거치도록 설정
         return http.build();
-        // 로그인 실패시 엔드포인트 or exception ?
     }
 }

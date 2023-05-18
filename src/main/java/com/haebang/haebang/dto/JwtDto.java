@@ -2,12 +2,13 @@ package com.haebang.haebang.dto;
 
 import lombok.*;
 
-@Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 @Data
 public class JwtDto {
-    String grantType;
+    @Builder.Default
+    String grantType = "Bearer";
     String accessToken;
     String refreshToken;
 }

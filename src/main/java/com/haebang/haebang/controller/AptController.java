@@ -7,15 +7,11 @@ import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.service.AptService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.implementation.bytecode.assign.Assigner;
-import org.json.HTTP;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.model.ITemplateStart;
 
-import javax.annotation.security.PermitAll;
 import java.util.List;
 import java.util.Map;
 

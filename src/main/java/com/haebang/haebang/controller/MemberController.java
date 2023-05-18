@@ -26,13 +26,13 @@ public class MemberController {
     // 회원 가입
     @PostMapping("join")
     public ResponseEntity<?> join(@RequestBody MemberReqDto joinReqDto){
-        String text = memberService.join(joinReqDto.getUsername(), joinReqDto.getPassword());
+        String text = memberService.join(joinReqDto.getUsername(), joinReqDto.getPassword(), joinReqDto.getEmail());
         return ResponseEntity.ok().body(text);
     }
     // 로그인
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody MemberReqDto dto){
-        JwtDto token = memberService.login(dto.getUsername(), dto.getPassword());
+        JwtDto token = memberService.login(dto);
         return ResponseEntity.ok().body(token);
     }
     //인중

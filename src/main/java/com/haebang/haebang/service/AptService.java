@@ -25,8 +25,8 @@ public class AptService {
 
     public Item createItem(String username, AptItemReq req) {
         Apt apt = new Apt();
-        if (req.getRoadAddress() == null) {// 주소가 있어야 함
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "도로명주소를 적어주세요");
+        if (req.getRoadAddress() == null || req.getRoadAddress().split(" ").length!=2) {// 주소가 있어야하고, 포멧에 맞아야 함
+            throw new CustomException(CustomErrorCode.INVALID_FORMAT_ADDRESS);
         }
 
         Optional<Apt> optional = aptRepository.findByRoadAddress(req.getRoadAddress());

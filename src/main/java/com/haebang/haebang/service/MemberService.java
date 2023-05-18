@@ -2,6 +2,7 @@ package com.haebang.haebang.service;
 
 import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.dto.JwtDto;
+import com.haebang.haebang.dto.MemberReqDto;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.MemberRepository;
 import com.haebang.haebang.entity.Member;
@@ -23,26 +24,31 @@ public class MemberService {
     final private MemberRepository memberRepository;
     final private BCryptPasswordEncoder encoder;
 
-    public String join(String username, String password){
+    public String join(String username, String password, String email){
         if( memberRepository.findByUsername(username).isPresent() ) {
             throw new CustomException(CustomErrorCode.ALREADY_JOINED_MEMBER);
         }
         memberRepository.save(Member.builder()
                 .username(username)
+                .email(email)
                 .password(encoder.encode( password )).build());
         return "회원가입 성공";
     }
 
-    public JwtDto login(String username, String password){
-        Member member = memberRepository.findByUsername(username)
+    public JwtDto login(MemberReqDto dto){
+        Member member = memberRepository.findByUsername(dto.getUsername())
                 .orElseThrow(()-> new CustomException(CustomErrorCode.INVALID_MEMBER_INFO) );// 존재하지 않는 사용자
-        if( !encoder.matches(  password, member.getPassword()) ){
+        if( !encoder.matches(  dto.getPassword(), member.getPassword()) ){
             throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
         }
-        String accessToken = jwtProvider.createToken(member.getUsername(), "ATK", 24L);
-        String refreshToken = jwtProvider.createToken(member.getUsername(), "RFT", 720L);
+        if(!dto.getEmail().equals(member.getEmail())){
+            throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
+        }
 
-        jwtProvider.setTokenValueAndTime(refreshToken, username);
+        String accessToken = jwtProvider.createToken(dto, "ATK", 24L);
+        String refreshToken = jwtProvider.createToken(dto, "RFT", 720L);
+
+        jwtProvider.setTokenValueAndTime(refreshToken, dto.getEmail());
 
         return JwtDto.builder()
                 .refreshToken(refreshToken)
@@ -53,9 +59,16 @@ public class MemberService {
     public String reissue(String refreshToken){
         String value = jwtProvider.getValueFromToken(refreshToken);
         String username = jwtProvider.getUsername(refreshToken);
+        String email = jwtProvider.getEmail(refreshToken);
+
+        MemberReqDto dto = MemberReqDto.builder()
+                .username(username)
+                .email(email)
+                .build();
+
         String accessToken = null;
-        if(value.equals(username)){
-            accessToken = jwtProvider.createToken(username, "ATK", 24L);
+        if(value.equals(email)){
+            accessToken = jwtProvider.createToken(dto, "ATK", 24L);
         }
         log.info(username+"님 재발급 : "+accessToken);
         return accessToken;
