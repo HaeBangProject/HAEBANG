@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<body>
-<!--<th:block th:replace="~{/layout/basic :: setContent(~{this :: content})}">-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
     <th:block th:fragment="content">
 
         <div class="container">
@@ -23,21 +22,19 @@
         </div>
 
 
-        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</th:block>
 
-    </th:block>
-<!--</th:block>-->
+</html>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script th:inline="javascript">
     $(document).ready(function(){
 
         var roomName = [[${room.name}]];
         var roomId = [[${room.roomId}]];
-        var username = [[${#authentication.principal.username}]];
-
+        var username = "login_user"; //현재 로그인 유저
         console.log(roomName + ", " + roomId + ", " + username);
-
         var sockJs = new SockJS("/stomp/chat");
         //1. SockJS를 내부에 들고있는 stomp를 내어줌
         var stomp = Stomp.over(sockJs);
@@ -49,10 +46,9 @@
             //4. subscribe(path, callback)으로 메세지를 받을 수 있음
             stomp.subscribe("/sub/chat/room/" + roomId, function (chat) {
                 var content = JSON.parse(chat.body);
-
                 var writer = content.writer;
                 var str = '';
-
+                var message = content.message;
                 if(writer === username){
                     str = "<div class='col-6'>";
                     str += "<div class='alert alert-secondary'>";
@@ -67,8 +63,6 @@
                     str += "</div></div>";
                     $("#msgArea").append(str);
                 }
-
-                $("#msgArea").append(str);
             });
 
             //3. send(path, header, message)로 메세지를 보낼 수 있음
@@ -84,7 +78,3 @@
         });
     });
 </script>
-</body>
-</html>
-
-

@@ -55,6 +55,11 @@ public class MemberService {
                 .accessToken(accessToken)
                 .build();
     }
+    //현재 로그인 유저
+    public String login_user(MemberReqDto dto){
+        System.out.println(memberRepository.findByUsername(dto.getUsername())+"hi");
+        return String.valueOf(memberRepository.findByUsername(dto.getUsername()));
+    }
 
     public String reissue(String refreshToken){
         String value = jwtProvider.getValueFromToken(refreshToken);

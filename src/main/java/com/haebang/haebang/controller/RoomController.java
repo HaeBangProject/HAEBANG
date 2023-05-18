@@ -1,15 +1,20 @@
 package com.haebang.haebang.controller;
 
+import com.haebang.haebang.dto.MemberReqDto;
 import com.haebang.haebang.repository.ChatRoomRepository;
+import com.haebang.haebang.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -17,8 +22,9 @@ import java.util.List;
 @Log4j2
 @RequestMapping(value = "chat")
 public class RoomController {
-
     private final ChatRoomRepository repository;
+    private final MemberService memberService;
+    MemberReqDto memberReqDto;
 
     //채팅방 목록 조회
     @RequestMapping(value = "rooms")
