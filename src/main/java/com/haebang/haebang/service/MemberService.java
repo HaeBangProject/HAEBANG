@@ -31,6 +31,7 @@ public class MemberService {
         memberRepository.save(Member.builder()
                 .username(username)
                 .email(email)
+                .role("ROLE_USER")
                 .password(encoder.encode( password )).build());
         return "회원가입 성공";
     }

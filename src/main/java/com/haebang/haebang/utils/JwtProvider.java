@@ -4,13 +4,16 @@ import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.dto.JwtDto;
 import com.haebang.haebang.dto.MemberReqDto;
 import com.haebang.haebang.exception.CustomException;
+import com.haebang.haebang.repository.MemberRepository;
 import com.haebang.haebang.service.CustomRedisService;
+import com.haebang.haebang.service.MemberService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -23,11 +26,14 @@ import java.util.Date;
 public class JwtProvider {
     final private Key key;
     final private CustomRedisService redisService;
+    final private MemberRepository memberRepository;
 
-    public JwtProvider(@Value("${jwt.secret}") String secretKey, CustomRedisService redisService){
+    public JwtProvider(@Value("${jwt.secret}") String secretKey,
+                       CustomRedisService redisService, MemberRepository memberRepository){
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(keyBytes);
         this.redisService = redisService;
+        this.memberRepository = memberRepository;
     }
 
     /**
@@ -62,6 +68,10 @@ public class JwtProvider {
         return Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token)
                 .getBody().get("email", String.class);
+    }
+
+    public UserDetails getUserDetails(String username){
+        return memberRepository.findByUsername(username).get();
     }
 
     public boolean validateToken(String token){

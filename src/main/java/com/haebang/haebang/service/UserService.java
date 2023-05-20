@@ -30,6 +30,7 @@ public class UserService implements UserDetailsService {
                 .username(entity.getUsername())
                 .email(entity.getEmail())
                 .password(bCryptPasswordEncoder.encode( entity.getPassword()) )
+                .role("ROLE_USER")
                 .build();
     }
 }

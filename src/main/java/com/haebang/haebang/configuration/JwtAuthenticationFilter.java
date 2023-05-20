@@ -2,6 +2,7 @@ package com.haebang.haebang.configuration;
 
 import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.exception.CustomException;
+import com.haebang.haebang.repository.MemberRepository;
 import com.haebang.haebang.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,7 +26,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
     final private JwtProvider jwtProvider;
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -44,13 +45,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
                     // 로그아웃되지 않은 ATK라면 정상 작동 하도록
                     String username = jwtProvider.getUsername(token);
+                    UserDetails userDetails = jwtProvider.getUserDetails(username);
                         // 사용자 정보를 넣은 authentication 인증객체를 만들어 넣어주면 -> authentication에서 꺼내 쓸수 있음
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(username, null,
-                                    List.of(new SimpleGrantedAuthority("USER")));
+                                    userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    log.info(authorization);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-
                 }
             }
 

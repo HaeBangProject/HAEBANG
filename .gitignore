@@ -42,3 +42,6 @@ out/
 ###yml###
 *.yml
 *.yaml
+
+###sql###
+*.sql

@@ -41,6 +41,9 @@ public class MemberController {
     @PostMapping("test")
     public ResponseEntity<?> test(Authentication authentication){
         log.info("jwt 로그인 성공 사용자: "+authentication.getName());
+        log.info(authentication.getPrincipal().toString());
+        log.info(authentication.getAuthorities().toString());
+        log.info(authentication.getDetails().toString());
         return ResponseEntity.ok().body(authentication.getName()+"님 로그인이 완료되었습니다");
     }
 
