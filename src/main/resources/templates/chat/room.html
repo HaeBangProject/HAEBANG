@@ -44,7 +44,7 @@
         var stomp = Stomp.over(sockJs);
 
         //2. connection이 맺어지면 실행
-        stomp.connect({}, function (){
+        stomp.connect({"token":"eyJ0eXAiOiJBVEsiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvaW5UZXN0VXNlcjEiLCJhdXRoIjoiUk9MRV9VU0VSIiwiZW1haWwiOiJqb2luVGVzdFVzZXIxQGdtYWlsLmNvbSIsImlhdCI6MTY4NTE2NzQ1NiwiZXhwIjoxNjg1MjUzODU2fQ.qdbFZLYXTnx-MF5uure-WHAIrWy4tzXnu4N3GmaZwYI"}, function (){
             console.log("STOMP Connection")
 
             //4. subscribe(path, callback)으로 메세지를 받을 수 있음

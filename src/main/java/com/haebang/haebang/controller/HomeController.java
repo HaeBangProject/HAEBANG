@@ -8,12 +8,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
 public class HomeController {
 
-    @GetMapping("hello")
-    public String homeController(){
-        return "map";
+    @RequestMapping("login")
+    public String loginController(){
+
+        return "login";
+    }
+    @RequestMapping("post")
+    public String postController(){
+
+        return "post";
     }
 }
 //

@@ -33,12 +33,16 @@ public class MapController {
         List <String> area = new ArrayList<>();
         List <String> amount = new ArrayList<>();
 
+
+
         address=mapDto.getAddress();
         contract=mapDto.getContract();
         apart=mapDto.getApart();
         build=mapDto.getBuild();
         area=mapDto.getArea();
         amount=mapDto.getAmount();
+        model.addAttribute("mapDto",mapDto);
+        System.out.println(mapDto);
 
         if (build.isEmpty()){
             model.addAttribute("msg", "매물이 존재하지 않습니다.\n 검색어를 다시 입력해주세요.");

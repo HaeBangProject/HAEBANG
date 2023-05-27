@@ -38,7 +38,7 @@
 
                         <option value="11350">노원구</option>
 
-                        <option value="11320" selected="">도봉구</option>
+                        <option value="11320" >도봉구</option>
 
                         <option value="11230">동대문구</option>
 
@@ -197,18 +197,17 @@
     // 주소-좌표 변환 객체를 생성합니다
     var geocoder = new kakao.maps.services.Geocoder();
     //th:each를 활용해 리스트 값 주소에 넣기
-    /*<![CDATA[*/
+    // /*<![CDATA[*/
 
     /*[# th:each="address : ${address}"]*/
-    // /*[# th:each="contract : ${contract}"]*/
+    /*[# th:each="contract : ${contract}"]*/
     // /*[# th:each="apart : ${apart}"]*/
-    // /*[# th:each="build : ${build}"]*/
-    // /*[# th:each="area : ${area}"]*/
-    // /*[# th:each="amount : ${amount}"]*/
+    /*[# th:each="build : ${build}"]*/
+    /*[# th:each="area : ${area}"]*/
+    /*[# th:each="amount : ${amount}"]*/
 
     // 주소로 좌표를 검색
     geocoder.addressSearch(/*[[${address}]]*/, function(result, status) {
-
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
 
@@ -222,10 +221,28 @@
             // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
             var iwContent = '<div style="padding:5px;">' +
                     '주소:'+/*[[${address}]]*/+'</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-                iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+                iwRemoveable = true; // removeable 속성을 true 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+            var iwContent2 = '<div style="padding:5px;">' +
+                    '계약날짜:'+/*[[${contract}]]*/+'</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+                iwRemoveable = true;
+            // var iwContent3 = '<div style="padding:5px;">' +
+            //         '아파트:'+/*[[${apart}]]*/+'</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            //     iwRemoveable = true; // removeable 속성을 true 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+            var iwContent4 = '<div style="padding:5px;">' +
+                    '건축년도:'+/*[[${build}]]*/+'</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+                iwRemoveable = true;
+            var iwContent5 = '<div style="padding:5px;">' +
+                    '전용면적:'+/*[[${area}]]*/+'</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+                iwRemoveable = true; // removeable 속성을 true 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+            var iwContent6 = '<div style="padding:5px;">' +
+                    '거래금액:'+/*[[${amount}]]*/+'</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+                iwRemoveable = true;
             // 인포윈도우를 생성합니다
             var infowindow = new kakao.maps.InfoWindow({
-                content : iwContent,
+                content : iwContent+iwContent2+iwContent4+iwContent5+iwContent6,
                 removable : iwRemoveable
             });
 
@@ -240,8 +257,13 @@
         }
     });
     /*[/]*/
+    /*[/]*/
+    /*[/]*/
+    /*[/]*/
+    /*[/]*/
 
-    /*]]>*/
+
+    // /*]]>*/
 
 
 
