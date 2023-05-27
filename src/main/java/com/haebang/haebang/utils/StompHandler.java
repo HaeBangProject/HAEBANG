@@ -18,19 +18,14 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        if(accessor.getCommand() == StompCommand.CONNECT) {
+        if(accessor.getCommand() == StompCommand.CONNECT || accessor.getCommand()==StompCommand.SEND) {
             if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
                 throw new AccessDeniedException("");
             String username = jwtProvider.getUsername(accessor.getFirstNativeHeader("token"));
-            accessor.setHeader("username",username);
-            accessor.setMessage(username+"님이 채팅방에 참여하였습니다.");
-            System.out.println("connect user "+accessor.getFirstNativeHeader("username"));
+            accessor.setNativeHeader("username", username);
+            accessor.setHeader("username", username);
         }
-
-        if(accessor.getCommand() == StompCommand.SEND){
-            accessor.setMessage(accessor.getLogin()+" : "+accessor.getMessage());
-        }
-
         return message;
     }
+
 }

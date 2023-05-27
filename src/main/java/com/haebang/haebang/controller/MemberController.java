@@ -46,6 +46,10 @@ public class MemberController {
         log.info(authentication.getDetails().toString());
         return ResponseEntity.ok().body(authentication.getName()+"님 로그인이 완료되었습니다");
     }
+    @GetMapping("username")
+    public ResponseEntity<?> getUsername(Authentication authentication){
+        return ResponseEntity.ok().body(authentication.getName());
+    }
 
     @GetMapping("reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request){
