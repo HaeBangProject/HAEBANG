@@ -19,7 +19,7 @@
   - [인기 검색 순위](#인기-검색-순위)
   - [매물 CRUD](#매물-CRUD)
   - [관리자 문의](#관리자-문의)
-
+  - [Error Response](#custom-error-response)
 ## Project Members
 
 <table>
@@ -111,7 +111,7 @@
 
 ## 핵심 기능
 
-* ### 로그인/회원가입
+ - ### 로그인/회원가입
 
   * 세션로그인 대신 JWT(Json Web Token)을 활용한 토큰인증방식을 구현
   * 최초 로그인 이후, 발급된 토큰을 담은 API요청을 필터로 검증 - 접근제한/허용
@@ -132,7 +132,7 @@
   - opsForZset()의 incrementScore()를 이용해 key 안에서 검색어(지역)를 value에 저장하고, 검색될때마다  delta에 1을 주어 순위를 구현
   - key 안에서 delta 기준으로 0~9순위를 리스트에 담아 Top10 구현
 
-* ### 매물 CRUD
+- ### 매물 CRUD
 
   * 아파트 매물을 작성하고 수정 삭제 조회하는 기능을 RESTful API로 구현
   * 수정, 삭제는 글의 작성자와 토큰에서 도출한 사용자와 일치하는 지 확인 후 접근/제한
@@ -148,7 +148,7 @@
     * 최초 연결 Connect 에서 토큰이 검증되면 연결 허용
     * 이어지는 Send 요청들도 토큰을 검증해 중간에 사용자가 바뀌는지 확인
 
-- Custom Error Response
+- ### Custom Error Response
 
   * 상황에 따른 error code를 작성하여 기존 응답보다 client가 어떤 조치를 취해야 하는지 자세히 안내하는 Exception Handler를 작성
   
