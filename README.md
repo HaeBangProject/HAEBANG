@@ -148,4 +148,7 @@
     * 최초 연결 Connect 에서 토큰이 검증되면 연결 허용
     * 이어지는 Send 요청들도 토큰을 검증해 중간에 사용자가 바뀌는지 확인
 
+- Custom Error Response
+
+  * 상황에 따른 error code를 작성하여 기존 응답보다 client가 어떤 조치를 취해야 하는지 자세히 안내하는 Exception Handler를 작성
   
