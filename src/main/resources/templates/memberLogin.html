@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>member login</title>
+
+</head>
+<body>
+<form id="formlogin">
+    <input type="text" name="username" placeholder="사용할 이름을 입력하세요">
+    <input type="email" name="email" placeholder="이메일을 입력하세요">
+    <input type="password" name="password" placeholder="비밀번호를 입력하세요">
+    <button onclick="login()">로그인</button>
+</form>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js">
+    function login() {
+        var data = $('#formlogin');
+        $.ajax({
+            type: "POST",
+            url: "/api/member/login",
+            headers: {"content-type": "application/json"},
+            dataType: "text",
+            data: JSON.stringify(data),
+            success: function (data) {
+                console.log(data);
+            },
+            error: function () {
+                alert("실패");
+            }
+        });
+    }
+
+</script>
+</html>
