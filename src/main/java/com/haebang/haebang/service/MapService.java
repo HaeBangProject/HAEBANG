@@ -20,7 +20,7 @@ public class MapService {
     @Value("${haebang.secret.key}")
     private String haebang_key;
 
-    public MapDto search_map(String year, String month, Integer sggCd, String dong) throws IOException {
+    public List<MapDto> search_map(String year, String month, Integer sggCd, String dong) throws IOException {
 
         int local_code;//지역 코드
         String deal_ymd ; //계약년월
@@ -105,15 +105,13 @@ public class MapService {
 
         }
 
-        MapDto mapDto = new MapDto();
-        mapDto.setAddress(address);
-        mapDto.setContract(contract);
-        mapDto.setApart(apart);
-        mapDto.setBuild(build);
-        mapDto.setArea(area);
-        mapDto.setAmount(amount);
+        List<MapDto> list = new ArrayList<>();
+        for(int i=0;i<address.size();i++){
+            list.add(new MapDto(address.get(i),contract.get(i),apart.get(i),build.get(i),area.get(i),amount.get(i)));
 
-        return mapDto;
+        }
+        System.out.println(list);
+        return list;
     }
 
 }

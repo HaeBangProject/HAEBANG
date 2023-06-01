@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping()
 public class PageController {
 
     @GetMapping("mypage")
@@ -21,5 +20,10 @@ public class PageController {
     @GetMapping("/memberJoin")
     public String memberJoin(){
         return "memberJoin";
+    }
+
+    @RequestMapping("/apt")
+    public String showApt(){
+        return "showApt";
     }
 }

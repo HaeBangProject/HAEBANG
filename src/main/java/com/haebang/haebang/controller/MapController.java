@@ -24,51 +24,24 @@ public class MapController {
     @RequestMapping("/map")
     public String map(Model model,String year,String month,Integer sggCd,String dong) throws IOException {
 
-        mapDto=mapservice.search_map(year,month,sggCd,dong);
+        List<MapDto> list = mapservice.search_map(year,month,sggCd,dong);
 
-        List <String> address = new ArrayList<>();
-        List <String> contract = new ArrayList<>();
-        List <String> apart = new ArrayList<>();
-        List <String> build = new ArrayList<>();
-        List <String> area = new ArrayList<>();
-        List <String> amount = new ArrayList<>();
 
-        address=mapDto.getAddress();
-        contract=mapDto.getContract();
-        apart=mapDto.getApart();
-        build=mapDto.getBuild();
-        area=mapDto.getArea();
-        amount=mapDto.getAmount();
-        model.addAttribute("mapDto",mapDto);
-        System.out.println(mapDto);
 
-        List<List<String>> result = new ArrayList<>();
-        for (int i = 0; i < mapDto.getAddress().size(); i++) {
-            ArrayList<String> list = new ArrayList<>();
-            list.add(mapDto.getAddress().get(i));
-            list.add(mapDto.getAmount().get(i));
-            list.add(mapDto.getContract().get(i));
-            list.add(mapDto.getArea().get(i));
-            list.add(mapDto.getBuild().get(i));
-            list.add(mapDto.getApart().get(i));
-            result.add(list);
-        }
+        System.out.println(list);
+        model.addAttribute("list",list);
 
-        if (build.isEmpty()){
+
+        if (list.isEmpty()){
             model.addAttribute("msg", "매물이 존재하지 않습니다.\n 검색어를 다시 입력해주세요.");
             model.addAttribute("url", "/");
             return "alert";
         }
 
-        model.addAttribute("address",address);
-        model.addAttribute("contract",contract);
-        model.addAttribute("apart",apart);
-        model.addAttribute("build",build);
-        model.addAttribute("area",area);
-        model.addAttribute("amount",amount);
+
 
         if(!Objects.equals(dong, null)){
-           redisSampleService.ranking(dong);
+            redisSampleService.ranking(dong);
         }
 
         return "map";
