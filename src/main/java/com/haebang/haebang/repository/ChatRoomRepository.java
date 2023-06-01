@@ -1,20 +1,25 @@
 package com.haebang.haebang.repository;
 
 import com.haebang.haebang.dto.ChatRoomDTO;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.stream.Stream;
 
+@Getter
+@Setter
 @Repository
 public class ChatRoomRepository {
 
     private Map<String, ChatRoomDTO> chatRoomDTOMap;
+    private Map<String, String> sessionIdUsername;
 
     @PostConstruct
     private void init(){
         chatRoomDTOMap = new LinkedHashMap<>();
+        sessionIdUsername = new HashMap<>();
     }
 
     public List<ChatRoomDTO> findAllRooms(){

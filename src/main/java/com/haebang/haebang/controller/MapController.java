@@ -33,8 +33,6 @@ public class MapController {
         List <String> area = new ArrayList<>();
         List <String> amount = new ArrayList<>();
 
-
-
         address=mapDto.getAddress();
         contract=mapDto.getContract();
         apart=mapDto.getApart();
@@ -43,6 +41,18 @@ public class MapController {
         amount=mapDto.getAmount();
         model.addAttribute("mapDto",mapDto);
         System.out.println(mapDto);
+
+        List<List<String>> result = new ArrayList<>();
+        for (int i = 0; i < mapDto.getAddress().size(); i++) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add(mapDto.getAddress().get(i));
+            list.add(mapDto.getAmount().get(i));
+            list.add(mapDto.getContract().get(i));
+            list.add(mapDto.getArea().get(i));
+            list.add(mapDto.getBuild().get(i));
+            list.add(mapDto.getApart().get(i));
+            result.add(list);
+        }
 
         if (build.isEmpty()){
             model.addAttribute("msg", "매물이 존재하지 않습니다.\n 검색어를 다시 입력해주세요.");
