@@ -6,30 +6,40 @@
 
 </head>
 <body>
-<form id="formlogin">
-    <input type="text" name="username" placeholder="사용할 이름을 입력하세요">
-    <input type="email" name="email" placeholder="이메일을 입력하세요">
-    <input type="password" name="password" placeholder="비밀번호를 입력하세요">
-    <button onclick="login()">로그인</button>
+<form id="form">
+    <input type="text" id="username" placeholder="사용할 이름을 입력하세요">
+    <input type="email" id="email" placeholder="이메일을 입력하세요">
+    <input type="password" id="password" placeholder="비밀번호를 입력하세요">
+    <button type="button" onclick="login()">로그인</button>
 </form>
 </body>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript">
     function login() {
-        var data = $('#formlogin');
+        var form = document.getElementById("form");
+        console.log(form);
+        var data = {
+            username : form.username.value,
+            email : form.email.value,
+            password : form.password.value
+        }
+        console.log(data);
         $.ajax({
             type: "POST",
             url: "/api/member/login",
             headers: {"content-type": "application/json"},
-            dataType: "text",
-            data: JSON.stringify(data),
-            success: function (data) {
-                console.log(data);
-            },
-            error: function () {
-                alert("실패");
-            }
-        });
-    }
+            dataType: "json",
+            data: JSON.stringify(data)
+            })
+            .done(function (response) {
+                alert("성공");
+                console.log(response);
+                window.location.href = '/';
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("실패 : "+jqXHR.responseText);
+                })
+    };
 
 </script>
 </html>

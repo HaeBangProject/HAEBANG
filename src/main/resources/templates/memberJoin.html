@@ -6,32 +6,37 @@
 
 </head>
 <body>
-<div id="formJoin">
-  <div type="text" name="username" placeholder="사용할 이름을 입력하세요">
-  <div type="email" name="email" placeholder="이메일을 입력하세요">
-  <div type="password" name="password" placeholder="비밀번호를 입력하세요">
-  <a href="#" onclick="join()">회원가입</a>
-  <a href="/memberLogin">로그인하기</a>
-</div>
+<form id="form">
+  <input type="text" id="username" placeholder="사용할 이름을 입력하세요">
+  <input type="email" id="email" placeholder="이메일을 입력하세요">
+  <input type="password" id="password" placeholder="비밀번호를 입력하세요">
+  <button type="button" onclick="join()">회원가입</button>
+</form>
 </body>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
   function join() {
-    var data = $('#formJoin');
-    console.log(data);
+    var form = document.getElementById("form");
+    var data = {
+      username : form.username.value,
+      email : form.email.value,
+      password : form.password.value
+    }
     $.ajax({
       type: "POST",
       url: "/api/member/join",
       headers: {"content-type": "application/json"},
       dataType: "text",
-      data: JSON.stringify(data),
-      success: function (data) {
-        console.log(data);
-      },
-      error: function () {
-        alert("실패");
-      }
-    });
-  }
+      data: JSON.stringify(data)})
+            .done(function (result) {
+              alert("성공");
+              console.log(result)
+              window.location.href = '/memberLogin';
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+              alert("실패 : "+jqXHR.responseText);
+            })
+  };
 
 </script>
 </html>

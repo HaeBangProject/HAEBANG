@@ -28,7 +28,9 @@ public class MemberController {
     // 회원 가입
     @PostMapping("join")
     public ResponseEntity<?> join(@RequestBody MemberReqDto joinReqDto){
+        System.out.println(joinReqDto.toString());
         String text = memberService.join(joinReqDto.getUsername(), joinReqDto.getPassword(), joinReqDto.getEmail());
+        log.info(text);
         return ResponseEntity.ok().body(text);
     }
     // 로그인
