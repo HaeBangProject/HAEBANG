@@ -46,7 +46,7 @@ public class MemberService {
             throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
         }
 
-        String accessToken = jwtProvider.createToken(dto, "ATK", 24L);
+        String accessToken = jwtProvider.createToken(dto, "ATK", 720L);
         String refreshToken = jwtProvider.createToken(dto, "RFT", 720L);
 
         jwtProvider.setTokenValueAndTime(refreshToken, dto.getEmail());
