@@ -26,6 +26,8 @@ public class AptService {
     public Item createItem(String username, AptItemReq req) {
         Apt apt = new Apt();
         if (req.getRoadAddress() == null || req.getRoadAddress().split(" ").length!=2) {// 주소가 있어야하고, 포멧에 맞아야 함
+            System.out.println(req.getRoadAddress());
+            System.out.println(req.getRoadAddress().split(" ").length);
             throw new CustomException(CustomErrorCode.INVALID_FORMAT_ADDRESS);
         }
 
@@ -46,9 +48,14 @@ public class AptService {
                 .hits(0L)
                 .text(req.getText())
                 .title(req.getTitle())
-                .price(req.getPrice())
+                .dp_amount(req.getDp_amount())
+                .dp_area(req.getDp_area())
+                .build_year(req.getBuild_year())
                 .dong(req.getDong())
                 .floor(req.getFloor())
+                .contract_year(req.getContract_year())
+                .contract_month(req.getContract_month())
+                .contract_day(req.getContract_day())
                 .build();
 
         itemRepository.save(item);

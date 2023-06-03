@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @AllArgsConstructor
 @Builder
 @Entity

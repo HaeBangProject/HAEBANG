@@ -1,6 +1,8 @@
 package com.haebang.haebang.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.haebang.haebang.dto.AptItemReq;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,8 +25,13 @@ public class Item {
     String text;
     String dong;
     int floor;
-    Long price;
-    Long hits;
+    long hits;
+    String contract_year;//계약 날짜
+    String contract_month;// 월
+    String contract_day;//일
+    String dp_area;//전용면적
+    String dp_amount;//거래금액
+    String build_year;//건축년도
 
     @CreationTimestamp
     LocalDateTime createdDate;
@@ -42,6 +49,11 @@ public class Item {
         this.text = req.getText();
         this.dong = req.getDong();
         this.floor = req.getFloor();
-        this.price = req.getPrice();
+        this.dp_amount = req.getDp_amount();
+        this.dp_area = req.getDp_area();
+        this.build_year = req.getBuild_year();
+        this.contract_year = req.getContract_year();
+        this.contract_month = req.getContract_month();
+        this.contract_day = req.getContract_day();
     }
 }

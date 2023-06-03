@@ -1,5 +1,7 @@
 package com.haebang.haebang.entity;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,11 +20,6 @@ public class Apt {
     @Column(unique = true)
     String roadAddress;// 이태원로27가길 49
 
-    String contract_date;//계약 날짜
-
-    String build_year;//건축년도
-    String dp_area;//전용면적
-    String dp_amount;//거래금액
     String dp;//아파트
 
     @OneToMany(mappedBy = "apt", cascade = CascadeType.ALL)

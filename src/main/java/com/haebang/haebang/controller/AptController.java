@@ -27,6 +27,8 @@ public class AptController {
                                         Authentication authentication){
         log.info("집 내놓기");
 
+        System.out.println(req.toString());
+
         if(!authentication.isAuthenticated())
             throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
         return new ResponseEntity(aptService.createItem(authentication.getName() ,req), HttpStatus.OK);
