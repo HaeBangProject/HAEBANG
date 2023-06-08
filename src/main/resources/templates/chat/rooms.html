@@ -34,6 +34,20 @@
         });
 
     });
+    function getCookie(name){
+        var search = name +"=";
+        if (document.cookie.length>0){
+            var start = document.cookie.indexOf(search);
+            if(start==-1) return "";
+            start += search.length;
+            var end = document.cookie.indexOf(";", start);
+            if(end==-1){
+                end = document.cookie.length;
+            }
+            return document.cookie.substring(start, end);
+        }
+        return "";
+    }
 </script>
     </th:block>
 </body>

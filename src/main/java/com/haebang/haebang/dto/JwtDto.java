@@ -11,4 +11,5 @@ public class JwtDto {
     String grantType = "Bearer";
     String accessToken;
     String refreshToken;
+    String username;
 }

@@ -54,6 +54,7 @@ public class MemberService {
         return JwtDto.builder()
                 .refreshToken(refreshToken)
                 .accessToken(accessToken)
+                .username(member.getUsername())
                 .build();
     }
     //현재 로그인 유저
