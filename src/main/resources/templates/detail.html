@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<tr th:each="item:${item}">
+    <td th:text="${item.phoneNumber}"></td><br>
+    <td th:text="${item.title}"></td><br>
+</tr>
+<tr th:each="apt:${apt}">
+    <td th:text="${apt.roadAddress}"></td><br>
+    <td th:text="${apt.dp}"></td><br>
+</tr>
+</body>
+</html>

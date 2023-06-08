@@ -1,11 +1,11 @@
 package com.haebang.haebang.dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Data
 
 public class MapDto {
@@ -17,12 +17,4 @@ public class MapDto {
     String amount; //거래금액
 
 
-    public MapDto(String s, String s1, String s2, String s3, String s4, String s5) {
-        this.address = s;
-        this.contract= s1;
-        this.apart=s2;
-        this.build=s3;
-        this.area=s4;
-        this.amount=s5;
-    }
 }

@@ -9,9 +9,7 @@ import com.haebang.haebang.repository.AptRepository;
 import com.haebang.haebang.repository.ItemRepository;
 import com.haebang.haebang.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +20,7 @@ public class AptService {
     final MemberRepository memberRepository;
     final AptRepository aptRepository;
     final ItemRepository itemRepository;
+
 
     public Item createItem(String username, AptItemReq req) {
         Apt apt = new Apt();
@@ -78,7 +77,9 @@ public class AptService {
         itemRepository.save(item);
         return item;
     }
-
+    public Optional<Item> findItem2(Long id){
+        return itemRepository.findByAptId(id);
+    }
     public List<Item> findAllItems(){
         return itemRepository.findAll();
     }
@@ -96,4 +97,10 @@ public class AptService {
         itemRepository.delete(item);
         return true;
     }
+
+    public List<Apt> findAllApt() { return aptRepository.findAll();}
+
+    public Optional<Apt> findByAptId(Long id) { return aptRepository.findById(id);}
+
+
 }
