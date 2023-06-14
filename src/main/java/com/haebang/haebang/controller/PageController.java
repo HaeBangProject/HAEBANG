@@ -21,12 +21,8 @@ public class PageController {
         return "mypage";
     }
     @GetMapping("/memberLogin")
-    public String memberlogin(){
+    public String memberLogin(){
         return "memberLogin";
-    }
-    @GetMapping("/memberJoin")
-    public String memberJoin(){
-        return "memberJoin";
     }
 
     @RequestMapping("/apt")
@@ -48,5 +44,10 @@ public class PageController {
         model.addAttribute("apt",apt);
         return "detail";
 
+    }
+
+    @GetMapping("/item/write")
+    public String write(){
+        return "item/write";
     }
 }

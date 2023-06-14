@@ -1,17 +1,15 @@
 package com.haebang.haebang.utils;
 
 import com.haebang.haebang.constant.CustomErrorCode;
-import com.haebang.haebang.dto.JwtDto;
-import com.haebang.haebang.dto.MemberReqDto;
+import com.haebang.haebang.dto.JoinDto;
+import com.haebang.haebang.dto.LoginDto;
+import com.haebang.haebang.entity.Member;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.MemberRepository;
 import com.haebang.haebang.service.CustomRedisService;
-import com.haebang.haebang.service.MemberService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -42,7 +40,7 @@ public class JwtProvider {
      * @param duration 1시간 단위
      * @return 토큰
      */
-    public String createToken(MemberReqDto dto, String typ, Long duration){
+    public String createToken(Member dto, String typ, Long duration){
         Claims claims = Jwts.claims();
         claims.put("username", dto.getUsername());
         claims.put("auth", "ROLE_USER");

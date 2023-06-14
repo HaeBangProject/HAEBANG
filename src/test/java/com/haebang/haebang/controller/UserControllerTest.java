@@ -1,7 +1,7 @@
 package com.haebang.haebang.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.haebang.haebang.dto.MemberReqDto;
+import com.haebang.haebang.dto.JoinDto;
 import com.haebang.haebang.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("회원가입 성공 테스트")
     void join() throws Exception {
-        MemberReqDto joinReqDto = new MemberReqDto();
+        JoinDto joinReqDto = new JoinDto();
         joinReqDto.setUsername("테스트 유저 1");
         joinReqDto.setPassword("test password 1");
         mockMvc.perform( MockMvcRequestBuilders.post("/api/user/join")
@@ -40,7 +40,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("회원가입 실패 테스트")
     void join_fail() throws Exception {
-        MemberReqDto joinReqDto = new MemberReqDto();
+        JoinDto joinReqDto = new JoinDto();
         joinReqDto.setUsername("테스트 유저 1");
         joinReqDto.setPassword("test password 1");
         mockMvc.perform( MockMvcRequestBuilders.post("/api/user/join")
