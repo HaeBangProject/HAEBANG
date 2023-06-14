@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>매물 작성하기</title>
+</head>
+<body>
+<form class="form">
+<input id="title" type="text" class="form-control" placeholder="title" aria-label="title">
+
+<input id="road_address" type="text" class="form-control" placeholder="road_address" aria-label="road_address">
+<input id="dp" type="text" class="form-control" placeholder="dp" aria-label="dp">
+<input id="floor" type="text" class="form-control" placeholder="floor" aria-label="floor">
+<input id="dong" type="text" class="form-control" placeholder="dong" aria-label="dong">
+
+<input id="phone_number" type="text" class="form-control" placeholder="phone_number" aria-label="phone_number">
+<input id="dp_area" type="text" class="form-control" placeholder="dp_area" aria-label="dp_area">
+<input id="dp_amount" type="text" class="form-control" placeholder="dp_amount" aria-label="dp_amount">
+<input id="build_year" type="text" class="form-control" placeholder="build_year" aria-label="build_year">
+
+<input id="contract_year" type="text" class="form-control" placeholder="contract_year" aria-label="contract_year">
+<input id="contract_month" type="text" class="form-control" placeholder="contract_month" aria-label="contract_month">
+<input id="contract_day" type="text" class="form-control" placeholder="contract_day" aria-label="contract_day">
+
+<input id="text" type="text" class="form-control" placeholder="text" aria-label="text">
+</form>
+<button type="button" onclick="post()">집 내놓기</button>
+</body>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript">
+    function post(){
+        var form = document.querySelector(".form");
+        var data = formToJSON(form);
+    }
+
+    function formToJSON(form){
+        var data = {};
+        console.log(form)
+        return data;
+    }
+
+</script>
+</html>

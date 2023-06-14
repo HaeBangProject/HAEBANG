@@ -4,51 +4,192 @@
     <meta charset="UTF-8">
     <title>HAEBANG</title>
     <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+        .login-page {
+            width: 360px;
+            padding: 8% 0 0;
+            margin: auto;
+        }
+        .form {
+            position: relative;
+            z-index: 1;
+            background: #FFFFFF;
+            max-width: 360px;
+            margin: 0 auto 100px;
+            padding: 45px;
+            text-align: center;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+        .form input {
+            font-family: "Roboto", sans-serif;
+            outline: 0;
+            background: #f2f2f2;
+            width: 100%;
+            border: 0;
+            margin: 0 0 15px;
+            padding: 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .form button {
+            font-family: "Roboto", sans-serif;
+            text-transform: uppercase;
+            outline: 0;
+            background: #4CAF50;
+            width: 100%;
+            border: 0;
+            padding: 15px;
+            color: #FFFFFF;
+            font-size: 14px;
+            -webkit-transition: all 0.3 ease;
+            transition: all 0.3 ease;
+            cursor: pointer;
+        }
+        .form button:hover,.form button:active,.form button:focus {
+            background: #43A047;
+        }
+        .form .message {
+            margin: 15px 0 0;
+            color: #b3b3b3;
+            font-size: 12px;
+        }
+        .form .message a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .form .register-form {
+            display: none;
+        }
+        .form .login-form {
+            display: block;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .container:before, .container:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+        .container .info {
+            margin: 50px auto;
+            text-align: center;
+        }
+        .container .info h1 {
+            margin: 0 0 15px;
+            padding: 0;
+            font-size: 36px;
+            font-weight: 300;
+            color: #1a1a1a;
+        }
+        .container .info span {
+            color: #4d4d4d;
+            font-size: 12px;
+        }
+        .container .info span a {
+            color: #000000;
+            text-decoration: none;
+        }
+        .container .info span .fa {
+            color: #EF3B3A;
+        }
+        body {
+            background: #76b852; /* fallback for old browsers */
+            background: rgb(141,194,111);
+            background: linear-gradient(90deg, rgba(141,194,111,1) 0%, rgba(118,184,82,1) 50%);
+            font-family: "Roboto", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
 </head>
 <body>
-<form id="form">
-    <input type="text" id="username" placeholder="사용할 이름을 입력하세요">
-    <input type="email" id="email" placeholder="이메일을 입력하세요">
-    <input type="password" id="password" placeholder="비밀번호를 입력하세요">
-    <button type="button" onclick="login()">로그인</button>
-</form>
+<div class="login-page">
+    <div class="form">
+        <form class="register-form" id="register-form">
+            <input id="username" type="text" placeholder="username"/>
+            <input id="password" type="password" placeholder="password"/>
+            <input id="email" type="text" placeholder="email address"/>
+            <button type="button" onclick="join()">create</button>
+            <p class="message">Already registered? <button onclick="showDiff()" type="button">Sign In</button></p>
+        </form>
+        <form class="login-form" id="login-form">
+            <input id="username2" type="text" placeholder="username"/>
+            <input id="password2" type="password" placeholder="password"/>
+            <button type="button" onclick="login()">login</button>
+            <p class="message">Not registered? <button onclick="showDiff()" type="button">Create an account</button></p>
+        </form>
+    </div>
+</div>
 </body>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
-    var temp;
-    function login() {
-        var form = document.getElementById("form");
-        var data = {
-            username : form.username.value,
-            email : form.email.value,
-            password : form.password.value
+    function showDiff(){
+        if($('.login-form')[0].style.display == "block"){
+            $('.login-form')[0].style.display = "none";
+            $('.register-form')[0].style.display = "block";
+        }else{
+            $('.login-form')[0].style.display = "block";
+            $('.register-form')[0].style.display = "none";
         }
+    }
+    function login() {
+        var form = document.getElementById("login-form");
+        console.log(form);
+
+        var data = {
+            username: form.username2.value,
+            password: form.password2.value
+        }
+        console.log(data)
+
         $.ajax({
             type: "POST",
             url: "/api/member/login",
             headers: {"content-type": "application/json"},
             dataType: "json",
             data: JSON.stringify(data)
-            })
+        })
             .done(function (response) {
-                temp = response;
-                console.log(temp);
-
-                setCookie("ATK", response.accessToken, 100);
-                setCookie("RTK", response.refreshToken, 100);
-                setCookie("username", response.username, 100);
-
-                console.log(response);
-
                 alert("성공");
 
                 window.location.href = '/';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert("실패 : "+jqXHR.responseText);
-                })
+                alert("실패 : "+jqXHR.responseText);
+            })
     };
 
+    function join() {
+        var form = document.getElementById("register-form");
+        console.log(form);
+
+        var data = {
+            username : form.username.value,
+            email : form.email.value,
+            password : form.password.value
+        }
+        console.log(data)
+        $.ajax({
+            type: "POST",
+            url: "/api/member/join",
+            headers: {"content-type": "application/json"},
+            dataType: "text",
+            data: JSON.stringify(data)})
+            .done(function (result) {
+                alert("성공");
+                console.log(result)
+                window.location.href = '/memberLogin';
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert("실패 : "+jqXHR.responseText);
+            })
+    };
 
     function getCookie(name){
         var search = name +"=";
