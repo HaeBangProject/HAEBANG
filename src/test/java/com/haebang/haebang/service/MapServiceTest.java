@@ -120,12 +120,12 @@ class MapServiceTest {
         }
 
         MapDto mapDto = new MapDto();
-        mapDto.setAddress(address);
-        mapDto.setContract(contract);
-        mapDto.setApart(apart);
-        mapDto.setBuild(build);
-        mapDto.setArea(area);
-        mapDto.setAmount(amount);
+//        mapDto.setAddress(address);
+//        mapDto.setContract(contract);
+//        mapDto.setApart(apart);
+//        mapDto.setBuild(build);
+//        mapDto.setArea(area);
+//        mapDto.setAmount(amount);
 
     }
 

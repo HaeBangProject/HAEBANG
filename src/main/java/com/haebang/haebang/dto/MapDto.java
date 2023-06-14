@@ -14,7 +14,9 @@ public class MapDto {
     String apart; // 아파트
     String build; //건축년도
     String area; //전용면적
+    String floor; //층
     String amount; //거래금액
 
 
+   
 }

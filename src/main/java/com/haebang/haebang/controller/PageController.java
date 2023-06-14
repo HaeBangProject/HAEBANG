@@ -44,8 +44,6 @@ public class PageController {
         System.out.println(dp_id);
         Item item = aptService.findItem2(id).orElseThrow();
         Apt apt = aptService.findByAptId(id).orElseThrow();
-        System.out.println(item.getUsername());
-        System.out.println(apt.getRoadAddress());
         model.addAttribute("item",item);
         model.addAttribute("apt",apt);
         return "detail";

@@ -27,7 +27,6 @@ public class MapController {
         List<MapDto> list = mapservice.search_map(year,month,sggCd,dong);
 
 
-
         System.out.println(list);
         model.addAttribute("list",list);
 

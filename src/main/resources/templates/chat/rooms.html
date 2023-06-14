@@ -1,8 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>HAEBANG</title>
+<link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function(){
+
+        if([[${username}]]==='admin'){
+            document.getElementById("container").style.display = "";
+        }else{//조건 1이 아닐떄
+            document.getElementById("container").style.display = "none";
+        }
+    });
+
+</script>
 <body>
     <th:block th:fragment="content">
-        <div class="container">
+        <div id="container">
             <div>
                 <ul th:each="room : ${list}">
                     <li><a th:href="@{/chat/room(roomId=${room.roomId})}">[[${room.name}]]</a></li>
@@ -13,8 +27,9 @@
             <input type="text" name="name" class="form-control">
             <button class="btn btn-secondary">개설하기</button>
         </form>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script th:inline="javascript">
+
+
     $(document).ready(function(){
 
         var roomName = [[${roomName}]];
@@ -50,5 +65,7 @@
     }
 </script>
     </th:block>
+
 </body>
+
 </html>

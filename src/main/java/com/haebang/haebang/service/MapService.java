@@ -14,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MapService {
@@ -71,6 +72,8 @@ public class MapService {
         List<String> build = new ArrayList<String>();
         List<String> area = new ArrayList<String>();
         List<String> amount = new ArrayList<String>();
+        List<String> floor = new ArrayList<String>();
+
 
         String test_dong = dong; //동
 
@@ -87,6 +90,7 @@ public class MapService {
             String dp_area = String.valueOf(jsonObject.getInt("전용면적"));
             String dp_amount = String.valueOf(jsonObject.getString("거래금액"));
             String dp = String.valueOf(jsonObject.getString("아파트"));
+            String dp_floor = String.valueOf(jsonObject.getInt("층"));
 
             String test = "0";
             if (code_sub.equals(test)){
@@ -101,17 +105,39 @@ public class MapService {
             build.add(build_year); //건축년도
             area.add(dp_area+"㎡"); //전용 면적
             amount.add(dp_amount+"만원"); //거래금액
+            floor.add(dp_floor+"층");
             }
 
         }
 
         List<MapDto> list = new ArrayList<>();
         for(int i=0;i<address.size();i++){
-            list.add(new MapDto(address.get(i),contract.get(i),apart.get(i),build.get(i),area.get(i),amount.get(i)));
+            list.add(new MapDto(address.get(i),contract.get(i),apart.get(i),build.get(i),area.get(i),floor.get(i),amount.get(i)));
 
         }
-        System.out.println(list);
-        return list;
+        List<Integer> test=new ArrayList<>();
+        //동일한 좌표값들을 한 마커에 띄우기 위한 for문
+        for(int i=0;i<address.size();i++) {
+            for(int j=i+1;j<address.size();j++) {
+                if(Objects.equals(address.get(i), address.get(j))){
+                    list.get(j).setContract(list.get(j).getContract()+","+contract.get(i));
+                    list.get(j).setApart(list.get(j).getApart()+","+apart.get(i));
+                    list.get(j).setBuild(list.get(j).getBuild()+","+build.get(i));
+                    list.get(j).setArea(list.get(j).getArea()+","+area.get(i));
+                    list.get(j).setFloor(list.get(j).getFloor()+","+floor.get(i));
+                    list.get(j).setAmount(list.get(j).getAmount()+","+amount.get(i));
+                    test.add(i);
+
+
+                }
+            }
+        }
+//        for(int k=0;k<test.size();k++){
+//            list.remove(list.get(test.get(k)));
+//        }
+
+
+            return list;
     }
 
 }
