@@ -12,6 +12,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +30,15 @@ public class MemberController {
 //TODO: 원래 json으로 넘겨주던 토큰 방식에 쿠키로 주고 받는 걸 추가해서 일단 두가지 방식 다 됨 -> json에서 atk넘겨주는 건 바꿔야 할듯?+ 쿠키로 rtk 넘겨주는 것도 제외시키고
     // 회원 가입
     @PostMapping("join")
-    public ResponseEntity<?> join(@RequestBody JoinDto joinReqDto){
+    public ResponseEntity<?> join(@Validated @RequestBody JoinDto joinReqDto, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            StringBuilder sb = new StringBuilder();
+            for(ObjectError error : bindingResult.getAllErrors()){
+                FieldError fieldError = (FieldError) error;
+                sb.append(fieldError.getDefaultMessage()).append("\n");
+            }
+            return ResponseEntity.badRequest().body(sb.toString());
+        }
         System.out.println(joinReqDto.toString());
         String text = memberService.join(joinReqDto.getUsername(), joinReqDto.getPassword(), joinReqDto.getEmail());
         log.info(text);
@@ -33,7 +46,15 @@ public class MemberController {
     }
     // 로그인
     @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody LoginDto dto){
+    public ResponseEntity<?> login(@Validated @RequestBody LoginDto dto, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            StringBuilder sb = new StringBuilder();
+            for(ObjectError error : bindingResult.getAllErrors()){
+                FieldError fieldError = (FieldError) error;
+                sb.append(fieldError.getDefaultMessage()).append("\n");
+            }
+            return ResponseEntity.badRequest().body(sb.toString());
+        }
         JwtDto token = memberService.login(dto);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE,

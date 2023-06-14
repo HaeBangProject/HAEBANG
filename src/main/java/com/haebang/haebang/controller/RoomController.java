@@ -12,8 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.http.ResponseCookie;
-
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,26 +23,27 @@ import java.util.HashMap;
 @RequestMapping(value = "chat")
 public class RoomController {
     private final ChatRoomRepository repository;
+    private final MemberService memberService;
 
     //채팅방 목록 조회
     @RequestMapping(value = "rooms")
     public ModelAndView rooms(HttpServletRequest request){
+        System.out.println("test");
         log.info("# All Chat Rooms");
-//        Cookie[] cookies = request.getCookies();
-//        for (Cookie cookie : cookies) {
-//            if(cookie.getUsername()==null){
-//
-//                ModelAndView mv = new ModelAndView("alert");
-//                mv.addObject("msg", "로그인을 해주세요.\n");
-//                mv.addObject("url", "/");
-//                return mv;
-//            }
-//        }
+        for(Cookie cookie : request.getCookies()){
+            if(cookie.getName().equals("username") || cookie.getName().equals("ATK")){
+                if(cookie.getValue()!=null){
+                    ModelAndView mv = new ModelAndView("chat/rooms");
 
-        ModelAndView mv = new ModelAndView("chat/rooms");
+                    mv.addObject("list", repository.findAllRooms());
 
-        mv.addObject("list", repository.findAllRooms());
-
+                    return mv;
+                }
+            }
+        }
+        ModelAndView mv = new ModelAndView("alert");
+        mv.addObject("msg", "로그인을 해주세요.\n");
+        mv.addObject("url", "/");
         return mv;
     }
 

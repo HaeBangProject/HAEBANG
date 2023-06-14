@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>HAEBANG</title>
+    <link rel="stylesheet" href="css/common.css">
     <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
     <style>
-        @import url(https://fonts.googleapis.com/css?family=Roboto:300);
-
         .login-page {
             width: 360px;
             padding: 8% 0 0;
@@ -162,6 +161,7 @@
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 alert("실패 : "+jqXHR.responseText);
+                alert("error : "+errorThrown.message);
             })
     };
 

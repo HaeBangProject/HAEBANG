@@ -17,6 +17,7 @@ import java.util.List;
 @Controller
 public class PageController {
     final AptService aptService;
+    @GetMapping("mypage")
     public String mypage(){
         return "mypage";
     }

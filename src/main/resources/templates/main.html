@@ -6,6 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HAEBANG</title>
+    <link rel="stylesheet" href="css/common.css">
     <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
     <link rel="stylesheet" href="/css/button.css" />
     <style>
@@ -147,12 +148,8 @@
 
 <tr th:each="rank : ${rank}">
     <td th:text = "${rank}"></td></tr>
-
-<form action="/memberLogin" method="post">
-    <button type="submit">로그인</button>
-</form>
-<form action="/memberJogin" method="post">
-    <button type="submit">회원가입</button>
+<form action="/mypage" method="get">
+    <button type="submit">마이페이지</button>
 </form>
 <form action="/apt" method="post">
     <button type="submit">매물보기</button>

@@ -10,8 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +28,7 @@ public class AptController {
     final AptService aptService;
 
     @PostMapping("item")// 집 내놓기
-    public ResponseEntity createAptItem(@RequestBody AptItemReq req,
+    public ResponseEntity createAptItem(@Validated @RequestBody AptItemReq req, BindingResult bindingResult,
                                         Authentication authentication){
         log.info("집 내놓기");
 
@@ -31,16 +36,35 @@ public class AptController {
 
         if(!authentication.isAuthenticated())
             throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
+
+        if(bindingResult.hasErrors()){
+            StringBuilder sb = new StringBuilder();
+            for(ObjectError error : bindingResult.getAllErrors()){
+                FieldError fieldError = (FieldError) error;
+                sb.append(fieldError.getDefaultMessage()).append("\n");
+            }
+            return ResponseEntity.badRequest().body(sb.toString());
+        }
+
         return new ResponseEntity(aptService.createItem(authentication.getName() ,req), HttpStatus.OK);
     }
 
     @PutMapping("item/{id}")// 글 수정
     public ResponseEntity editAptItem(@PathVariable("id") Long id,
-                                      @RequestBody AptItemReq req,
+                                      @Validated @RequestBody AptItemReq req, BindingResult bindingResult,
                                       Authentication authentication
     ){
         if(!authentication.isAuthenticated())
             throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
+
+        if(bindingResult.hasErrors()){
+            StringBuilder sb = new StringBuilder();
+            for(ObjectError error : bindingResult.getAllErrors()){
+                FieldError fieldError = (FieldError) error;
+                sb.append(fieldError.getDefaultMessage()).append("\n");
+            }
+            return ResponseEntity.badRequest().body(sb.toString());
+        }
 
         return new ResponseEntity(aptService.updateItem(authentication.getName(), id, req), HttpStatus.OK);
     }
