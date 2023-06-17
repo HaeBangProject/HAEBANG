@@ -48,4 +48,17 @@ public class StompChatController {
         message.setWriter(chatRoomRepository.getSessionIdUsername().get(sessionId));
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
+
+    @MessageMapping(value="/chat/exit")
+    public void exit(ChatMessageDTO message ,SimpMessageHeaderAccessor headerAccessor){
+        String sessionId = headerAccessor.getSessionId();
+        String username = chatRoomRepository.getSessionIdUsername().get(sessionId);
+        message.setWriter(username);
+        message.setMessage(message.getWriter() + "님이 채팅방을 종료하셨습니다.");
+        message.setWriter(chatRoomRepository.getSessionIdUsername().get(sessionId));
+        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+
+
+
+    }
 }

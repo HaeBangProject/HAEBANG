@@ -6,7 +6,7 @@
 <script th:inline="javascript">
     $(document).ready(function(){
 
-        if([[${username}]]==='admin'){
+        if(getCookie("username")==='admin'){
             document.getElementById("container").style.display = "";
         }else{//조건 1이 아닐떄
             document.getElementById("container").style.display = "none";

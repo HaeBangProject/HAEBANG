@@ -139,10 +139,6 @@ public class MapService {
                 }
             }
         }
-//        for(int k=0;k<test.size();k++){
-//            list.remove(list.get(test.get(k)));
-//        }
-
 
             return list;
     }

@@ -40,4 +40,8 @@ public class ChatRoomRepository {
 
         return room;
     }
+
+    public void deleteRoomById(String id){
+        chatRoomDTOMap.remove(id);
+    }
 }

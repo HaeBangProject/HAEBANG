@@ -14,14 +14,15 @@
                 <div class="col-6">
                     <div class="input-group mb-3">
                         <input type="text" id="msg" class="form-control">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
-                        </div>
+                        <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
                     </div>
                 </div>
             </div>
             <div class="col-6"></div>
         </div>
+        <form th:action="@{/chat/exit(roomId=${room.roomId})}" method="post">
+        <button type="submit" id="button-exit">종료</button>
+        </form>
 
         <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
@@ -62,11 +63,11 @@
                 if(writer === username){
                     str = "<div class='col-6'>";
                     str += "<div class='alert alert-secondary'>";
-                    str += "<b>"+"               "+ message + "</b>";
+                    str += "<b>" + writer + " : " + message + "</b>";
                     str += "</div></div>";
                     $("#msgArea").append(str);
                 }
-                else{
+                else{ //관리자
                     str = "<div class='col-6'>";
                     str += "<div class='alert alert-warning'>";
                     str += "<b>" + writer + " : " + message + "</b>";
@@ -87,6 +88,12 @@
             console.log(username + ":" + msg.value);
             stomp.send('/pub/chat/message', {"token":ATK}, JSON.stringify({roomId: roomId, message: msg.value, writer: username}));
             msg.value = '';
+        });
+        $("#button-exit").on("click", function(e){
+            var msg = "채팅이 종료되었습니다.";
+
+            console.log(username + ":" + msg);
+            stomp.send('/pub/chat/exit', {"token":ATK}, JSON.stringify({roomId: roomId, message: msg, writer: username}));
         });
     });
 

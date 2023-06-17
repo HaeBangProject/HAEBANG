@@ -2,20 +2,15 @@ package com.haebang.haebang.controller;
 
 import com.haebang.haebang.dto.ChatRoomDTO;
 import com.haebang.haebang.repository.ChatRoomRepository;
-import com.haebang.haebang.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,18 +18,15 @@ import java.util.HashMap;
 @RequestMapping(value = "chat")
 public class RoomController {
     private final ChatRoomRepository repository;
-    private final MemberService memberService;
 
     //채팅방 목록 조회
     @RequestMapping(value = "rooms")
     public ModelAndView rooms(HttpServletRequest request){
-        System.out.println("test");
         log.info("# All Chat Rooms");
         for(Cookie cookie : request.getCookies()){
             if(cookie.getName().equals("username") || cookie.getName().equals("ATK")){
                 if(cookie.getValue()!=null){
                     ModelAndView mv = new ModelAndView("chat/rooms");
-
                     mv.addObject("list", repository.findAllRooms());
 
                     return mv;
@@ -49,12 +41,12 @@ public class RoomController {
 
     //채팅방 개설
     @PostMapping(value = "room")
-    public String create(@RequestParam String name, @NotNull RedirectAttributes rttr){
+    public String create(Model model,@RequestParam String name){
 
         log.info("# Create Chat Room , name: " + name);
         ChatRoomDTO dto = repository.createChatRoomDTO(name);
-        rttr.addFlashAttribute("roomName", dto);
-        return "redirect:/chat/rooms";
+        model.addAttribute("room",dto);
+        return "chat/room";
     }
 
     //채팅방 조회
@@ -66,5 +58,14 @@ public class RoomController {
         model.addAttribute("room", repository.findRoomById(roomId));
 //        model.addAttribute("member", memberReqDto);
 
+    }
+
+    //채팅방 종료
+    @PostMapping("exit")
+    public String exitRoom(String roomId,Model model){
+        repository.deleteRoomById(roomId);
+        model.addAttribute("msg", "채팅이 종료되었습니다.");
+        model.addAttribute("url", "/");
+        return "alert";
     }
 }

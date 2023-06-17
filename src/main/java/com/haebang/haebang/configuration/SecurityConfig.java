@@ -1,5 +1,4 @@
 package com.haebang.haebang.configuration;
-
 import com.haebang.haebang.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurtiyConfig {
+public class SecurityConfig {
     final private JwtProvider jwtProvider;
 
     @Bean
@@ -28,7 +27,7 @@ public class SecurtiyConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/static/css/**", "/js/**", "/img/**", "/").permitAll()
-                .antMatchers( "/hello", "/chat/**").permitAll()
+                .antMatchers(  "/chat/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/apt/item/*", "/api/apt/items", "/api/apt/items?**").permitAll()
                 .antMatchers("/api/apt/item**").authenticated()
                 .antMatchers("/api/member/test").authenticated()

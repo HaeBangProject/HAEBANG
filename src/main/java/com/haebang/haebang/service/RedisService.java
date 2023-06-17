@@ -24,7 +24,7 @@ public class RedisService {
             redisTemplate.opsForZSet().incrementScore("ranking",content,1);
         }
         catch(Exception e){
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
 
 
@@ -33,7 +33,7 @@ public class RedisService {
 
     }
 
-    public List<String> rank_list(){
+    public List<Map.Entry<String, Integer>> rank_list(){
         ZSetOperations<String,String> stringStringZSetOperations = redisTemplate.opsForZSet();
         Long redis_size = redisTemplate.opsForZSet().size("ranking");
         Double test_score =null;
@@ -54,10 +54,32 @@ public class RedisService {
                 same_score += score.get(key) - 1;
             }
         }
-            System.out.println(same_score);
-            Set<String> scoreRange = stringStringZSetOperations.reverseRange("ranking",0,9+same_score);
-            System.out.println(scoreRange);
-        return new ArrayList<>(Objects.requireNonNull(scoreRange));
+        System.out.println(same_score);
+        Set<String> scoreRange = stringStringZSetOperations.reverseRange("ranking",0,4+same_score);
+        List<Integer> scoreRange_score = new ArrayList<>();
+
+        for(String str : scoreRange) {
+            int i;
+            double d = stringStringZSetOperations.score("ranking", str);
+            i = Integer.parseInt(String.valueOf(Math.round(d))); //double값 int로 변환
+            scoreRange_score.add(i);
+        }
+        List<String> targetList = new ArrayList<>(scoreRange);
+        Map<String, Integer> rank = new HashMap<>();
+        for(int j=0;j<scoreRange.size();j++){
+            rank.put(targetList.get(j),scoreRange_score.get(j));
+        }
+
+        List<Map.Entry<String, Integer>> entryList = new LinkedList<>(rank.entrySet());
+        entryList.sort(new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o2.getValue() - o1.getValue();
+            }
+        });
+
+        System.out.println(entryList);
+        return entryList;
 
     }
 
