@@ -20,6 +20,8 @@
   - [매물 CRUD](#매물-CRUD)
   - [관리자 문의](#관리자-문의)
   - [Error Response](#custom-error-response)
+- [Trouble Shooting](#Trouble-Shooting)
+
 ## Project Members
 
 <table>
@@ -151,4 +153,14 @@
 - ### Custom Error Response
 
   * 상황에 따른 error code를 작성하여 기존 응답보다 client가 어떤 조치를 취해야 하는지 자세히 안내하는 Exception Handler를 작성
-  
+
+## Trouble Shooting
+- Redis의 sorted set 자료구조를 이용해 인기 지역 검색 순위를 구현하는 과정에서 동점처리를 못해 공동 순위를 구현하지 못하는 문제가 발생
+  - [Map 자료구조를 이용해 score값을 기준으로 다시 검색데이터를 분류해 같은 score값을 가진 데이터를 카운트 해 reverseRange()를 이용해 동점처리 된 데이터도 공동순위에 들어가게 구현](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/service/RedisService.java#L40)
+- spring Security 5.7 & JWT 변경사항
+  - [spring boot 2.7.3 은 spring security 5.7 버전을 포함한다. 5.7버전은 어댑터를 사용하지 않고 bean 등록방식을 사용하도록 바뀌었기 때문에 오버라이드 해서 구현했던 방식 대신 bean으로 등록하여 사용하면 된다. WebSecurityConfigurerAdapter (기존) → FilterChain (변경)](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/configuration/SecurityConfig.java#L20))
+  - [new release 1.0.x 부터 parse 대신 builder()로, <u>signWith( 알고리즘, 세가지형태시크릿키)</u>에서 <u>signWith( byte[]형만되는시크릿키, 알고리즘 )</u> 으로 변경. ](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/utils/JwtProvider.java#L29))
+    signWith에 필요한 시크릿키는 Keys.hmacShaKeyFor('keyBytes')로 인코딩 된 키로 sign하도록 변경됨 ('keybytes'는 32byte보다 길어야 함)
+- 웹소켓 통신시 jwt 적용과 유저 구분 문제 - 토큰으로 여부를 구분하기 때문에 토큰을 담아 보내고 검증하는 것에 어려움 발생
+  - [토큰으로 회원여부를 구분하기 때문에 stomp의 헤더에 토큰을 담아 보내고, 이를 stomp hadler를 거쳐 검증함](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/utils/StompHandler.java#L20)
+  - [핸들러를 통해 <u>세션id와 토큰으로 부터 가져온 유저네임을 맵핑시키는 방식</u>에서, 최초 로그인시 토큰과 유저정보를 쿠키에 저장하도록 해 소켓 <u>통신시 토큰과 유저네임을 함께 보내도록해 보다 </u>편리하게 변경](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/utils/StompHandler.java#L20)
