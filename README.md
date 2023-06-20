@@ -91,7 +91,8 @@
 
 ## 시스템 아키텍처
 
-![haebang_architecture](https://github.com/HaeBangProject/HAEBANG/assets/59076085/f6cc8811-24bf-4b36-bbfe-13b06ce9c506)
+![image](https://github.com/HaeBangProject/HAEBANG/assets/59076085/60990617-b00e-412a-b31c-f9bb8e40887d)
+
 
 ## API 명세서
 
