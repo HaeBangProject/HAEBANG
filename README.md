@@ -1,6 +1,7 @@
 # <img width="60" alt="bemo_icon" src="https://github.com/HaeBangProject/HAEBANG/assets/59076085/128deff0-b54c-46aa-ba85-130f52dba780"> HAEBANG
 
 <br>
+
 <br>
 
 ## 목차
