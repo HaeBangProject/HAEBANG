@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,9 +23,10 @@ public class MainController {
     @RequestMapping("/")
     public String main(Model model) throws IOException {
         // 지역별 매물 검색 랭킹 5순위
-        List<Map.Entry<String, Integer>> entryList =redisSampleService.rank_list();
+        List<Map.Entry<String, Integer>> entryList = redisSampleService.rank_list();
         List<String> ranking = new ArrayList<>();
         List<Integer> ranking_score = new ArrayList<>();
+
 
         for(Map.Entry<String, Integer> entry : entryList){
             ranking.add(entry.getKey());

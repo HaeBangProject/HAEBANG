@@ -20,7 +20,6 @@ public class MapController {
     final private MapService mapservice;
     final private RedisService redisSampleService;
 
-    MapDto mapDto;
     @RequestMapping("/map")
     public String map(Model model,String year,String month,Integer sggCd,String dong) throws IOException {
 
@@ -42,6 +41,9 @@ public class MapController {
         if(!Objects.equals(dong, null)){
             redisSampleService.ranking(dong);
         }
+        model.addAttribute("year",year);
+        model.addAttribute("month",month);
+        model.addAttribute("dong",dong);
 
         return "map";
     }
