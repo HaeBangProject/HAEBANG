@@ -41,9 +41,15 @@ dependencies {
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	// aws s3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 	//websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.webjars:stomp-websocket:2.3.4'
+
+	// thymeleaf
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
 //	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359' //데이터 타입 컨버터 문제
 

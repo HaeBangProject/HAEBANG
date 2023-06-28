@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<head th:insert="layout/default :: head"></th:insert></head>
 <head>
     <meta charset="UTF-8">
     <title>HAEBANG | 매물 작성하기</title>
@@ -8,6 +9,8 @@
     <script type="text/javascript" src="/js/common.js"></script>
 </head>
 <body>
+<div th:insert="layout/default :: nav">
+</div>
 <form class="form" id="form">
     <input id="item_id" th:text="${item_id}" name="id" type="hidden" class="form-control">
     <input name="apt_id" type="hidden" class="form-control">
@@ -45,6 +48,10 @@
             document.getElementById("btn-post").innerText = "집 내놓기";
         }
     });
+
+    function upload_file(file, dataObj){
+
+    }
 
     function get_item(item_id){
         console.log(item_id+"번 매물 로딩");

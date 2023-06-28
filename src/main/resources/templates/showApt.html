@@ -1,13 +1,16 @@
 <!doctype html>
 <html lang="en">
+<head th:insert="layout/default :: head"></th:insert></head>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/common.css">
     <title>HAEBANG</title>
-    <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e"></head>
 <body>
+<div th:insert="layout/default :: nav">
+</div>
 <div id="map" style="width:100%;height:700px;"></div>
 <script th:inline="javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2e1ab347af966350cd08e84de51d9fdb&libraries=services"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>

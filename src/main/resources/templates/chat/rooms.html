@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="layout/default :: head"></th:insert></head>
 <title>HAEBANG</title>
-<link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<link rel="stylesheet" href="/css/common.css">
+<script type="text/javascript" src="/js/common.js"></script>
 <script th:inline="javascript">
     $(document).ready(function(){
 
@@ -15,6 +17,8 @@
 
 </script>
 <body>
+<div th:insert="layout/default :: nav">
+</div>
     <th:block th:fragment="content">
         <div id="container">
             <div>

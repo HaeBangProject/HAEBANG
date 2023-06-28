@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+<head th:insert="layout/default :: head"></th:insert></head>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -12,6 +13,8 @@
 
 </head>
 <body>
+<div th:insert="layout/default :: nav">
+</div>
 <div style="height: 30%;">
     <div style="float:left;">
         <h3>지역별 랭킹 TOP5</h3>
@@ -92,18 +95,6 @@
                 <button class="custom-btn btn-16" style="color: cornflowerblue;" type="submit">SUBMIT</button>
             </div>
 
-        </form>
-    </div>
-
-    <div style="float:right">
-        <form action="/mypage" method="get">
-            <button type="submit">마이페이지</button>
-        </form>
-        <form action="/apt" method="post">
-            <button type="submit">매물보기</button>
-        </form>
-        <form action="/chat/rooms" method="post">
-            <button type="submit">관리자문의</button>
         </form>
     </div>
 
