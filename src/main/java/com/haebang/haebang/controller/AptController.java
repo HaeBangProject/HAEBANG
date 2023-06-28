@@ -34,8 +34,7 @@ public class AptController {
 
         System.out.println(req.toString());
 
-        if(!authentication.isAuthenticated())
-            throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
+        if(!authentication.isAuthenticated()) throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
 
         if(bindingResult.hasErrors()){
             StringBuilder sb = new StringBuilder();
@@ -69,14 +68,14 @@ public class AptController {
         return new ResponseEntity(aptService.updateItem(authentication.getName(), id, req), HttpStatus.OK);
     }
 
-    @GetMapping("items")// 검색 조건 params
+    @GetMapping("items")// 도로명 주소에 따른 매물 검색
     public ResponseEntity getAptItems(@RequestParam Map<String, String> params
     ){
         if(params.isEmpty()){// param없으면
             return new ResponseEntity( aptService.findAllItems(), HttpStatus.OK);
         }
-        // TODO: 아파트 정보 받아서 해당 아파트 매물 조회 하기로 바꿈
-        List<Item> items = aptService.findItemsByRoadAddress(params.get("roadAddress"));
+
+        List<Item> items = aptService.findItemsByRoadAddress(params.get("road_address"));
         if(items==null) return new ResponseEntity("동일한 주소의 매물이 없습니다", HttpStatus.OK);
         return new ResponseEntity(items, HttpStatus.OK);
     }
@@ -87,11 +86,17 @@ public class AptController {
         if(id==null) return new ResponseEntity("잘못된 매물 접근", HttpStatus.BAD_REQUEST);
         return new ResponseEntity(aptService.findItem(id), HttpStatus.OK);
     }
+    @GetMapping("item/edit/{id}")// 수정할 수 있는 정보들만 모아 dto 로 보내줌
+    public ResponseEntity getItemDetail(@PathVariable("id") Long id){
+        if(id==null) return new ResponseEntity("잘못된 매물 접근", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(aptService.getItemForEdit(id), HttpStatus.OK);
+    }
 
     @DeleteMapping("item/{id}")// 삭제
     public ResponseEntity deleteApt(@PathVariable("id") Long id,
                                     Authentication authentication
     ){
+        System.out.println(id+"아이템 삭제");
         if(!aptService.deleteItem(authentication.getName(), id)){
             return new ResponseEntity("삭제 안됨", HttpStatus.INTERNAL_SERVER_ERROR);
         }

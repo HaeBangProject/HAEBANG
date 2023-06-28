@@ -26,15 +26,16 @@
 
 
     function dp_detail(){
-        location.href="/dp_detail/"+dp_id;
+        var road_address = /*[[${Apt.roadAddress}]]*/;
+
+        location.href="item/detail/"+road_address;
     }
 
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch(/*[[${Apt.roadAddress}]]*/, function(result, status) {
-        dp_id = [[${Apt.id}]];
         var dp_data = /*[[${Apt.roadAddress}]]*/;
-        var detail ='<button onclick="dp_detail();">'+"매물보기"+'</button>';
-
+        var cnt = /*[[${Apt.cnt}]]*/;
+        var detail = '<button onclick="dp_detail();">'+cnt+"개의 매물보기"+'</button>';
 
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {

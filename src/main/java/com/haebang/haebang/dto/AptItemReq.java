@@ -2,10 +2,11 @@ package com.haebang.haebang.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.haebang.haebang.entity.Apt;
+import com.haebang.haebang.entity.Item;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Data
@@ -15,7 +16,7 @@ public class AptItemReq {
     String roadAddress;// 도로명주소
     @NotBlank(message = "아파트명은 필수 입력값입니다.")
     String dp;// 아파트명
-    @NotBlank(message = "연락처는 필수 입력값입니다.")
+    @NotBlank(message = "연락처는 필수 입력값입니다.") @Pattern(regexp = "[0-9]+-[0-9]+-[0-9]+", message = "010-xxxx-xxxx 형식을 맞춰주세요")
     String phoneNumber;
     @NotBlank(message = "제목은 필수 입력값입니다.")
     String title;
@@ -23,18 +24,28 @@ public class AptItemReq {
     String text;
     @NotBlank(message = "아파트 동은 필수 입력값입니다.")
     String dong;
-    @NotBlank(message = "층 수는 필수 입력값입니다.")
+    @NotNull(message = "층 수는 필수 입력값입니다.") @Min(0)
     int floor;
     @NotBlank(message = "계약 연도는 필수 입력값입니다.")
-    String contract_year;
-    @NotBlank(message = "계약 달은 필수 입력값입니다.")
-    String contract_month;
-    @NotBlank(message = "계약 일은 필수 입력값입니다.")
-    String contract_day;
+    String contract_date;
     @NotBlank(message = "아파트 평수는 필수 입력값입니다.")
     String dp_area;
     @NotBlank(message = "매물 가격은 필수 입력값입니다.")
     String dp_amount;
-    @NotBlank(message = "건축연도는 필수 입력값입니다.")
-    String build_year;
+    @NotNull(message = "건축연도는 필수 입력값입니다.")
+    int build_year;
+
+    public void fromEntityToDto(Apt apt, Item item){
+        this.dp = apt.getDp();
+        this.roadAddress = apt.getRoadAddress();
+        this.build_year = item.getBuild_year();
+        this.dp_amount = item.getDp_amount();
+        this.dp_area = item.getDp_area();
+        this.contract_date = item.getContract_date();
+        this.floor = item.getFloor();
+        this.dong = item.getDong();
+        this.text = item.getText();
+        this.title = item.getTitle();
+        this.phoneNumber = item.getPhoneNumber();
+    }
 }
