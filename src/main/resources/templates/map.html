@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="layout/default :: head"></th:insert></head>
 <head>
     <meta charset="utf-8">
     <title>HAEBANG</title>
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/button.css"/>
-
-    <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
-
 </head>
 <body>
+<div th:insert="layout/default :: nav">
+</div>
 <div style="height: 20%;">
     <form action="/map" method="post">
 

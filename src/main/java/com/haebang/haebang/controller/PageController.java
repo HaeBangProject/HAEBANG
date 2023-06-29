@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.SortedMap;
 
 @RequiredArgsConstructor
 @Controller
@@ -33,23 +34,25 @@ public class PageController {
         List<Apt> list = aptService.findAllApt();
         model.addAttribute("Apt",list);
 
-
         return "showApt";
     }
-    @RequestMapping("/dp_detail/{dp_id}")
-    public String dp_detail(Model model,@PathVariable String dp_id){
-        long id = Long.parseLong(dp_id);
-        System.out.println(dp_id);
-        Item item = aptService.findItem2(id).orElseThrow();
-        Apt apt = aptService.findByAptId(id).orElseThrow();
-        model.addAttribute("item",item);
-        model.addAttribute("apt",apt);
-        return "detail";
-
+    @RequestMapping("/item/detail/{road_address}")
+    public String dp_detail(Model model,@PathVariable("road_address") String road_address){
+        System.out.println(road_address);
+        Apt apt = aptService.findAptByRoadAddress(road_address);
+        model.addAttribute("apt", apt);
+        return "item/detail";
     }
 
-    @GetMapping("/item/write")
-    public String write(){
+    @GetMapping("item/write")
+    public String write(Model model){
+        model.addAttribute("item_id", 0);
+        return "item/write";
+    }
+    @GetMapping("item/edit/{item_id}")
+    public String edit(Model model, @PathVariable("item_id") Long id){
+        System.out.println("매물 작성 페이지 로딩 : "+id);
+        model.addAttribute("item_id", id);
         return "item/write";
     }
 

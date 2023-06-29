@@ -1,10 +1,102 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+<head th:insert="layout/default :: head"></th:insert></head>
 <head>
     <meta charset="UTF-8">
-    <title>매물 상세페이지</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HAEBANG</title>
+    <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
+    <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
+<div th:insert="layout/default :: nav">
+</div>
+<table id="apt">
+<tr>
+    <td th:text="${apt.dp}"></td>
+    <td th:text="${apt.roadAddress}"></td>
+</tr>
+</table>
+<div id="items">
 
+</div>
 </body>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var itmes;
+    $(document).ready(function (){
+        findItems( /*[[${apt.roadAddress}]]*/);
+    })
+
+    function findItems(roadAddress){
+        $.ajax({
+            type: "GET",
+            url: "/api/apt/items?road_address="+roadAddress,
+            headers: {"content-type": "application/json"},
+            dataType: "json",
+        })
+            .done(function (response) {
+                console.log(response);
+                items = response;
+                var html =``;
+
+                if(!response.length) html += '등록된 매물이 없습니다.';
+                else{
+                    response.forEach((obj, idx) => {
+                        html += `<div class="card" style="width: 18rem;">\n` +
+                            `  <div class="card-body">\n` +
+                            `    <h5 class="card-title">${obj.title}</h5>\n` +
+                            `    <h6 class="card-subtitle mb-2 text-body-secondary">${obj.created_date}</h6>\n` +
+                            `    <p class="card-text">${obj.text}</p>\n` +
+                            `    <p>${obj.phone_number}</p>\n`+
+                            `    <p>${obj.dong}</p>\n`+
+                            `    <p>${obj.floor}</p>\n`+
+                            `    <p>${obj.contract_date}</p>\n`+
+                            `    <p>${obj.hits}</p>\n`+
+                            `    <p>${obj.dp_area}</p>\n`+
+                            `    <p>${obj.dp_amount}</p>\n`+
+                            `    <p>${obj.build_year}</p>\n`+
+                            `    <p>${obj.username}</p>\n`+
+                            '    <button type="button" onclick="edit_item('+obj.id+')" class="card-link">수정</button>\n' +
+                            '    <button type="button" onclick="delete_item('+obj.id+')" class="card-link">삭제</button>\n' +
+                            `  </div>\n` +
+                            `</div>`;
+                    })
+                }
+
+                alert("성공");
+                $("#items").append(html);
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert("실패 : "+jqXHR.responseText);
+            })
+    }
+    function edit_item(item_id){
+        location.href = "/item/edit/"+item_id;
+    }
+
+    function delete_item(item_id){
+        console.log(item_id);
+        alert("이 글을 삭제하시겠습니까?")
+        $.ajax({
+            type: "DELETE",
+            url: "/api/apt/item/"+item_id,
+            headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
+            dataType: "text",
+        })
+            .done(function (response) {
+                alert("성공");
+                window.location.href = '/apt';
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert("실패 : "+jqXHR.responseText);
+            })
+    }
+    /*]]>*/
+</script>
+
 </html>

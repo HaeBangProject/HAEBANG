@@ -33,9 +33,11 @@ public class AptService {
         Optional<Apt> optional = aptRepository.findByRoadAddress(req.getRoadAddress());
         if(optional.isPresent()){// 이미 저장된 apt 가 있을때
             apt = optional.get();
+            apt.increaseCnt();
         }else{// 새 아파트 등록할때
             apt.setRoadAddress(req.getRoadAddress());
             apt.setDp(req.getDp());
+            apt.setCnt(1L);
             System.out.println("아파트 새로 저장"+apt.getRoadAddress()+" "+apt.getDp());
             aptRepository.save(apt);
         }
@@ -52,9 +54,7 @@ public class AptService {
                 .build_year(req.getBuild_year())
                 .dong(req.getDong())
                 .floor(req.getFloor())
-                .contract_year(req.getContract_year())
-                .contract_month(req.getContract_month())
-                .contract_day(req.getContract_day())
+                .contract_date(req.getContract_date())
                 .build();
 
         itemRepository.save(item);
@@ -66,6 +66,13 @@ public class AptService {
         entity.setHits(entity.getHits()+1);
         itemRepository.save(entity);
         return entity;
+    }
+    public AptItemReq getItemForEdit(Long idx){
+        Item item = itemRepository.findById(idx).orElseThrow();
+        Apt apt = aptRepository.findById(item.getApt().getId()).orElseThrow();
+        AptItemReq dto = new AptItemReq();
+        dto.fromEntityToDto(apt, item);
+        return dto;
     }
 
     public Item updateItem(String username, Long idx, AptItemReq req){
@@ -94,13 +101,18 @@ public class AptService {
     public boolean deleteItem(String username, Long idx){
         Item item = itemRepository.findById(idx).orElseThrow();
         if(!item.getUsername().equals(username)) throw new CustomException(CustomErrorCode.INVALID_EDIT_USER);
-        itemRepository.delete(item);
+        itemRepository.deleteById(idx);
+        item.getApt().decreaseCnt();
+        aptRepository.save(item.getApt());
         return true;
     }
 
     public List<Apt> findAllApt() { return aptRepository.findAll();}
 
     public Optional<Apt> findByAptId(Long id) { return aptRepository.findById(id);}
+    public Apt findAptByRoadAddress(String roadAddress) {
+        return aptRepository.findByRoadAddress(roadAddress).orElseThrow();
+    }
 
 
 }
