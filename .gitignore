@@ -39,9 +39,7 @@ out/
 ### properties ###
 *.properties
 
-###yml###
-*.yml
-*.yaml
+
 
 ###sql###
 *.sql

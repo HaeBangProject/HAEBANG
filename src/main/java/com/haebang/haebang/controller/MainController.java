@@ -37,16 +37,21 @@ public class MainController {
         rank_list.add(ranking.get(0));
         int rank_count=1;
         for(int i=1;i<ranking_score.size();i++){
-            if(ranking_score.get(i)!=ranking_score.get(i-1)||i==ranking_score.size()-1){ //앞의 리스트와 점수가 다를때
+            if(ranking_score.get(i)!=ranking_score.get(i-1)){ //앞의 리스트와 점수가 다를때
                 String str = String.join(",",rank_list);
                 model.addAttribute("rank"+rank_count,str);
                 rank_list=new ArrayList<>();
                 rank_count+=1;
                 rank_list.add(ranking.get(i));
+
             }
             else{
                 rank_list.add(ranking.get(i));
             }
+        }
+        if (rank_list.size()>=0){
+            String str = String.join(",",rank_list);
+            model.addAttribute("rank"+rank_count,str);
         }
         int rank_sggCd = mapService.rank_one(ranking.get(0));
 

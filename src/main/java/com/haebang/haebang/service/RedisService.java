@@ -35,9 +35,12 @@ public class RedisService {
         Long redis_size = redisTemplate.opsForZSet().size("ranking");
         Double test_score =null;
         Map<Double,Integer> score = new HashMap<>(); //스코어를 담기위한 Map
-
+        if (redis_size==0){
+            redisTemplate.opsForZSet().incrementScore("ranking","상계동",0);
+        }
         for(int i = 0; i < redis_size; i++) {
             Set<String> test = stringStringZSetOperations.reverseRange("ranking", i, i);
+
             for(String str : test) {
                 test_score = stringStringZSetOperations.score("ranking", str);
                 score.put(test_score,score.getOrDefault(test_score, 0)+1);
@@ -78,6 +81,7 @@ public class RedisService {
                 return o2.getValue() - o1.getValue();
             }
         });
+        System.out.println(entryList);
         // entryList = [논현동=8, 상계동=5, 길동=3, 방학동=3, 창동=2, 신림동=2, 쌍문동=2, 수유동=1, 석촌동=1, 공릉동=1, 번동=1, 삼성동=1, 노량진동=1, 독산동=1, 대치동=1, 고덕동=1, 둔촌동=1]
 
         return entryList;

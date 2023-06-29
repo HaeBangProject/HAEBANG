@@ -1,0 +1,46 @@
+jwt:
+  secret: ${jwt_secret}
+haebang:
+  secret:
+    key: ${haebang_secretkey}
+
+
+spring:
+  sql:
+    init:
+      mode: never #always에서 변경한 상태
+      data-locations: classpath:data.sql
+  datasource:
+    driver-class-name:
+    url: ${datasource_url}
+    username: ${datasource_username} # aws
+    password: ${datasource_pw}
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      generate-ddl: true
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    generate-ddl: true
+    database: mysql # 없으면 ddl error
+    database-platform: org.hibernate.dialect.MySQL8Dialect # ??? ???? ?? ??? MySQL8 ??
+
+  #
+  redis:
+    host: ${redis_host} # server host
+    password: # server password
+    port: 6379 # connection port
+    pool:
+      max-idle: 8 # pool settings ...
+      min-idle: 0
+      max-active: 8
+      max-wait: -1
+
+
+logging:
+  level:
+    org.hibernate.SQL : debug
+    org.hibernate.type: trace
