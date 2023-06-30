@@ -1,8 +1,8 @@
 jwt:
-  secret: ${jwt_secret}
+  secret: jwt_secret
 haebang:
   secret:
-    key: ${haebang_secretkey}
+    key: haebang_secretkey
 
 
 spring:
@@ -12,9 +12,9 @@ spring:
       data-locations: classpath:data.sql
   datasource:
     driver-class-name:
-    url: ${datasource_url}
-    username: ${datasource_username} # aws
-    password: ${datasource_pw}
+    url: datasource_url
+    username: datasource_username # aws
+    password: datasource_pw
   jpa:
     defer-datasource-initialization: true
     hibernate:
@@ -30,7 +30,7 @@ spring:
 
   #
   redis:
-    host: ${redis_host} # server host
+    host: redis_host # server host
     password: # server password
     port: 6379 # connection port
     pool:
