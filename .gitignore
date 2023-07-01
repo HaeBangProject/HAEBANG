@@ -38,8 +38,3 @@ out/
 
 ### properties ###
 *.properties
-
-
-
-###sql###
-*.sql
