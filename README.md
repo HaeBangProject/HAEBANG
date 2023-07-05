@@ -3,6 +3,7 @@
 <br>
 <br>
 
+## 🚀[HAEBANG 접속하기](https://www.haebang.site)
 
 ## 목차
 
@@ -80,9 +81,10 @@
 - AWS EC2
 - AWS S3
 - AWS RDS
-- AWS Codedeploy
+- AWS LoadBalancer
 - AWS Route 53
-- Github Actions
+- Jenkins
+- Docker
 
 **라이브러리**
 
@@ -91,7 +93,7 @@
 
 ## 시스템 아키텍처
 
-![image](https://github.com/HaeBangProject/HAEBANG/assets/59076085/adfbe988-65fa-4506-96f3-9c29be9a728e)
+![haebang_archi_final](https://github.com/HaeBangProject/HAEBANG/assets/59076085/ae7dfc0a-3f86-4ae6-8539-ba4eea9d3d97)
 
 
 ## API 명세서
