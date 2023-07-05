@@ -38,6 +38,9 @@ public class RedisService {
         if (redis_size==0){
             redisTemplate.opsForZSet().incrementScore("ranking","상계동",0);
         }
+        if(redis_size==2){ //첫 검색어가 들어왔을때,기존에 설정했던 key에서 상계동을 지우기
+            redisTemplate.opsForZSet().remove("ranking","상계동");
+        }
         for(int i = 0; i < redis_size; i++) {
             Set<String> test = stringStringZSetOperations.reverseRange("ranking", i, i);
 
