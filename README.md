@@ -3,7 +3,7 @@
 <br>
 <br>
 
-## 🚀[HAEBNAG 접속하기](https://www.haebang.site)
+## 🚀[HAEBANG 접속하기](https://www.haebang.site)
 
 ## 목차
 
