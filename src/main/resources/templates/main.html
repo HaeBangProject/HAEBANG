@@ -8,32 +8,32 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HAEBANG</title>
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
     <link rel="stylesheet" href="/css/button.css"/>
 
 </head>
 <body>
 <div th:insert="layout/default :: nav">
 </div>
+<br>
 <div style="height: 30%;">
-    <div style="float:left;">
-        <h3>지역별 랭킹 TOP5</h3>
-        <div th:text="${rank1}"></div>
-        <div th:text="${rank2}"></div>
-        <div th:text="${rank3}"></div>
-        <div th:text="${rank4}"></div>
-        <div th:text="${rank5}"></div>
+    <h5 style="float:left;">
+        <h4>지역별 랭킹 TOP5</h4>
+        <h5 th:text="${rank1}"></h5>
+        <h5 th:text="${rank2}"></h5>
+        <h5 th:text="${rank3}"></h5>
+        <h5 th:text="${rank4}"></h5>
+        <h5 th:text="${rank5}"></h5>
+    </h5>
         <form action="/map" method="post">
-
-            <div>
-                <select class="form-control input-sm" id="year" name="year">
+            <div style="display: flex;">
+                <select style="width: 150px;" class="form-control" id="year" name="year">
                 </select>
-                <select class="form-control input-sm" id="month" name="month">
+                <select style="width: 150px;" class="form-control" id="month" name="month">
                 </select>
-
-
+            </div>
+            <div style="display: flex;">
                 <td valgn="top">
-                    <select name="sggCd" size="1" class="input_text" id="Type2" onchange="categoryChange(this)">
+                    <select name="sggCd" size="1" style="width: 150px; display:inline;" class="form-control" id="Type2" onchange="categoryChange(this)">
                         <option value="0">시/군/구</option>
 
                         <option value="11680">강남구</option>
@@ -87,13 +87,12 @@
                         <option value="11260">중랑구</option>
 
                     </select>
-                    <select name="dong" id="good">
+                    <select style="width: 150px;" class="form-control" name="dong" id="good">
                         <option>읍/면/동</option>
                     </select>
-
                 </td>
-                <button class="custom-btn btn-16" style="color: cornflowerblue;" type="submit">SUBMIT</button>
             </div>
+                <button class="btn btn-secondary" type="submit">SUBMIT</button>
 
         </form>
     </div>

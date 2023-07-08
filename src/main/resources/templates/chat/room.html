@@ -4,36 +4,35 @@
 <title>HAEBANG</title>
 <link rel="stylesheet" href="/css/common.css">
 <script type="text/javascript" src="/js/common.js"></script>
-<link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
 <div th:insert="layout/default :: nav">
 </div>
-<th:block th:fragment="content">
-
-        <div class="container">
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-6">
+            <h1>[[${room.name}]]</h1>
+            <div id="user"></div>
+        </div>
+        <div>
+            <div id="msgArea" class="col"></div>
             <div class="col-6">
-                <h1>[[${room.name}]]</h1>
-                <div id="user"></div>
-            </div>
-            <div>
-                <div id="msgArea" class="col"></div>
-                <div class="col-6">
-                    <div class="input-group mb-3">
-                        <input type="text" id="msg" class="form-control">
-                        <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
-                    </div>
+                <div class="input-group mb-3">
+                    <input type="text" id="msg" class="form-control">
+                    <button class="btn btn-secondary" type="button" id="button-send">전송</button>
                 </div>
             </div>
-            <div class="col-6"></div>
         </div>
+        <div class="col-6"></div>
         <form th:action="@{/chat/exit(roomId=${room.roomId})}" method="post">
-        <button type="submit" id="button-exit">종료</button>
+            <button class="btn btn-secondary" type="submit" id="button-exit">종료</button>
         </form>
+    </div>
+</div>
 
-        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
-    </th:block>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
 
 </html>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>

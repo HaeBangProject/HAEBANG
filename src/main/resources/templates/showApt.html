@@ -38,7 +38,7 @@
     geocoder.addressSearch(/*[[${Apt.roadAddress}]]*/, function(result, status) {
         var dp_data = /*[[${Apt.roadAddress}]]*/;
         var cnt = /*[[${Apt.cnt}]]*/;
-        var detail = '<button onclick="dp_detail();">'+cnt+"개의 매물보기"+'</button>';
+        var detail = '<button class="btn btn-secondary" onclick="dp_detail();">'+cnt+"개의 매물보기"+'</button>';
 
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {

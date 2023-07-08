@@ -8,3 +8,7 @@ body {
     width: 100%;
     height: 100%;
 }
+:root{ /*부트스트랩안에서 폰트변경*/
+    --bs-body-font-family:"Nanum Gothic";
+    --bs-body-font-family:"Orbit";
+}

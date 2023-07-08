@@ -19,16 +19,16 @@
 <body>
 <div th:insert="layout/default :: nav">
 </div>
+<br>
     <th:block th:fragment="content">
         <div id="container">
-            <div>
-                <ul th:each="room : ${list}">
-                    <li><a th:href="@{/chat/room(roomId=${room.roomId})}">[[${room.name}]]</a></li>
-                </ul>
-            </div>
+            <ul th:each="room : ${list}">
+                <a style="text-decoration-line: none;" th:href="@{/chat/room(roomId=${room.roomId})}">[[${room.name}]]</a>
+            </ul>
+            <br>
         </div>
-        <form th:action="@{/chat/room}" method="post">
-            <input type="text" name="name" class="form-control">
+        <form style="display: flex;" th:action="@{/chat/room}" method="post">
+            <input type="text" name="name" style="width: 150px; " class="form-control">
             <button class="btn btn-secondary">개설하기</button>
         </form>
 <script th:inline="javascript">
