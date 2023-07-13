@@ -1,3 +1,36 @@
+function showWhat(){
+    var to_login = document.getElementById("to_login");
+    var logout_btn = document.getElementById("logout_btn");
+
+    if(getCookie("username")=='' || getCookie("ATK")== ''){// 로그인 보이게
+        to_login.hidden = false;
+        logout_btn.hidden = true;
+    }
+    else{// 로그아웃 보이게
+        logout_btn.hidden = false;
+        to_login.hidden = true;
+    }
+}
+function logout() {
+    var data = {
+        access_token : getCookie("ATK"),
+        refresh_token : getCookie("RTK")
+    }
+    console.log(data);
+    $.ajax({
+        type: "POST",
+        url: "/api/member/logout",
+        headers: {"content-type": "application/json"},
+        dataType: "text",
+        data: JSON.stringify(data)})
+        .done(function (result) {
+            alert(result);
+            window.location.href = '/';
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("실패 : "+jqXHR.responseText);
+        })
+};
 function getCookie(name){
     var search = name +"=";
     if (document.cookie.length>0){

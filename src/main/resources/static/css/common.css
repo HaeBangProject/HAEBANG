@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Orbit&display=swap');
-html {
+:root {
     font-family: 'Nanum Gothic', sans-serif;
     font-family: 'Orbit', sans-serif;
 }

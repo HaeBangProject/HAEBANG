@@ -1,0 +1,17 @@
+
+.form {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+.form label {
+    font-weight: bolder;
+    font-size: 20px;
+    padding: 0.25rem;
+    margin: 0.25rem;
+    color: #60666d;
+}
+
+
+#btn-post {
+    margin-left: 40%;
+}

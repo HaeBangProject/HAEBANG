@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>HAEBANG | 매물 작성하기</title>
     <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/detail.css">
     <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
     <script type="text/javascript" src="/js/common.js"></script>
 </head>
@@ -12,23 +13,25 @@
 <div th:insert="layout/default :: nav">
 </div>
 <form class="form" id="form">
-    <input id="item_id" th:text="${item_id}" name="id" type="hidden" class="form-control">
-    <input name="apt_id" type="hidden" class="form-control">
-<input name="title" type="text" class="form-control" placeholder="title" aria-label="title">
-
-<input name="road_address" type="text" class="form-control" placeholder="road_address" aria-label="road_address">
-<input name="dp" type="text" class="form-control" placeholder="dp" aria-label="dp">
-<input name="floor" type="number" class="form-control" placeholder="floor" aria-label="floor">
-<input name="dong" type="text" class="form-control" placeholder="dong" aria-label="dong">
-
-<input name="phone_number" type="text" class="form-control" placeholder="phone_number" aria-label="phone_number">
-<input name="dp_area" type="text" class="form-control" placeholder="dp_area" aria-label="dp_area">
-<input name="dp_amount" type="text" class="form-control" placeholder="dp_amount" aria-label="dp_amount">
-<input name="build_year" type="number" value="2000" class="form-control" placeholder="build_year" aria-label="build_year">
-
-<input name="contract_date" type="date" class="form-control" placeholder="contract_date" aria-label="contract_date">
-
-<input name="text" type="text" class="form-control" placeholder="text" aria-label="text">
+<input type="hidden" id="item_id" th:value="${item_id}" name="id" class="form-control">
+<input type="hidden" name="apt_id" class="form-control">
+<label class="col-mid-9">제목<input name="title" type="text" class="form-control" placeholder="제목" aria-label="title"></label>
+<br>
+<label class="col-md-3">도로명주소<input name="road_address" type="text" class="form-control" placeholder="도로명 형식 ex)000길 12" aria-label="road_address"></label>
+<br>
+    <label class="col-md-3">아파트이름<input name="dp" type="text" class="form-control" placeholder="아파트명 ex)해방아파트" aria-label="dp"></label>
+<label class="col-md-3">동<input name="dong" type="text" class="form-control" placeholder="숫자/한글/영어+동 ex)해방1동" aria-label="dong"></label>
+<label class="col-md-2">층<input name="floor" type="number" class="form-control" placeholder="숫자입력" aria-label="floor"></label>
+<br>
+<label class="col-md-4">아파트면적<input name="dp_area" type="text" class="form-control" placeholder="평/m2" aria-label="dp_area"></label>
+<label class="col-md-4">건축연도<input name="build_year" type="number" value="2000" class="form-control" placeholder="건축연도" aria-label="build_year"></label>
+<br>
+<label class="col-md-4">매매가<input name="dp_amount" type="text" class="form-control" placeholder="매매/전월세/분양" aria-label="dp_amount"></label>
+<label class="col-md-4-">계약날짜<input name="contract_date" type="date" class="form-control" placeholder="원하는 계약 년/월/일" aria-label="contract_date"></label>
+<br>
+    <label class="col-md-4">연락처<input name="phone_number" type="text" class="form-control" placeholder="010-1234-5678" aria-label="phone_number"></label>
+<br>
+    <label class="col-md-10">설명<textarea rows="5" name="text" type="text" class="form-control" placeholder="매물과 계약에 관한 설명을 적어주세요" aria-label="text"></textarea></label>
 </form>
 <button class="btn btn-secondary" id="btn-post" type="button" onclick="post()">집 내놓기</button>
 </body>
@@ -37,6 +40,8 @@
     /*<![CDATA[*/
     let item_id;
     $(document).ready(function(){
+        showWhat();
+
         item_id = [[${item_id}]]
         console.log(item_id);
         if(item_id > 0){

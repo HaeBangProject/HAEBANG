@@ -39,7 +39,7 @@
 
 <script th:inline="javascript">
     $(document).ready(function(){
-
+        showWhat();
         document.getElementById("user").innerText = getCookie("username")+" 님으로 채팅중";
 
         var ATK = getCookie("ATK");
