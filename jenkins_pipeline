@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('github Clone') {
+            steps {
+               git branch: 'main', credentialsId: 'haebang', url: 'https://github.com/HaeBangProject/HAEBANG.git'
+            }
+        }
+        stage('ignore') {
+            steps {
+                sh """
+                #!/bin/bash
+                sed -i "s/jwt_secret/${jwt_secret}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
+                sed -i "s/haebang_secretkey/${haebang_secretkey}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
+                sed -i "s/datasource_url/${datasource_url}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
+                sed -i "s/datasource_username/${datasource_username}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
+                sed -i "s/datasource_pw/${datasource_pw}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
+                sed -i "s/redis_host/${redis_host}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
+                sed -i "s/admin_token/${admin_token}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
+                sed -i "s/admin_username/${admin_username}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
+                sed -i "s/admin_mail/${admin_mail}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
+                sed -i "s/admin_role/${admin_role}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
+
+                """
+            }
+        }
+        stage('build') {
+            steps {
+                sh '''
+                    pwd
+                    chmod +x ./gradlew
+                    ./gradlew clean bootJar
+                '''
+            }
+        }
+        stage('Build and Push Image') {
+            steps {
+                script {
+                    def imageName = 'haebang/haebang:jenkins'
+
+                    // Build Docker image
+                    docker.build(imageName, '-f ./Dockerfile .')
+
+                    // Login to DockerHub
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-haebang') {
+                        // Push Docker image to DockerHub
+                        docker.image(imageName).push()
+                    }
+                }
+            }
+        }
+        stage('Run Container') {
+            environment {
+                EC2_INSTANCE = 'ec2-user@43.202.12.16'
+                SSH_KEY = credentials('ssh-key')
+            }
+            steps {
+                script {
+
+                    // EC2 인스턴스로 도커 이미지받고, 컨테이너 실행
+                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE 'docker pull haebang/haebang:jenkins'"
+                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE 'docker stop server1 && docker rm server1 && docker run -d --name server1 -p 8081:8080 haebang/haebang:jenkins'"
+                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE 'docker stop server2 && docker rm server2 && docker run -d --name server2 -p 8082:8080 haebang/haebang:jenkins'"
+                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE 'docker stop server3 && docker rm server3 && docker run -d --name server3 -p 8083:8080 haebang/haebang:jenkins'"
+                }
+            }
+        }
+
+    }
+}

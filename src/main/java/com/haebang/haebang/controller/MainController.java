@@ -60,6 +60,8 @@ public class MainController {
         String[] time = last_month.split("-");
         List<MapDto> list = mapService.search_map(time[0],time[1], rank_sggCd, ranking.get(0)); //지난달 기준 랭킹1위 지역의 매물 정보
         model.addAttribute("list",list);
+        model.addAttribute("rankTop1_year",time[0]);
+        model.addAttribute("rankTop1_month",time[1]);
         model.addAttribute("rankTop1",ranking.get(0));
         return "main";
     }
