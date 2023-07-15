@@ -51,23 +51,27 @@
                         '  <div class="row">';
 
                     response.forEach((obj, idx) => {
+                        console.log(obj);
                         html += `<div class="col card" style="width: 18rem; margin: 5px;">\n` +
+                            `<div class="card-header">${obj.title}` +
                             `  <div class="card-body">\n` +
-                            `    <h5 class="card-title">${obj.title}</h5>\n` +
                             `    <h6 class="card-subtitle mb-2 text-body-secondary">${obj.created_date}</h6>\n` +
-                            `    <p class="card-text">${obj.text}</p>\n` +
+                            `    <p>${obj.username}님 작성</p>\n`+
+                            `    <h5 class="card-title">매매|전/월세 : ${obj.dp_amount}</h5>\n`+
+                            `    <p>계약날짜 : ${obj.contract_date}</p>\n`+
                             `    <p>${obj.phone_number}</p>\n`+
-                            `    <p>${obj.dong}</p>\n`+
-                            `    <p>${obj.floor}</p>\n`+
-                            `    <p>${obj.contract_date}</p>\n`+
-                            `    <p>${obj.dp_area}</p>\n`+
-                            `    <p>${obj.dp_amount}</p>\n`+
-                            `    <p>${obj.build_year}</p>\n`+
-                            `    <p>${obj.username}</p>\n`+
+                            `<ul class="list-group list-group-flush">
+    <li class="list-group-item">${obj.dp_area}</li>
+    <li class="list-group-item">${obj.dong}(동)</li>
+    <li class="list-group-item">${obj.floor}층</li>
+    <li class="list-group-item">${obj.build_year}년도 건설</li>
+  </ul>`+
+                            `    <p class="card-text">상세설명 : ${obj.text}</p>\n` +
                             '    <button type="button" onclick="edit_item('+obj.id+')" class="btn btn-secondary">수정</button>\n' +
                             '    <button type="button" onclick="delete_item('+obj.id+')" class="btn btn-secondary">삭제</button>\n' +
                             `  </div>\n` +
-                            `</div>`;
+                            `</div>`+
+                        `</div>`;
                     })
                     html += '  </div>\n' +
                         '</div>';
