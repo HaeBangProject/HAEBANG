@@ -16,7 +16,7 @@
 </div>
 <br>
 <div style="height: 30%;">
-    <div style="float: right">
+    <div style="float: right; margin-right: 5%;">
         <h5 style="float:left; ">
             <h4>지역별 랭킹 TOP5</h4>
             <h5 th:text="${rank1}"></h5>
@@ -235,10 +235,13 @@
                     position: coords
                 });
                 // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-                var iwContent = '<div>' +
-                        '주소:' +/*[[${mapDto.address}]]*/ +'</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-                    iwRemoveable = true; // removeable 속성을 true 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
+                var iwContent ='<div style="width: calc(100% + 10%);">'+
+                    '주소:' +/*[[${mapDto.address}]]*/ // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+                    +'<br>'+'계약날짜:' +/*[[${mapDto.contract}]]*/
+                    +'<br>'+'건축년도:' +/*[[${mapDto.build}]]*/
+                    +'<br>'+'전용면적:' +/*[[${mapDto.area}]]*/
+                    +'<br>'+'층:' +/*[[${mapDto.floor}]]*/
+                    +'<br>'+'거래금액:' +/*[[${mapDto.amount}]]*/;
                 var iwContent2 ='<br>'+
                     '계약날짜:' +/*[[${mapDto.contract}]]*/
                 // var iwContent3 = '<div style="padding:5px;">' +
@@ -252,12 +255,12 @@
                 var iwContent6 ='<br>'+
                     '층:' +/*[[${mapDto.floor}]]*/
                 var iwContent7 = '<br>'+
-                        '거래금액:' +/*[[${mapDto.amount}]]*/, // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-                    iwRemoveable = true;
+                    '거래금액:' +/*[[${mapDto.amount}]]*/; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+                var iwContent8 = '<br>';
                 // 인포윈도우를 생성합니다
                 var infowindow = new kakao.maps.InfoWindow({
-                    content: iwContent + iwContent2 + iwContent4 + iwContent5 + iwContent6 + iwContent7,
-                    removable: iwRemoveable
+                    content: iwContent
+
                 });
 
                 var cnt=0;

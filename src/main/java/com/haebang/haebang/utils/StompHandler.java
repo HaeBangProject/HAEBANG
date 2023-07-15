@@ -20,28 +20,20 @@ import org.springframework.web.socket.WebSocketSession;
 public class StompHandler implements ChannelInterceptor {
 
     private final JwtProvider jwtProvider;
-    private final ChatRoomRepository chatRoomRepository;
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         JSONObject jsonObject = new JSONObject(message.getPayload());
 
         if(accessor.getCommand() == StompCommand.CONNECT) {// 세션과 username 정보 연결만 함
-            if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
+            if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token"))){
                 throw new AccessDeniedException("");
-            chatRoomRepository.getSessionIdUsername()
-                    .put(accessor.getSessionId(),
-                            jwtProvider.getUsername(accessor.getFirstNativeHeader("token")));
+            }
+
         }
         if(accessor.getCommand() == StompCommand.SEND){// 이후 모든 요청은 저장된 정보에서 user가져옴
             if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
                 throw new AccessDeniedException("");
-            System.out.println("session id : "+accessor.getSessionId());
-
-            // 세션id 저장돼있으면 가져오기
-            if(chatRoomRepository.getSessionIdUsername().containsKey(accessor.getSessionId())) {
-                accessor.setNativeHeader("username", chatRoomRepository.getSessionIdUsername().get(accessor.getSessionId()));
-            }else new Exception("잘못된 세션 접근 요청");
         }
 
         return message;

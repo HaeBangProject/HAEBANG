@@ -7,9 +7,9 @@
 <div th:insert="layout/default :: nav">
 </div>
 <div class="container">
-    <div class="row justify-content-center align-items-center">
-        <div class="col-6">
-            <h1>[[${room.name}]]</h1>
+    <div style="margin-left: 30%;" class="row justify-content-center align-items-center">
+        <div style="margin-right: 15%;" class="col-6">
+            <h1 >[[${room.name}]]</h1>
             <div id="user"></div>
         </div>
         <div>
@@ -40,9 +40,8 @@
 <script th:inline="javascript">
     $(document).ready(function(){
         login_or_logout();
-        document.getElementById("user").innerText = getCookie("username")+" 님으로 채팅중";
 
-        var ATK = getCookie("ATK");
+        var ATK = getCookie("ATK").substring(4);
         var roomName = [[${room.name}]];
         var roomId = [[${room.roomId}]];
         var username = getCookie("username");

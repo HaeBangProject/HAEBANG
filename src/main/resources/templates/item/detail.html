@@ -47,8 +47,11 @@
 
                 if(!response.length) html += '등록된 매물이 없습니다.';
                 else{
+                    html += '<div class="container">\n' +
+                        '  <div class="row">';
+
                     response.forEach((obj, idx) => {
-                        html += `<div class="card" style="width: 18rem;">\n` +
+                        html += `<div class="col card" style="width: 18rem; margin: 5px;">\n` +
                             `  <div class="card-body">\n` +
                             `    <h5 class="card-title">${obj.title}</h5>\n` +
                             `    <h6 class="card-subtitle mb-2 text-body-secondary">${obj.created_date}</h6>\n` +
@@ -57,7 +60,6 @@
                             `    <p>${obj.dong}</p>\n`+
                             `    <p>${obj.floor}</p>\n`+
                             `    <p>${obj.contract_date}</p>\n`+
-                            `    <p>${obj.hits}</p>\n`+
                             `    <p>${obj.dp_area}</p>\n`+
                             `    <p>${obj.dp_amount}</p>\n`+
                             `    <p>${obj.build_year}</p>\n`+
@@ -67,6 +69,8 @@
                             `  </div>\n` +
                             `</div>`;
                     })
+                    html += '  </div>\n' +
+                        '</div>';
                 }
 
                 alert("성공");
@@ -77,12 +81,13 @@
             })
     }
     function edit_item(item_id){
+        confirm("이 글을 수정하시겠습니까?");
         location.href = "/item/edit/"+item_id;
     }
 
     function delete_item(item_id){
         console.log(item_id);
-        alert("이 글을 삭제하시겠습니까?")
+        confirm("이 글을 삭제하시겠습니까?");
         $.ajax({
             type: "DELETE",
             url: "/api/apt/item/"+item_id,
