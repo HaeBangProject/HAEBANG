@@ -42,7 +42,7 @@
         login_or_logout();
         document.getElementById("user").innerText = getCookie("username")+" 님으로 채팅중";
 
-        var ATK = getCookie("ATK");
+        var ATK = getCookie("ATK").substring(4);
         var roomName = [[${room.name}]];
         var roomId = [[${room.roomId}]];
         var username = getCookie("username");
