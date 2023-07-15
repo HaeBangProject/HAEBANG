@@ -18,7 +18,7 @@
     <!-- js 부분 -->
     <script th:inline="javascript">
     $(document).ready(function(){
-        showWhat();
+        login_or_logout();
     });
     function showWhat(){
         var to_login = document.getElementById("to_login");
@@ -54,21 +54,6 @@
                 alert("실패 : "+jqXHR.responseText);
             })
     };
-
-    function getCookie(name){
-        var search = name +"=";
-        if (document.cookie.length>0){
-            var start = document.cookie.indexOf(search);
-            if(start==-1) return "";
-            start += search.length;
-            var end = document.cookie.indexOf(";", start);
-            if(end==-1){
-                end = document.cookie.length;
-            }
-            return document.cookie.substring(start, end);
-        }
-        return "";
-    }
 
 </script>
 </html>

@@ -39,7 +39,7 @@
 
 <script th:inline="javascript">
     $(document).ready(function(){
-        showWhat();
+        login_or_logout();
         document.getElementById("user").innerText = getCookie("username")+" 님으로 채팅중";
 
         var ATK = getCookie("ATK");
@@ -101,18 +101,4 @@
         });
     });
 
-    function getCookie(name){
-        var search = name +"=";
-        if (document.cookie.length>0){
-            var start = document.cookie.indexOf(search);
-            if(start==-1) return "";
-            start += search.length;
-            var end = document.cookie.indexOf(";", start);
-            if(end==-1){
-                end = document.cookie.length;
-            }
-            return document.cookie.substring(start, end);
-        }
-        return "";
-    }
 </script>

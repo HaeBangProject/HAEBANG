@@ -1,4 +1,4 @@
-function showWhat(){
+function login_or_logout(){
     var to_login = document.getElementById("to_login");
     var logout_btn = document.getElementById("logout_btn");
 
