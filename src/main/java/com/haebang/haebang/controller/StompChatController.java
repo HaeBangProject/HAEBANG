@@ -21,7 +21,6 @@ import javax.websocket.Session;
 @Controller
 @RequiredArgsConstructor
 public class StompChatController {
-    private final ChatRoomRepository chatRoomRepository;
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
 
     //Client가 SEND할 수 있는 경로
@@ -29,36 +28,19 @@ public class StompChatController {
     //"/pub/chat/enter"
 
     @MessageMapping(value = "/chat/enter")
-    public void enter(ChatMessageDTO message, SimpMessageHeaderAccessor  headerAccessor){
-        //String username = chatRoomRepository.getSessionIdUsername().get(session.getId());
-        //System.out.println(session.getId()+" "+username);
-//        message.setWriter(username);
-        String sessionId = headerAccessor.getSessionId();
-        log.info("session id"+sessionId);
-//        String sessionId = session.getMessage().getHeaders().get("simpleSessionId").toString();
-        String username = chatRoomRepository.getSessionIdUsername().get(sessionId);
-        message.setWriter(username);
+    public void enter(ChatMessageDTO message){
         message.setMessage(message.getWriter() + "님이 채팅방에 참여하였습니다.");
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 
     @MessageMapping(value = "/chat/message")
-    public void message(ChatMessageDTO message, SimpMessageHeaderAccessor headerAccessor){
-        String sessionId = headerAccessor.getSessionId();
-        message.setWriter(chatRoomRepository.getSessionIdUsername().get(sessionId));
+    public void message(ChatMessageDTO message){
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 
     @MessageMapping(value="/chat/exit")
-    public void exit(ChatMessageDTO message ,SimpMessageHeaderAccessor headerAccessor){
-        String sessionId = headerAccessor.getSessionId();
-        String username = chatRoomRepository.getSessionIdUsername().get(sessionId);
-        message.setWriter(username);
+    public void exit(ChatMessageDTO message){
         message.setMessage(message.getWriter() + "님이 채팅방을 종료하셨습니다.");
-        message.setWriter(chatRoomRepository.getSessionIdUsername().get(sessionId));
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
-
-
-
     }
 }

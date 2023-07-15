@@ -14,12 +14,10 @@ import java.util.*;
 public class ChatRoomRepository {
 
     private Map<String, ChatRoomDTO> chatRoomDTOMap;
-    private Map<String, String> sessionIdUsername;
 
     @PostConstruct
     private void init(){
         chatRoomDTOMap = new LinkedHashMap<>();
-        sessionIdUsername = new HashMap<>();
     }
 
     public List<ChatRoomDTO> findAllRooms(){
