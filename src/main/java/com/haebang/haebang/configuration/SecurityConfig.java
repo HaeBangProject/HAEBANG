@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/static/css/**", "/js/**", "/img/**", "/").permitAll()
                 .antMatchers(  "/chat/**").permitAll()
+                .antMatchers("/stomp/chat").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/apt/item/*", "/api/apt/items", "/api/apt/items?**").permitAll()
                 .antMatchers("/api/apt/item**").authenticated()
                 .antMatchers("/api/member/test").authenticated()
