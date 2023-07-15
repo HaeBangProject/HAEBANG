@@ -44,7 +44,7 @@
         var ATK = getCookie("ATK").substring(4);
         var roomName = [[${room.name}]];
         var roomId = [[${room.roomId}]];
-        var username = getCookie("username");
+        var username = getCookie("username").substring(9);
 
         console.log(roomName + ", " + roomId + ", " + username);
 
