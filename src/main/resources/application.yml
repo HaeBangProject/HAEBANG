@@ -31,7 +31,7 @@ spring:
   #
   redis:
     host: redis_host # server host
-    password: # server password
+    password: redis_pw # server password
     port: 6379 # connection port
     pool:
       max-idle: 8 # pool settings ...
