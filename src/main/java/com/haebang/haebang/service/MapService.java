@@ -113,7 +113,7 @@ public class MapService {
                 address.add(value+code_main+"-"+code_sub);
             }
             contract_year=contract_year.substring(2);
-            contract.add(contract_year+"/"+contract_month+"/"+contract_day); //계약한 날짜
+            contract.add(contract_month+"/"+contract_day); //계약한 날짜
             apart.add(dp+"아파트"); //아파트
             build.add(build_year); //건축년도
             area.add(dp_area+"㎡"); //전용 면적

@@ -77,7 +77,6 @@
                         '</div>';
                 }
 
-                alert("성공");
                 $("#items").append(html);
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
@@ -99,7 +98,7 @@
             dataType: "text",
         })
             .done(function (response) {
-                alert("성공");
+
                 window.location.href = '/apt';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
