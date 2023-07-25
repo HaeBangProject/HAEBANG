@@ -17,9 +17,9 @@ public class Apt {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(unique = true)
-    String roadAddress;// 이태원로27가길 49
+    String roadAddress;// 서울 00구 이태원로27가길 49
 
-    String dp;//아파트
+    String dp;// 한 건물당 하나의 도로명주소가짐 (아파트/건물이름)
     Long cnt;
     @OneToMany(mappedBy = "apt", cascade = CascadeType.ALL)
     List<Item> items = new ArrayList<>();

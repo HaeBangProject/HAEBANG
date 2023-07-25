@@ -34,15 +34,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         log.info("authorization={}", authorization);
 
         String token = resolve(authorization);
+        log.info("token={}", token);
 
-        if(token!=null && jwtProvider.validateToken(token)){
+        if(token!=null && token.length()>0 && jwtProvider.validateToken(token)){
             // 유효한 토큰 일때
-            log.info("유효한 토큰임");
+            log.info("유효한 토큰임 필터 검사1");
 
             String type = jwtProvider.getTokenType(token);
             if(type.equals("ATK")){// 엑세스 토큰 일떄
-                if(jwtProvider.getValueFromToken(token)==null){
+                log.info("엑세스 토큰일때");
 
+                if(jwtProvider.getValueFromToken(token)==null){
+                    log.info("로그아웃된 토큰인지 살펴봄"+jwtProvider.getValueFromToken(token));
                     // 로그아웃되지 않은 ATK라면 정상 작동 하도록
                     String username = jwtProvider.getUsername(token);
                     UserDetails userDetails = jwtProvider.getUserDetails(username);
@@ -51,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                             new UsernamePasswordAuthenticationToken(username, null,
                                     userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    log.info(authorization);
+                    log.info(authorization+"통과");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
@@ -65,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     String resolve(String authorization){
         if(authorization==null || !authorization.startsWith("Bearer ")){
             log.error("request에서 authorization 빈 요청 통과");
-            return  null;
+            return null;
         }
         return authorization.split(" ")[1];
     }

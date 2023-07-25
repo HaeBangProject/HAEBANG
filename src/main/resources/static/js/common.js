@@ -13,14 +13,15 @@ function login_or_logout(){
 }
 function logout() {
     var data = {
-        access_token : getCookie("ATK"),
-        refresh_token : getCookie("RTK")
+        access_token : getCookie("ATK").substring(4),
+        refresh_token : getCookie("RTK").substring(4),
+        username : getCookie("username").substring(9)
     }
     console.log(data);
     $.ajax({
         type: "POST",
         url: "/api/member/logout",
-        headers: {"content-type": "application/json"},
+        headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
         dataType: "text",
         data: JSON.stringify(data)})
         .done(function (result) {

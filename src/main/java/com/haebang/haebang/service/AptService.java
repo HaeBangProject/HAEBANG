@@ -4,11 +4,14 @@ import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.dto.AptItemReq;
 import com.haebang.haebang.entity.Apt;
 import com.haebang.haebang.entity.Item;
+import com.haebang.haebang.entity.Member;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.AptRepository;
 import com.haebang.haebang.repository.ItemRepository;
 import com.haebang.haebang.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,17 +25,16 @@ public class AptService {
     final ItemRepository itemRepository;
 
 
-    public Item createItem(String username, AptItemReq req) {
+    public Item createItem(Authentication authentication, AptItemReq req) {
         Apt apt = new Apt();
-        if (req.getRoadAddress() == null || req.getRoadAddress().split(" ").length!=2) {// 주소가 있어야하고, 포멧에 맞아야 함
+        if (req.getRoadAddress() == null) {// 주소가 있어야함
             System.out.println(req.getRoadAddress());
-            System.out.println(req.getRoadAddress().split(" ").length);
             throw new CustomException(CustomErrorCode.INVALID_FORMAT_ADDRESS);
         }
 
-        Optional<Apt> optional = aptRepository.findByRoadAddress(req.getRoadAddress());
-        if(optional.isPresent()){// 이미 저장된 apt 가 있을때
-            apt = optional.get();
+        Optional<Apt> optionalApt = aptRepository.findByRoadAddress(req.getRoadAddress());
+        if(optionalApt.isPresent()){// 이미 저장된 apt 가 있을때
+            apt = optionalApt.get();
             apt.increaseCnt();
         }else{// 새 아파트 등록할때
             apt.setRoadAddress(req.getRoadAddress());
@@ -41,16 +43,24 @@ public class AptService {
             System.out.println("아파트 새로 저장"+apt.getRoadAddress()+" "+apt.getDp());
             aptRepository.save(apt);
         }
+        Optional<Member> optionalMember = memberRepository.findByUsername(authentication.getName());
+        Member member = new Member();
+        if(optionalMember.isEmpty()){
+            System.out.println(authentication.getName()+" : 빈 member 객체임");
+        }else{
+            member = optionalMember.get();
+        }
 
         Item item = Item.builder()
                 .apt(apt)
-                .username(username)
+                .username(authentication.getName())
+                .member(member)
                 .phoneNumber(req.getPhoneNumber())
                 .hits(0L)
                 .text(req.getText())
                 .title(req.getTitle())
                 .dp_amount(req.getDp_amount())
-                .dp_area(req.getDp_area())
+                .dp_area(Double.parseDouble( req.getDp_area() ))
                 .build_year(req.getBuild_year())
                 .dong(req.getDong())
                 .floor(req.getFloor())

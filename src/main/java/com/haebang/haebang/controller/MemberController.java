@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("api/member")
 public class MemberController {
     final private MemberService memberService;
-//TODO: 원래 json으로 넘겨주던 토큰 방식에 쿠키로 주고 받는 걸 추가해서 일단 두가지 방식 다 됨 -> json에서 atk넘겨주는 건 바꿔야 할듯?+ 쿠키로 rtk 넘겨주는 것도 제외시키고
     // 회원 가입
     @PostMapping("join")
     public ResponseEntity<?> join(@Validated @RequestBody JoinDto joinReqDto, BindingResult bindingResult){
@@ -93,11 +92,9 @@ public class MemberController {
     }
 
     @GetMapping("reissue")
-    public ResponseEntity<?> reissue(HttpServletRequest request){
-        // 리프레시 토큰 받아서 -> access token 새로 쿠키에 넣어주기
-        String accessToken = memberService.reissue(
-                request.getHeader(HttpHeaders.AUTHORIZATION).split(" ")[1]
-        );
+    public ResponseEntity<?> reissue(@CookieValue(name = "RTK", defaultValue = "")String rtk){
+        // 리프레시 토큰 쿠키로 받아서 -> access token 새로 쿠키에 넣어주기
+        String accessToken = memberService.reissue(rtk);
         if(accessToken==null) throw new CustomException(CustomErrorCode.RTK_REISSUE_ERROR);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, ResponseCookie.from("ATK", accessToken)
                 .maxAge(24*60*60*30)
@@ -108,8 +105,9 @@ public class MemberController {
 
     // 로그아윳
     @PostMapping("logout")
-    public ResponseEntity<?> logout(Authentication authentication,
-                                    @RequestBody JwtDto jwtDto){
+    public ResponseEntity<?> logout(JwtDto jwtDto){
+
+        memberService.toBlackListed(jwtDto); //TODO: 배포할땐 주석해제하기, GETDEL 명령어 안먹어서 주석처리 해둠
         log.info("ATK 블랙리스트에 등록");
 
         HttpHeaders headers = new HttpHeaders();
@@ -132,7 +130,6 @@ public class MemberController {
                         .build()
                         .toString());
 
-//        memberService.toBlackListed(jwtDto); //TODO: 배포할땐 주석해제하기, GETDEL 명령어 안먹어서 주석처리 해둠
         log.info("headers : {}", headers);
         return ResponseEntity.ok().headers(headers)
                 .body("로그아웃이 완료되었습니다");

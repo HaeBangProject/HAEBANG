@@ -1,8 +1,6 @@
 package com.haebang.haebang.utils;
 
 import com.haebang.haebang.constant.CustomErrorCode;
-import com.haebang.haebang.dto.JoinDto;
-import com.haebang.haebang.dto.LoginDto;
 import com.haebang.haebang.entity.Member;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.MemberRepository;
@@ -23,14 +21,14 @@ import java.util.Date;
 @Component
 public class JwtProvider {
     final private Key key;
-    final private CustomRedisService redisService;
+    final private CustomRedisService customRedisService;
     final private MemberRepository memberRepository;
 
     public JwtProvider(@Value("${jwt.secret}") String secretKey,
                        CustomRedisService redisService, MemberRepository memberRepository){
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(keyBytes);
-        this.redisService = redisService;
+        this.customRedisService = redisService;
         this.memberRepository = memberRepository;
     }
 
@@ -99,20 +97,21 @@ public class JwtProvider {
     }
 
     public String getValueFromToken(String token){
-        String value = redisService.getStringValue(token);
-        if(value!=null) return redisService.getStringValue(token);// logout(ATK) or email(RTK)
+        String value = customRedisService.getStringValue(token);
+        if(value!=null) return customRedisService.getStringValue(token);// logout(ATK) or email(RTK)
 
-        new CustomException(CustomErrorCode.LOGOUTED_MEMBER_WARN);
+//        new CustomException(CustomErrorCode.LOGOUTED_MEMBER_WARN);
         return null;
     }
 
     /**
      * @param token ATK, RTK
      * @param value logout, email
+     * @apiNote 로그아웃시 atk저장, 로그인시 rtk 저장
      */
     public void setTokenValueAndTime(String token, String value){
         Long duration = getExpireTime(token) - new Date(System.currentTimeMillis()).getTime();
-        redisService.setStringKey(token, value, Duration.ofMillis(duration));
+        customRedisService.setStringKey(token, value, Duration.ofMillis(duration));
     }
 
 }

@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/api/apt/item/*", "/api/apt/items", "/api/apt/items?**").permitAll()
                 .antMatchers("/api/apt/item**").authenticated()
                 .antMatchers("/api/member/test").authenticated()
+                .antMatchers("/api/member/logout").authenticated()
                 .antMatchers("/api/member/*").anonymous()
                 .and()
                 .formLogin().disable()

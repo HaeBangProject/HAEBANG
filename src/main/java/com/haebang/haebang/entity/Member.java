@@ -34,12 +34,14 @@ public class Member implements UserDetails {// user은 ddl예약어로 member로
     private String email;
     String role;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    List<Item> items = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
     {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(this.role));
-        //TODO: admin, user 나누기
         return authorities;
     }
 

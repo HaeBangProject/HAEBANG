@@ -22,7 +22,7 @@ import java.util.Set;
 @Service
 public class MemberService {
     final private JwtProvider jwtProvider;
-    final private RedisService redisService;
+    final private CustomRedisService customRedisService;
     final private MemberRepository memberRepository;
     final private BCryptPasswordEncoder encoder;
 
@@ -46,7 +46,7 @@ public class MemberService {
         }
 
         String accessToken = jwtProvider.createToken(member, "ATK", 720L);
-        String refreshToken = jwtProvider.createToken(member, "RFT", 720L);
+        String refreshToken = jwtProvider.createToken(member, "RTK", 720L);
 
         jwtProvider.setTokenValueAndTime(refreshToken, member.getEmail());
 
@@ -56,11 +56,6 @@ public class MemberService {
                 .username(member.getUsername())
                 .build();
     }
-    //현재 로그인 유저
-    public String login_user(JoinDto dto){
-        System.out.println(memberRepository.findByUsername(dto.getUsername())+"hi");
-        return String.valueOf(memberRepository.findByUsername(dto.getUsername()));
-    }
 
     public String reissue(String refreshToken){
         String value = jwtProvider.getValueFromToken(refreshToken);
@@ -68,12 +63,6 @@ public class MemberService {
         String email = jwtProvider.getEmail(refreshToken);
 
         Member member = (Member)jwtProvider.getUserDetails(refreshToken);
-
-        Set<String> set = new HashSet<>();
-        set.add("first");
-        for(String str : set){
-
-        }
 
         String accessToken = null;
         if(value.equals(email)){
@@ -84,8 +73,10 @@ public class MemberService {
     }
 
     public void toBlackListed(JwtDto jwtDto){
+        System.out.println("toBlackListed atk logout");
         jwtProvider.setTokenValueAndTime(jwtDto.getAccessToken(), "logout");
-        redisService.deleteKey(jwtDto.getRefreshToken());
-        return;
+        System.out.println("toBlackListed rtk delete");
+        customRedisService.deleteStringKey(jwtDto.getRefreshToken());
+        System.out.println("finish");
     }
 }

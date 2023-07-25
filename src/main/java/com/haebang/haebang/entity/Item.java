@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -27,13 +28,13 @@ public class Item {
     String dong;
     int floor;
     long hits;
-    String contract_date;//계약일
-    String dp_area;//전용면적
+    LocalDate contract_date;//계약일
+    double dp_area;//전용면적
     String dp_amount;//거래금액
     int build_year;//건축년도
 
     @CreationTimestamp
-    LocalDateTime createdDate;
+    LocalDate createdDate;
 
     String username;
 
@@ -42,6 +43,11 @@ public class Item {
     @JoinColumn(name = "apt_id")// casecadeType = ALL 코드 지워서 부모까지 지워지는거 막음
     Apt apt;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    Member member;
+
     public void update(AptItemReq req){
         this.phoneNumber = req.getPhoneNumber();
         this.title = req.getTitle();
@@ -49,7 +55,7 @@ public class Item {
         this.dong = req.getDong();
         this.floor = req.getFloor();
         this.dp_amount = req.getDp_amount();
-        this.dp_area = req.getDp_area();
+        this.dp_area = Double.parseDouble( req.getDp_area() );
         this.build_year = req.getBuild_year();
         this.contract_date = req.getContract_date();
     }

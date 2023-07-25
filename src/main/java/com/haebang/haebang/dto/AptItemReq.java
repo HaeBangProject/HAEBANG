@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.haebang.haebang.entity.Apt;
 import com.haebang.haebang.entity.Item;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
+import java.time.LocalDate;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Data
@@ -26,10 +28,12 @@ public class AptItemReq {
     String dong;
     @NotNull(message = "층 수는 필수 입력값입니다.") @Min(0)
     int floor;
-    @NotBlank(message = "계약 연도는 필수 입력값입니다.")
-    String contract_date;
+    @NotNull(message = "계약 연도는 필수 입력값입니다.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    LocalDate contract_date;
     @NotBlank(message = "아파트 평수는 필수 입력값입니다.")
     String dp_area;
+    String dp_pyeong;
     @NotBlank(message = "매물 가격은 필수 입력값입니다.")
     String dp_amount;
     @NotNull(message = "건축연도는 필수 입력값입니다.")
@@ -38,9 +42,10 @@ public class AptItemReq {
     public void fromEntityToDto(Apt apt, Item item){
         this.dp = apt.getDp();
         this.roadAddress = apt.getRoadAddress();
+        this.dp = apt.getDp();
         this.build_year = item.getBuild_year();
         this.dp_amount = item.getDp_amount();
-        this.dp_area = item.getDp_area();
+        this.dp_area = String.valueOf( item.getDp_area() );
         this.contract_date = item.getContract_date();
         this.floor = item.getFloor();
         this.dong = item.getDong();

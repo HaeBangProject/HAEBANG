@@ -45,7 +45,7 @@ public class AptController {
             return ResponseEntity.badRequest().body(sb.toString());
         }
 
-        return new ResponseEntity(aptService.createItem(authentication.getName() ,req), HttpStatus.OK);
+        return new ResponseEntity(aptService.createItem(authentication ,req), HttpStatus.OK);
     }
 
     @PutMapping("item/{id}")// 글 수정
