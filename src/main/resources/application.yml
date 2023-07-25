@@ -11,8 +11,8 @@ spring:
       mode: never #always에서 변경한 상태
       data-locations: classpath:data.sql
   datasource:
-    driver-class-name:
-    url: jdbc:mysql://datasource_url?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://datasource_url?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true #aws
     username: datasource_username # aws
     password: datasource_pw
   jpa:
@@ -28,7 +28,6 @@ spring:
     database: mysql # 없으면 ddl error
     database-platform: org.hibernate.dialect.MySQL8Dialect # ??? ???? ?? ??? MySQL8 ??
 
-  #
   redis:
     host: redis_host # server host
     password: redis_pw # server password

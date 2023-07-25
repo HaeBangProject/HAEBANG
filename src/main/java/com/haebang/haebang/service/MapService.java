@@ -98,6 +98,12 @@ public class MapService {
             String dp_amount = String.valueOf(jsonObject.getString("거래금액"));
             String dp = String.valueOf(jsonObject.getString("아파트"));
             String dp_floor = String.valueOf(jsonObject.getInt("층"));
+            System.out.println(dp_amount);
+            dp_amount = dp_amount.replaceAll(",", "");
+            int x = Integer.parseInt(dp_amount);
+            System.out.println(x);
+            double y = Math.round(x /100) / 100.0;
+            System.out.println(y);
 
             String test = "0";
             if (code_sub.equals(test)){
@@ -106,12 +112,12 @@ public class MapService {
             else{
                 address.add(value+code_main+"-"+code_sub);
             }
-
-            contract.add(contract_year+"년"+contract_month+"월"+contract_day+"일"); //계약한 날짜
+            contract_year=contract_year.substring(2);
+            contract.add(contract_year+"/"+contract_month+"/"+contract_day); //계약한 날짜
             apart.add(dp+"아파트"); //아파트
             build.add(build_year); //건축년도
             area.add(dp_area+"㎡"); //전용 면적
-            amount.add(dp_amount+"만원"); //거래금액
+            amount.add(String.valueOf(y)+"억");//거래금액
             floor.add(dp_floor+"층");
             }
 

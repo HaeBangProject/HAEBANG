@@ -18,12 +18,16 @@ public class RedisConfig {
 
     @Value("${spring.redis.host}")
     private String host;
+    @Value("${spring.redis.password}") // 비밀번호 필드 추가
+    private String password;
+
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(host, port);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(host, port);
+        lettuceConnectionFactory.setPassword(password); // 비밀번호 설정
+        return lettuceConnectionFactory;
     }
-
     @Bean
     public RedisTemplate<String, String> redisTemplate() {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
