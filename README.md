@@ -160,14 +160,21 @@
 ## Trouble Shooting
 - Redis의 sorted set 자료구조를 이용해 인기 지역 검색 순위를 구현하는 과정에서 동점처리를 못해 공동 순위를 구현하지 못하는 문제가 발생
   - [Map 자료구조를 이용해 score값을 기준으로 다시 검색데이터를 분류해 같은 score값을 가진 데이터를 카운트 해 reverseRange()를 이용해 동점처리 된 데이터도 공동순위에 들어가게 구현](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/service/RedisService.java#L40)
+    
  - 관리자 문의 채팅 기능에서 WebSocket과 SockJS만으로 여러 채팅방을 구현하지 못하는 문제가 발생
     - STOMP를 이용해 여러 채팅방을 구현하고, Cookie를 이용해 현재 접속 유저와 비교해 관리자만이 여러 채팅방을 접속하게 구현
+      
 - 젠킨스로 배포하는 과정에서 application.yml에 있는 secret 값들을 설정해 배포해야 하는 문제가 발생
     - 젠킨스 파이프라인을 이용해서 sed 명령어로 secret값들을 파이프라인의 변수로 치환해 secret값들을 주입해 해결
+      
+- CI/CD가 될때마다 redis 컨테이너의 저장된 데이터 값이 삭제되는 문제가 발생
+  - redis-cli를 설정할때 --requirepass [password] 명령어를 사용해서 비밀번호를 설정해 데이터가 초기화 되는 문제를 해결
+    
 - spring Security 5.7 & JWT 변경사항
   - [spring boot 2.7.3 은 spring security 5.7 버전을 포함한다. 5.7버전은 어댑터를 사용하지 않고 bean 등록방식을 사용하도록 바뀌었기 때문에 오버라이드 해서 구현했던 방식 대신 bean으로 등록하여 사용하면 된다. WebSecurityConfigurerAdapter (기존) → FilterChain (변경)](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/configuration/SecurityConfig.java#L20))
   - [new release 1.0.x 부터 parse 대신 builder()로, <u>signWith( 알고리즘, 세가지형태시크릿키)</u>에서 <u>signWith( byte[]형만되는시크릿키, 알고리즘 )</u> 으로 변경. ](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/utils/JwtProvider.java#L29))
     signWith에 필요한 시크릿키는 Keys.hmacShaKeyFor('keyBytes')로 인코딩 된 키로 sign하도록 변경됨 ('keybytes'는 32byte보다 길어야 함)
+    
 - 웹소켓 통신시 jwt 적용과 유저 구분 문제 - 토큰으로 여부를 구분하기 때문에 토큰을 담아 보내고 검증하는 것에 어려움 발생
   - [토큰으로 회원여부를 구분하기 때문에 stomp의 헤더에 토큰을 담아 보내고, 이를 stomp hadler를 거쳐 검증함](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/utils/StompHandler.java#L20)
   - [핸들러를 통해 <u>세션id와 토큰으로 부터 가져온 유저네임을 맵핑시키는 방식</u>에서, 최초 로그인시 토큰과 유저정보를 쿠키에 저장하도록 해 소켓 <u>통신시 토큰과 유저네임을 함께 보내도록해 보다 </u>편리하게 변경](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/utils/StompHandler.java#L20)
