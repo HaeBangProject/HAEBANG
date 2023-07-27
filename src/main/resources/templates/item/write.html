@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head th:insert="layout/default :: head"></th:insert></head>
 <head>
     <meta charset="UTF-8">
@@ -12,11 +12,13 @@
 <body>
 <div th:insert="layout/default :: nav">
 </div>
+<div class="form-container">
+    <div>
 <form class="form" id="form">
 <input type="hidden" id="item_id" th:value="${item_id}" name="id" class="form-control">
 <input type="hidden" name="apt_id" class="form-control">
-<label>제목<input name="title" type="text" class="form-control" placeholder="제목" aria-label="title"></label>
-<br>
+    <fieldset>
+        <legend>아파트 정보</legend>
 <label>도로명주소
     <a href="#" id="tooltip2"
        data-bs-toggle="tooltip"
@@ -34,8 +36,17 @@
         <i class="bi bi-question-square-fill"></i>
     </a>
 <input id="dp" name="dp" type="text" class="form-control" placeholder="아파트명 ex)해방아파트" aria-label="dp"></label>
+<label>건축연도<input name="build_year" type="number" value="2000" class="form-control" placeholder="건축연도" aria-label="build_year"></label>
+    </fieldset>
+
+<br><hr><br>
+
+
+    <fieldset>
+        <legend>매물 정보</legend>
 <label>동<input name="dong" type="text" class="form-control" placeholder="숫자/한글/영어+동" aria-label="dong"></label>
 <label>층<input name="floor" type="number" class="form-control" placeholder="숫자입력" aria-label="floor"></label>
+        <br>
 <label>아파트면적
     <a href="#" id="tooltip5"
        data-bs-toggle="tooltip"
@@ -43,11 +54,11 @@
        data-bs-title="m2 기준으로 저장됩니다.">
         <i class="bi bi-question-square-fill"></i>
     </a>
-    <input id="area_m2" oninput="convert('m2')" name="dp_area" type="number" class="form-control" placeholder="m2" aria-label="dp_area">m2
-    <span> = </span>
-    <input id="area_pyeong" name="dp_pyeong" oninput="convert('pyeong')" type="number" class="form-control" placeholder="평">평
+    <div class="input-container">
+    <input id="area_m2" oninput="convert('m2')" name="dp_area" type="number" class="form-control" placeholder="m2" aria-label="dp_area">
+        <span>m2 = </span><input id="area_pyeong" name="dp_pyeong" oninput="convert('pyeong')" type="number" class="form-control" placeholder="평">평
+    </div>
 </label>
-<label>건축연도<input name="build_year" type="number" value="2000" class="form-control" placeholder="건축연도" aria-label="build_year"></label>
 
 <label>매매가
     <a href="#" id="tooltip3"
@@ -56,7 +67,7 @@
        data-bs-title="전/월세의 경우 해당되지 않습니다.">
         <i class="bi bi-question-square-fill"></i>
     </a>
-    <input name="dp_amount" type="text" class="form-control" placeholder="매매가" aria-label="dp_amount"></label>
+    <input name="dp_amount" type="text" class="form-control" placeholder="매매가" aria-label="dp_amount">억</label>
 <label>계약날짜<input name="contract_date" type="date" class="form-control" placeholder="원하는 계약 년/월/일" aria-label="contract_date"></label>
     <label>연락처
         <a href="#" id="tooltip4"
@@ -66,10 +77,21 @@
             <i class="bi bi-question-square-fill"></i>
         </a>
         <input name="phone_number" type="text" class="form-control" placeholder="010-1234-5678" aria-label="phone_number"></label>
-<br>
-    <label>설명<textarea rows="5" name="text" type="text" class="form-control" placeholder="매물과 계약에 관한 설명을 적어주세요" aria-label="text"></textarea></label>
+    </fieldset>
+
+        <br><hr><br>
+
+
+        <fieldset>
+            <legend>상세 정보</legend>
+    <label>제목<input name="title" type="text" class="form-control" placeholder="제목" aria-label="title"></label>
+    <label>설명<textarea cols="200" rows="10" name="text" type="text" class="form-control" placeholder="매물과 계약에 관한 설명을 적어주세요" aria-label="text"></textarea></label>
+    </fieldset>
 </form>
+
 <button class="btn btn-secondary" id="btn-post" type="button" onclick="post()">집 내놓기</button>
+    </div>
+</div>
 </body>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
