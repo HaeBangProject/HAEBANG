@@ -164,3 +164,25 @@
         transform: scaleY(0);
     }
 }
+
+/*검색바*/
+.search {
+    position: relative;
+    width: 400px;
+}
+
+.search input {
+    width: 100%;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+.search button img{
+    position : absolute;
+    width: 17px;
+    top: 10px;
+    right: 12px;
+    margin: 0;
+
+}

@@ -220,29 +220,14 @@
                     position: coords
                 });
                 // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-                var iwContent ='<div style="width: calc(115%); height: calc(115%); font-size:13px;" >'+
+                var iwContent ='<div style= width:calc(150%);>'+
                     '주소:' +/*[[${mapDto.address}]]*/ // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                     +'<br>'+'계약날짜:' +/*[[${mapDto.contract}]]*/
                     +'<br>'+'건축년도:' +/*[[${mapDto.build}]]*/
                     +'<br>'+'전용면적:' +/*[[${mapDto.area}]]*/
                     +'<br>'+'층:' +/*[[${mapDto.floor}]]*/
-                    +'<br>'+'거래금액:' +/*[[${mapDto.amount}]]*/;
-                var iwContent2 ='<br>'+
-                    '계약날짜:' +/*[[${mapDto.contract}]]*/
-                // var iwContent3 = '<div style="padding:5px;">' +
-                //         '아파트:'+/*[[${apart}]]*/+'</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-                //     iwRemoveable = true; // removeable 속성을 true 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+                    +'<br>'+'거래금액:' +/*[[${mapDto.amount}]]*/+'<br>'+'</div>';
 
-                var iwContent4 ='<br>'+
-                    '건축년도:' +/*[[${mapDto.build}]]*/
-                var iwContent5 ='<br>'+
-                    '전용면적:' +/*[[${mapDto.area}]]*/
-                var iwContent6 ='<br>'+
-                    '층:' +/*[[${mapDto.floor}]]*/
-                var iwContent7 = '<br>'+
-                    '거래금액:' +/*[[${mapDto.amount}]]*/; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-                var iwContent8 = '<br>';
-                // 인포윈도우를 생성합니다
                 var infowindow = new kakao.maps.InfoWindow({
                     content: iwContent
 
