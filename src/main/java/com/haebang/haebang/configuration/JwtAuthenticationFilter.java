@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         String token = resolve(authorization);
         log.info("token={}", token);
 
-        if(token!=null && token.length()>0 && jwtProvider.validateToken(token)){
+        if(token != null && token.length()>0 && jwtProvider.validateToken(token)){
             // 유효한 토큰 일때
             log.info("유효한 토큰임 필터 검사1");
 
@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
 
     String resolve(String authorization){
-        if(authorization==null || !authorization.startsWith("Bearer ")){
+        if(authorization == null|| !authorization.startsWith("Bearer ")){
             log.error("request에서 authorization 빈 요청 통과");
             return null;
         }

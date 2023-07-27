@@ -13,6 +13,7 @@ function login_or_logout(){
 }
 function logout() {
     var data = {
+        grant_type : "Bearer",
         access_token : getCookie("ATK").substring(4),
         refresh_token : getCookie("RTK").substring(4),
         username : getCookie("username").substring(9)

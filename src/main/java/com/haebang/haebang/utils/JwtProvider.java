@@ -1,10 +1,8 @@
 package com.haebang.haebang.utils;
 
-import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.entity.Member;
-import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.MemberRepository;
-import com.haebang.haebang.service.CustomRedisService;
+import com.haebang.haebang.service.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +19,14 @@ import java.util.Date;
 @Component
 public class JwtProvider {
     final private Key key;
-    final private CustomRedisService customRedisService;
+    final private RedisService redisService;
     final private MemberRepository memberRepository;
 
     public JwtProvider(@Value("${jwt.secret}") String secretKey,
-                       CustomRedisService redisService, MemberRepository memberRepository){
+                       RedisService redisService, MemberRepository memberRepository){
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(keyBytes);
-        this.customRedisService = redisService;
+        this.redisService = redisService;
         this.memberRepository = memberRepository;
     }
 
@@ -97,8 +95,9 @@ public class JwtProvider {
     }
 
     public String getValueFromToken(String token){
-        String value = customRedisService.getStringValue(token);
-        if(value!=null) return customRedisService.getStringValue(token);// logout(ATK) or email(RTK)
+        String value = redisService.getStringValue(token);
+        System.out.println("jwtProvider 100 line 토큰이 레디스에 저장되어있는지 값 확인 :"+value);
+        if(value!=null) return redisService.getStringValue(token);// logout(ATK) or email(RTK)
 
 //        new CustomException(CustomErrorCode.LOGOUTED_MEMBER_WARN);
         return null;
@@ -111,7 +110,8 @@ public class JwtProvider {
      */
     public void setTokenValueAndTime(String token, String value){
         Long duration = getExpireTime(token) - new Date(System.currentTimeMillis()).getTime();
-        customRedisService.setStringKey(token, value, Duration.ofMillis(duration));
+        System.out.println("남은 기간 : "+duration );
+        redisService.setStringValueExpire(token, value, Duration.ofMillis(duration));
     }
 
 }

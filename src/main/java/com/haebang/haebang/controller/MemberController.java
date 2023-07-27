@@ -105,8 +105,17 @@ public class MemberController {
 
     // 로그아윳
     @PostMapping("logout")
-    public ResponseEntity<?> logout(JwtDto jwtDto){
-
+    public ResponseEntity<?> logout(
+            @CookieValue(name = "RTK", defaultValue = "")String rtk,
+            @CookieValue(name = "ATK", defaultValue = "")String atk,
+            @CookieValue(name = "username", defaultValue = "")String username
+    ){
+        JwtDto jwtDto = JwtDto.builder()
+                .accessToken(atk)
+                .refreshToken(rtk)
+                .username(username)
+                .build();
+        System.out.println(jwtDto);
         memberService.toBlackListed(jwtDto); //TODO: 배포할땐 주석해제하기, GETDEL 명령어 안먹어서 주석처리 해둠
         log.info("ATK 블랙리스트에 등록");
 

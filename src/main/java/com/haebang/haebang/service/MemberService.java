@@ -2,7 +2,6 @@ package com.haebang.haebang.service;
 
 import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.dto.JwtDto;
-import com.haebang.haebang.dto.JoinDto;
 import com.haebang.haebang.dto.LoginDto;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.MemberRepository;
@@ -10,19 +9,18 @@ import com.haebang.haebang.entity.Member;
 import com.haebang.haebang.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.Duration;
+import java.util.Date;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberService {
     final private JwtProvider jwtProvider;
-    final private CustomRedisService customRedisService;
+    final private RedisService redisService;
     final private MemberRepository memberRepository;
     final private BCryptPasswordEncoder encoder;
 
@@ -74,9 +72,11 @@ public class MemberService {
 
     public void toBlackListed(JwtDto jwtDto){
         System.out.println("toBlackListed atk logout");
-        jwtProvider.setTokenValueAndTime(jwtDto.getAccessToken(), "logout");
+        Long duration = jwtProvider.getExpireTime(jwtDto.getAccessToken()) - new Date(System.currentTimeMillis()).getTime();
+        redisService.setStringValueExpire(jwtDto.getAccessToken(), "logout", Duration.ofMillis(duration));
+        System.out.println("남은 기간 : "+duration );
         System.out.println("toBlackListed rtk delete");
-        customRedisService.deleteStringKey(jwtDto.getRefreshToken());
+        redisService.deleteKey(jwtDto.getRefreshToken());
         System.out.println("finish");
     }
 }

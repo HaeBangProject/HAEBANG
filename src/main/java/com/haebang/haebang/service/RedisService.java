@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.*;
 
 
@@ -92,16 +93,24 @@ public class RedisService {
     }
 
 
-    public void setRedisStringValueExpire(String key, String value, Long duraionTime) {
+    public void setStringValueExpire(String key, String value, Duration duraionTime) {
         ValueOperations<String, String> stringValueOperations = redisTemplate.opsForValue();
         stringValueOperations.set(key, value, duraionTime);
+        System.out.println("redis set----------------------------");
         System.out.println("Redis key : " + key);
         System.out.println("Redis value : " + stringValueOperations.get(key));
+    }
+    public String getStringValue(String key){
+        ValueOperations<String, String> stringValueOperations = redisTemplate.opsForValue();
+        System.out.println("redis get-------------------------------");
+        System.out.println("Redis key : " + key);
+        System.out.println("Redis value : " + stringValueOperations.get(key));
+        return stringValueOperations.get(key);
     }
 
     public void deleteKey(String key){
         ValueOperations<String, String> stringValueOperations = redisTemplate.opsForValue();
-        stringValueOperations.getAndDelete(key);
-        System.out.println("Delete Key : "+key);
+
+        System.out.println("Delete Key : "+stringValueOperations.getAndDelete(key));
     }
 }

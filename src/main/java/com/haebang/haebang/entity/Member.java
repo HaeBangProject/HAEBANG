@@ -42,6 +42,7 @@ public class Member implements UserDetails {// user은 ddl예약어로 member로
     {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(this.role));
+        authorities.add(new SimpleGrantedAuthority(String.valueOf( this.userId )));
         return authorities;
     }
 

@@ -28,8 +28,9 @@ public class SecurityConfig {
                 .headers().frameOptions().disable()// h2 사용 iframe 허용
                 .and()
                 .authorizeRequests()
-                .antMatchers("/static/css/**", "/js/**", "/img/**", "/").permitAll()
+                .antMatchers("/static/css/**", "/js/**", "/img/**", "/*").permitAll()
                 .antMatchers(  "/chat/**").permitAll()
+                .antMatchers("/main", "/map").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/apt/item/*", "/api/apt/items", "/api/apt/items?**").permitAll()
                 .antMatchers("/api/apt/item**").authenticated()
                 .antMatchers("/api/member/test").authenticated()
