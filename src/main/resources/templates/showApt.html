@@ -49,21 +49,32 @@
 
             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
 
-// 커스텀 오버레이를 생성합니다
+            // 클릭 이벤트 등록
+            kakao.maps.event.addListener(marker, 'click', function () {
+                cnt += 1;
+                if (cnt % 2 === 1) {
+                    // 마커 위에 인포윈도우를 표시합니다
+                    customOverlay.setMap(map);
+                } else {
+                    customOverlay.setMap(null);
+                }
+            });
+
+            // 마커 클릭 이벤트 등록시 customOverlay를 생성하도록 변경
             var customOverlay = new kakao.maps.CustomOverlay({
                 position: coords,
-                content: detail,
-                map: map
-
+                content: detail, // 생성한 버튼 HTML을 content로 사용
+                yAnchor: 1.5, // 버튼이 마커 아래로 1.5배 만큼 위치하도록 설정
+                map: null // 처음에는 커스텀 오버레이를 지도에 표시하지 않습니다
             });
-            customOverlay.setMap(map);
 
             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
             map.setCenter(coords);
-
-            // 마커에 클릭이벤트를 등록합니다
-
         }
     });
     /*[/]*/
