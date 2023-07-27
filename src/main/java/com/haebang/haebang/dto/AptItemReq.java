@@ -34,13 +34,12 @@ public class AptItemReq {
     @NotBlank(message = "아파트 평수는 필수 입력값입니다.")
     String dp_area;
     String dp_pyeong;
-    @NotBlank(message = "매물 가격은 필수 입력값입니다.")
-    String dp_amount;
+    @NotNull(message = "매매가는 필수 입력값입니다.")
+    double dp_amount;
     @NotNull(message = "건축연도는 필수 입력값입니다.")
     int build_year;
 
     public void fromEntityToDto(Apt apt, Item item){
-        this.dp = apt.getDp();
         this.roadAddress = apt.getRoadAddress();
         this.dp = apt.getDp();
         this.build_year = item.getBuild_year();

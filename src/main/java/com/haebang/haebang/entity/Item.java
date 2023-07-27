@@ -30,7 +30,7 @@ public class Item {
     long hits;
     LocalDate contract_date;//계약일
     double dp_area;//전용면적
-    String dp_amount;//거래금액
+    double dp_amount;//거래금액
     int build_year;//건축년도
 
     @CreationTimestamp
