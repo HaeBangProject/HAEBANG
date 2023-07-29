@@ -1,4 +1,4 @@
-![image](https://github.com/HaeBangProject/HAEBANG/assets/57720285/aa3f95d1-5be1-4aec-b72f-d97b76f02dcf)# <img width="60" alt="bemo_icon" src="https://github.com/HaeBangProject/HAEBANG/assets/59076085/128deff0-b54c-46aa-ba85-130f52dba780"> HAEBANG
+# <img width="60" alt="bemo_icon" src="https://github.com/HaeBangProject/HAEBANG/assets/59076085/128deff0-b54c-46aa-ba85-130f52dba780"> HAEBANG
 
 <br>
 <br>
@@ -112,10 +112,9 @@
 ## HAEBANG 회고
 
 ### [HAEBANG 회고록](https://goofy-hoverfly-fbf.notion.site/fb804fd9cbca4e1298f111f9f21a75a2?v=98ca6cf74bb94745b5e16fd62c8b8bda)
-![image](https://github.com/HaeBangProject/HAEBANG/assets/57720285/f5d775e0-adb0-4b3b-bf96-0b5c227d3d72)
 
 ## ERD-구조
-  
+  ![image](https://github.com/HaeBangProject/HAEBANG/assets/57720285/f5d775e0-adb0-4b3b-bf96-0b5c227d3d72)
 
 ## 핵심 기능
 
