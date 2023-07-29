@@ -114,7 +114,8 @@
 ### [HAEBANG 회고록](https://goofy-hoverfly-fbf.notion.site/fb804fd9cbca4e1298f111f9f21a75a2?v=98ca6cf74bb94745b5e16fd62c8b8bda)
 
 ## ERD-구조
-  ![image](https://github.com/HaeBangProject/HAEBANG/assets/57720285/2c204fe6-e4ee-40b4-8eb4-a73a1dfc8d53)
+  ![ERD](https://github.com/HaeBangProject/HAEBANG/assets/57720285/c413cf24-dd70-4cb5-8d6a-bec1a6bfef9f)
+
 
 ## 핵심 기능
 
