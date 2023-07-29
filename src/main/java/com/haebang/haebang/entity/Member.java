@@ -1,5 +1,6 @@
 package com.haebang.haebang.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,7 @@ public class Member implements UserDetails {// user은 ddl예약어로 member로
     private String email;
     String role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     List<Item> items = new ArrayList<>();
 

@@ -24,7 +24,6 @@ public class AptService {
     final AptRepository aptRepository;
     final ItemRepository itemRepository;
 
-
     public Item createItem(Authentication authentication, AptItemReq req) {
         Apt apt = new Apt();
         if (req.getRoadAddress() == null) {// 주소가 있어야함
@@ -105,6 +104,9 @@ public class AptService {
         Optional<Apt> entity = aptRepository.findByRoadAddress(roadAddress);
         if(entity.isEmpty()) return null;
         return entity.get().getItems();
+    }
+    public List<Item> findItemsByMember(Member member){
+        return itemRepository.findAllByMember(member);
     }
 
 

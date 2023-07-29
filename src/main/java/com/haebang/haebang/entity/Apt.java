@@ -1,5 +1,6 @@
 package com.haebang.haebang.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
@@ -21,6 +22,8 @@ public class Apt {
 
     String dp;// 한 건물당 하나의 도로명주소가짐 (아파트/건물이름)
     Long cnt;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "apt", cascade = CascadeType.ALL)
     List<Item> items = new ArrayList<>();
 

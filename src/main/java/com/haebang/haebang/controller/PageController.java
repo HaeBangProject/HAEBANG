@@ -31,6 +31,11 @@ public class PageController {
     public String mypage(){
         return "mypage";
     }
+    @GetMapping("mypage/items")
+    public String myItems(){return "mypage/items";}
+    @GetMapping("mypage/bookmarked")
+    public String bookmarked(){return "mypage/bookmarked";}
+
     @GetMapping("/memberLogin")
     public String memberLogin(){
         return "memberLogin";

@@ -3,7 +3,9 @@ package com.haebang.haebang.controller;
 import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.dto.AptItemReq;
 import com.haebang.haebang.entity.Item;
+import com.haebang.haebang.entity.Member;
 import com.haebang.haebang.exception.CustomException;
+import com.haebang.haebang.repository.MemberRepository;
 import com.haebang.haebang.service.AptService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ import java.util.Map;
 @RequestMapping("api/apt")
 public class AptController {
     final AptService aptService;
+    final MemberRepository memberRepository;
 
     @PostMapping("item")// 집 내놓기
     public ResponseEntity createAptItem(@Validated @RequestBody AptItemReq req, BindingResult bindingResult,
@@ -68,6 +71,12 @@ public class AptController {
         return new ResponseEntity(aptService.updateItem(authentication.getName(), id, req), HttpStatus.OK);
     }
 
+    @GetMapping("myitems")
+    public ResponseEntity getMyItems(Authentication authentication){
+        Member member = memberRepository.findByUsername(authentication.getName()).orElseThrow();
+        log.info(member+"의 전체 글 조회");
+        return new ResponseEntity(aptService.findItemsByMember(member), HttpStatus.OK);
+    }
     @GetMapping("items")// 도로명 주소에 따른 매물 검색
     public ResponseEntity getAptItems(@RequestParam Map<String, String> params
     ){

@@ -30,6 +30,7 @@ public class UserControllerTest {
         JoinDto joinReqDto = new JoinDto();
         joinReqDto.setUsername("테스트 유저 1");
         joinReqDto.setPassword("test password 1");
+        joinReqDto.setEmail("user@gmail.com");
         mockMvc.perform( MockMvcRequestBuilders.post("/api/user/join")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsBytes(joinReqDto))
@@ -43,6 +44,7 @@ public class UserControllerTest {
         JoinDto joinReqDto = new JoinDto();
         joinReqDto.setUsername("테스트 유저 1");
         joinReqDto.setPassword("test password 1");
+        joinReqDto.setEmail("user@gmail.com");
         mockMvc.perform( MockMvcRequestBuilders.post("/api/user/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(joinReqDto))

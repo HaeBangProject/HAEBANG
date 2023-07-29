@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head th:insert="layout/default :: head"></th:insert></head>
 <head>
@@ -13,31 +13,23 @@
 <body>
 <div th:insert="layout/default :: nav">
 </div>
-<table id="apt">
-<tr>
-    <td th:text="${apt.dp}"></td>
-    <td th:text="${apt.roadAddress}"></td>
-</tr>
-</table>
 <div id="items">
 
 </div>
 </body>
-
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     var itmes;
     $(document).ready(function (){
         login_or_logout();
-        findItems( /*[[${apt.roadAddress}]]*/);
+        findMyBookmarks();
     })
-
-    function findItems(roadAddress){
+    function findMyBookmarks(){
         $.ajax({
             type: "GET",
-            url: "/api/apt/items?road_address="+roadAddress,
-            headers: {"content-type": "application/json"},
+            url: "/api/bookmark",
+            headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
             dataType: "json",
         })
             .done(function (response) {
@@ -53,26 +45,25 @@
                     response.forEach((obj, idx) => {
                         console.log(obj);
                         html += `<div class="col card" style="width: 18rem; margin: 5px;">\n` +
-                            `<div class="card-header">${obj.title}` +
+                            `<div class="card-header">${obj.item.title}` +
                             `  <div class="card-body">\n` +
-                            `    <h6 class="card-subtitle mb-2 text-body-secondary">${obj.created_date}</h6>\n` +
-                            `    <p>${obj.username}님 작성</p>\n`+
-                            `    <h5 class="card-title">매매|전/월세 : ${obj.dp_amount}</h5>\n`+
-                            `    <p>계약날짜 : ${obj.contract_date}</p>\n`+
-                            `    <p>${obj.phone_number}</p>\n`+
+                            `    <h6 class="card-subtitle mb-2 text-body-secondary">${obj.item.created_date}</h6>\n` +
+                            `    <p>${obj.item.username}님 작성</p>\n`+
+                            `    <h5 class="card-title">매매|전/월세 : ${obj.item.dp_amount}</h5>\n`+
+                            `    <p>계약날짜 : ${obj.item.contract_date}</p>\n`+
+                            `    <p>${obj.item.phone_number}</p>\n`+
                             `<ul class="list-group list-group-flush">
-    <li class="list-group-item">${obj.dp_area}</li>
-    <li class="list-group-item">${obj.dong}(동)</li>
-    <li class="list-group-item">${obj.floor}층</li>
-    <li class="list-group-item">${obj.build_year}년도 건설</li>
-  </ul>`+
-                            `    <p class="card-text">상세설명 : ${obj.text}</p>\n` +
-                            '    <button type="button" onclick="edit_item('+obj.id+')" class="btn btn-secondary">수정</button>\n' +
-                            '    <button type="button" onclick="delete_item('+obj.id+')" class="btn btn-secondary">삭제</button>\n' +
-                            '    <div id="mark"><i onclick="bookmark('+obj.id+')" class="bi bi-bookmark-plus"></i></div>'+
+                        <li class="list-group-item">${obj.item.dp_area}</li>
+                        <li class="list-group-item">${obj.item.dong}(동)</li>
+                        <li class="list-group-item">${obj.item.floor}층</li>
+                        <li class="list-group-item">${obj.item.build_year}년도 건설</li>
+                    </ul>`+
+                            `    <p class="card-text">상세설명 : ${obj.item.text}</p>\n` +
+                            '    <button type="button" onclick="edit_item('+obj.item.id+')" class="btn btn-secondary">수정</button>\n' +
+                            '    <button type="button" onclick="delete_item('+obj.item.id+')" class="btn btn-secondary">삭제</button>\n' +
                             `  </div>\n` +
                             `</div>`+
-                        `</div>`;
+                            `</div>`;
                     })
                     html += '  </div>\n' +
                         '</div>';
@@ -85,23 +76,6 @@
             })
     }
 
-    function bookmark(item_id){
-        $.ajax({
-            type: "POST",
-            url: "/api/bookmark/"+item_id,
-            headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
-            dataType: "text",
-        })
-            .done(function (response) {
-                var empty_mark = document.getElementById("mark");
-                empty_mark.innerHTML = '<i class="bi bi-bookmark-check-fill"></i>';
-
-                alert(response);
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                alert("실패 : "+jqXHR.responseText);
-            })
-    }
     function edit_item(item_id){
         confirm("이 글을 수정하시겠습니까?");
         location.href = "/item/edit/"+item_id;
@@ -124,7 +98,5 @@
                 alert("실패 : "+jqXHR.responseText);
             })
     }
-    /*]]>*/
 </script>
-
 </html>
