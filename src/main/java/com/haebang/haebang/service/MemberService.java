@@ -19,10 +19,10 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-    final private JwtProvider jwtProvider;
-    final private RedisService redisService;
-    final private MemberRepository memberRepository;
-    final private BCryptPasswordEncoder encoder;
+    private final JwtProvider jwtProvider;
+    private final RedisService redisService;
+    private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder encoder;
 
     public String join(String username, String password, String email){
         if( memberRepository.findByUsername(username).isPresent() ) {

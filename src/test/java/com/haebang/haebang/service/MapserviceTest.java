@@ -1,5 +1,6 @@
 package com.haebang.haebang.service;
 
+
 import com.haebang.haebang.dto.MapDto;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,7 +23,9 @@ import java.util.Objects;
 
 @EnableConfigurationProperties
 @SpringBootTest(classes = MapService.class)
-class MapServiceTest {
+public class MapserviceTest  {
+
+
 
     @Value("${haebang.secret.key}")
     private String haebang_key;

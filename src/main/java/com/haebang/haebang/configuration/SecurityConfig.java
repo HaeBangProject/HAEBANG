@@ -16,7 +16,7 @@ import org.springframework.security.web.firewall.HttpFirewall;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    final private JwtProvider jwtProvider;
+    private final JwtProvider jwtProvider;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{

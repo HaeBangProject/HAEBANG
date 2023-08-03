@@ -18,9 +18,9 @@ import java.util.Date;
 @Slf4j
 @Component
 public class JwtProvider {
-    final private Key key;
-    final private RedisService redisService;
-    final private MemberRepository memberRepository;
+    private final Key key;
+    private final RedisService redisService;
+    private final MemberRepository memberRepository;
 
     public JwtProvider(@Value("${jwt.secret}") String secretKey,
                        RedisService redisService, MemberRepository memberRepository){

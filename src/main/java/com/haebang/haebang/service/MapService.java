@@ -98,12 +98,9 @@ public class MapService {
             String dp_amount = String.valueOf(jsonObject.getString("거래금액"));
             String dp = String.valueOf(jsonObject.getString("아파트"));
             String dp_floor = String.valueOf(jsonObject.getInt("층"));
-            System.out.println(dp_amount);
             dp_amount = dp_amount.replaceAll(",", "");
             int x = Integer.parseInt(dp_amount);
-            System.out.println(x);
             double y = Math.round(x /100) / 100.0;
-            System.out.println(y);
 
             String test = "0";
             if (code_sub.equals(test)){

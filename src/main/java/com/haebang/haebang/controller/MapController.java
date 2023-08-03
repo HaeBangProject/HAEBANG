@@ -17,8 +17,8 @@ import java.util.*;
 @Controller
 @RequiredArgsConstructor
 public class MapController {
-    final private MapService mapservice;
-    final private RedisService redisSampleService;
+    private final MapService mapservice;
+    private final RedisService redisSampleService;
 
     @RequestMapping("/map")
     public String map(Model model,String year,String month,Integer sggCd,String dong) throws IOException {

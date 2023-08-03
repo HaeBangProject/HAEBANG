@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("api/member")
 public class MemberController {
-    final private MemberService memberService;
+    private final MemberService memberService;
     // 회원 가입
     @PostMapping("join")
     public ResponseEntity<?> join(@Validated @RequestBody JoinDto joinReqDto, BindingResult bindingResult){

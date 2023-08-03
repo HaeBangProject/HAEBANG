@@ -37,6 +37,9 @@ spring:
       min-idle: 0
       max-active: 8
       max-wait: -1
+  elasticsearch:
+    host: elastic_host
+    port: 9200
 
 
 logging:

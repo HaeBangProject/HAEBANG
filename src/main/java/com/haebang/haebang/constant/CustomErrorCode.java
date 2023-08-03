@@ -21,6 +21,6 @@ public enum CustomErrorCode {
     INVALID_FORMAT_ADDRESS(400, "도로명 주소를 다시 작성해 주세요. format : '000로(00길) 00'"),
     STOMP_NO_MATCH_USER(400, "stomp : 토큰과 유저 불일치");
 
-    final private int code;
-    final private String message;
+    private final int code;
+    private final String message;
 }

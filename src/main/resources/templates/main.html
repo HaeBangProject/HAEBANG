@@ -108,17 +108,51 @@
         <h2>어떤 방을 찾고 계신가요?</h2>
         <br>
         <div class="search">
-            <form action="/" method="post">
-                <input type="text" placeholder="검색어 입력">
-                <button type="submit" style="border: 0; background-color:transparent;">
-                <img src="https://github.com/HaeBangProject/HAEBANG/assets/59076085/62a34b17-c131-484c-9bb2-9af44ec24392">
+            <form id="searchForm">
+                <input type="text" id="searchInput" placeholder="검색어 입력">
+                <button type="submit" style="border: 0; background-color: transparent;">
+                    <img src="https://github.com/HaeBangProject/HAEBANG/assets/59076085/62a34b17-c131-484c-9bb2-9af44ec24392">
                 </button>
             </form>
+            <div id="autocompleteResults"></div>
         </div>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#searchInput").on("input", function() {
+            var userInput = $(this).val();
+
+            // console.log(userInput);
+            // 입력이 변경될 때마다 자동완성 요청을 보냄
+            $.ajax({
+                type: "GET",
+                url: "/api/search/apt?search_condition="+userInput,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+            })
+            .done(function(data) {
+                console.log(data);
+                // 자동완성 결과를 처리하여 autocompleteResults 영역에 출력
+                var autocompleteResults = $("#autocompleteResults");
+                autocompleteResults.empty();
+
+                if (data && data.length > 0) {
+                    $.each(data, function(index, item) {
+                        var roadAddress = item.roadAddress;
+                        var dp = item.dp;
+                        autocompleteResults.append("<div>" + roadAddress+" | "+dp + "</div>");
+                    });
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("실패 : "+jqXHR.responseText);
+            });
+        });
+    });
+</script>
 <script>
     $(document).ready(function () {
         login_or_logout();

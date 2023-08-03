@@ -18,6 +18,7 @@ pipeline {
                 sed -i "s/datasource_pw/${datasource_pw}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
                 sed -i "s/redis_host/${redis_host}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
                 sed -i "s/redis_pw/${redis_pw}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
+                sed -i "s/elastic_host/${elastic_host}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
                 sed -i "s/admin_token/${admin_token}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
                 sed -i "s/admin_username/${admin_username}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
                 sed -i "s/admin_mail/${admin_mail}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
