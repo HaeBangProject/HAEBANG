@@ -1,17 +1,15 @@
 package com.haebang.haebang.service;
 
 import com.haebang.haebang.constant.CustomErrorCode;
+import com.haebang.haebang.document.AptDocument;
 import com.haebang.haebang.dto.AptItemReq;
 import com.haebang.haebang.entity.Apt;
 import com.haebang.haebang.entity.Item;
 import com.haebang.haebang.entity.Member;
 import com.haebang.haebang.exception.CustomException;
-import com.haebang.haebang.repository.AptRepository;
-import com.haebang.haebang.repository.ItemRepository;
-import com.haebang.haebang.repository.MemberRepository;
+import com.haebang.haebang.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +18,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class AptService {
-    final MemberRepository memberRepository;
-    final AptRepository aptRepository;
-    final ItemRepository itemRepository;
+    private final MemberRepository memberRepository;
+    private final AptRepository aptRepository;
+    private final ItemRepository itemRepository;
+    private final AptSearchRepository aptSearchRepository;
 
     public Item createItem(Authentication authentication, AptItemReq req) {
         Apt apt = new Apt();
@@ -40,7 +39,7 @@ public class AptService {
             apt.setDp(req.getDp());
             apt.setCnt(1L);
             System.out.println("아파트 새로 저장"+apt.getRoadAddress()+" "+apt.getDp());
-            aptRepository.save(apt);
+            apt = aptRepository.save(apt);
         }
         Optional<Member> optionalMember = memberRepository.findByUsername(authentication.getName());
         Member member = new Member();
@@ -67,6 +66,7 @@ public class AptService {
                 .build();
 
         itemRepository.save(item);
+        System.out.println( aptSearchRepository.save(AptDocument.form(apt)));
         return item;
     }
 
@@ -115,7 +115,12 @@ public class AptService {
         if(!item.getUsername().equals(username)) throw new CustomException(CustomErrorCode.INVALID_EDIT_USER);
         itemRepository.deleteById(idx);
         item.getApt().decreaseCnt();
-        aptRepository.save(item.getApt());
+        if(item.getApt().getCnt() > 0){
+            aptRepository.save(item.getApt());
+        }else{
+            aptRepository.delete(item.getApt());
+            aptSearchRepository.delete(AptDocument.form(item.getApt()));
+        }
         return true;
     }
 

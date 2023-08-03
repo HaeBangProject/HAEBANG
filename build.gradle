@@ -51,6 +51,8 @@ dependencies {
 	// thymeleaf
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
+	implementation 'org.springframework.data:spring-data-elasticsearch:4.4.12'   //elasticsearch
+
 //	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359' //데이터 타입 컨버터 문제
 
 }
