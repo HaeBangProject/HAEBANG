@@ -76,6 +76,7 @@
 
 - Mysql
 - Redis
+- ElasticSearch
 
 **인프라** 
 
