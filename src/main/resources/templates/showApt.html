@@ -32,9 +32,7 @@
     /*[# th:each="Apt : ${Apt}"]*/
 
 
-    function dp_detail(){
-        var road_address = /*[[${Apt.roadAddress}]]*/;
-
+    function dp_detail(road_address){
         location.href="item/detail/"+road_address;
     }
 
@@ -42,7 +40,12 @@
     geocoder.addressSearch(/*[[${Apt.roadAddress}]]*/, function(result, status) {
         var dp_data = /*[[${Apt.roadAddress}]]*/;
         var cnt = /*[[${Apt.cnt}]]*/;
-        var detail = '<button class="btn btn-secondary" onclick="dp_detail();">'+dp_data+'</button>';
+        var detail = document.createElement('button');
+        detail.className = 'btn btn-secondary';
+        detail.textContent = dp_data;
+        detail.onclick = function() {
+            dp_detail(dp_data);
+        };
 
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
