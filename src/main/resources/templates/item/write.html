@@ -92,6 +92,9 @@
 <button class="btn btn-secondary" id="btn-post" type="button" onclick="post()">집 내놓기</button>
     </div>
 </div>
+
+<img id="load_image" src="/img/loading_image.gif" alt="LOADING" hidden="true">
+
 </body>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -185,12 +188,15 @@
         })
             .done(function (response) {
                 alert("성공");
-
                 window.location.href = '/apt';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 alert("실패 : "+jqXHR.responseText);
+                hideLoadImage();
             })
+            .ajaxStart(
+                showLoadImage()
+            )
     }
     function formToJSONObject(formData){
         var data = {};

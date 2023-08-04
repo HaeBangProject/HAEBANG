@@ -1,3 +1,20 @@
+
+function showLoadImage() {
+    var top = ( $(window).height() - 50 ) / 2 + $(window).scrollTop();
+    var left = ( $(window).width() - 50 ) / 2 + $(window).scrollLeft();
+    document.getElementById("load_image").hidden = false;
+    if($("#load_image").length != 0) {
+        $("#load_image").css({
+            "position": "absolute",
+            "top": top + "px",
+            "left": left + "px"
+        });
+    }
+}
+function hideLoadImage() {
+    document.getElementById("load_image").hidden = true;
+    }
+
 function login_or_logout(){
     var to_login = document.getElementById("to_login");
     var logout_btn = document.getElementById("logout_btn");
