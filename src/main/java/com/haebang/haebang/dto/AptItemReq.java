@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.haebang.haebang.entity.Apt;
 import com.haebang.haebang.entity.Item;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Data
+
 public class AptItemReq {
     // 아파트 정보
     @NotBlank(message = "도로명 주소는 필수 입력값입니다.")

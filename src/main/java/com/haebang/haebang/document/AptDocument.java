@@ -4,9 +4,6 @@ import com.haebang.haebang.entity.Apt;
 import lombok.*;
 import org.springframework.data.elasticsearch.annotations.*;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Getter
@@ -17,9 +14,9 @@ import javax.persistence.Id;
 public class AptDocument {
     @Id
     private Long id;
-    @Field(type = FieldType.Text, index=true)
+    @Field(type = FieldType.Text)
     String roadAddress;// 서울 00구 이태원로27가길 49
-    @Field(type = FieldType.Text, index = true)
+    @Field(type = FieldType.Text)
     String dp;// 한 건물당 하나의 도로명주소가짐 (아파트/건물이름)
 
     public static AptDocument form(Apt apt){

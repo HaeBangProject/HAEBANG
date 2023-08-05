@@ -125,33 +125,51 @@
         $("#searchInput").on("input", function() {
             var userInput = $(this).val();
 
-            // console.log(userInput);
             // 입력이 변경될 때마다 자동완성 요청을 보냄
             $.ajax({
                 type: "GET",
-                url: "/api/search/apt?search_condition="+userInput,
+                url: "/api/search/apt?search_condition=" + userInput,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
             })
-            .done(function(data) {
-                console.log(data);
-                // 자동완성 결과를 처리하여 autocompleteResults 영역에 출력
-                var autocompleteResults = $("#autocompleteResults");
-                autocompleteResults.empty();
+                .done(function(data) {
+                    // 자동완성 결과를 처리하여 autocompleteResults 영역에 출력
+                    var autocompleteResults = $("#autocompleteResults");
+                    autocompleteResults.empty();
 
-                if (data && data.length > 0) {
-                    $.each(data, function(index, item) {
-                        var roadAddress = item.roadAddress;
-                        var dp = item.dp;
-                        autocompleteResults.append("<div>" + roadAddress+" | "+dp + "</div>");
-                    });
-                }
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                console.log("실패 : "+jqXHR.responseText);
-            });
+                    if (data && data.length > 0) {
+                        $.each(data, function(index, item) {
+                            var roadAddress = item.roadAddress;
+                            var dp = item.dp;
+                            var button = $("<button style='background-color:transparent; border: 0;'>").text(roadAddress + " | " + dp);
+                            button.attr("data-roadaddress", roadAddress);
+                            // 버튼을 div에 추가
+                            autocompleteResults.append(button);
+
+                            // 버튼에 클릭 이벤트 리스너 추가
+                            button.on("click", function() {
+                                var roadAddress = $(this).data("roadaddress");
+                                window.location.href ="/item/detail/"+roadAddress;
+
+                            });
+                            // 버튼에 마우스 오버 시 색상 변화 처리
+                            button.hover(
+                                function() {
+                                    $(this).css("background-color", "lightgray");
+                                },
+                                function() {
+                                    $(this).css("background-color", "transparent");
+                                }
+                            );
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    // 실패 시 처리할 코드
+                });
         });
     });
+
 </script>
 <script>
     $(document).ready(function () {

@@ -57,9 +57,9 @@ dependencies {
 
 }
 
-//tasks.named('test') {
-//	useJUnitPlatform()
-//}
+tasks.named('test') {
+	useJUnitPlatform()
+}
 bootJar {
 	manifest {
 		attributes 'Start-Class': 'com.haebang.haebang.HaebangApplication'
