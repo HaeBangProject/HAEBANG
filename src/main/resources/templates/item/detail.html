@@ -29,6 +29,7 @@
     /*<![CDATA[*/
     var itmes;
     $(document).ready(function (){
+
         login_or_logout();
         findItems( /*[[${apt.roadAddress}]]*/);
     })
@@ -67,8 +68,6 @@
                                 <li class="list-group-item">${obj.build_year}년도 건설</li>
                               </ul>`+
                             `    <p class="card-text">상세설명 : ${obj.text}</p>\n` +
-                            '    <button type="button" onclick="edit_item('+obj.id+')" class="btn btn-secondary">수정</button>\n' +
-                            '    <button type="button" onclick="delete_item('+obj.id+')" class="btn btn-secondary">삭제</button>\n' +
                             '    <div id="mark"><i onclick="bookmark('+obj.id+')" class="bi bi-bookmark-plus"></i></div>'+
                             `  </div>\n` +
                             `</div>`+
@@ -102,28 +101,7 @@
                 alert("실패 : "+jqXHR.responseText);
             })
     }
-    function edit_item(item_id){
-        confirm("이 글을 수정하시겠습니까?");
-        location.href = "/item/edit/"+item_id;
-    }
 
-    function delete_item(item_id){
-        console.log(item_id);
-        confirm("이 글을 삭제하시겠습니까?");
-        $.ajax({
-            type: "DELETE",
-            url: "/api/apt/item/"+item_id,
-            headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
-            dataType: "text",
-        })
-            .done(function (response) {
-
-                window.location.href = '/apt';
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                alert("실패 : "+jqXHR.responseText);
-            })
-    }
     /*]]>*/
 </script>
 

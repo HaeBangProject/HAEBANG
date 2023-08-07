@@ -66,7 +66,7 @@ public class AptService {
                 .build();
 
         itemRepository.save(item);
-        System.out.println( aptSearchRepository.save(AptDocument.form(apt)));
+        aptSearchRepository.save(AptDocument.from(apt));
         return item;
     }
 
@@ -119,7 +119,7 @@ public class AptService {
             aptRepository.save(item.getApt());
         }else{
             aptRepository.delete(item.getApt());
-            aptSearchRepository.delete(AptDocument.form(item.getApt()));
+            aptSearchRepository.delete(AptDocument.from(item.getApt()));
         }
         return true;
     }

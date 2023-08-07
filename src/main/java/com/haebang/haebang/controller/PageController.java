@@ -59,28 +59,15 @@ public class PageController {
 
     @GetMapping("item/write")
     public String write(Model model){
+
         model.addAttribute("item_id", 0);
         return "item/write";
     }
     @GetMapping("item/edit/{item_id}")
-    public ModelAndView edit(Model model, @PathVariable("item_id") Long id, HttpServletRequest request){
-        Item item = itemRepository.findById(id).orElseThrow();
-        if(request.getCookies() != null){
-            for(Cookie cookie : request.getCookies()){
-                if( cookie.getName().equals("username") ){
-                    if(cookie.getValue().equals(item.getUsername())){
-                        System.out.println("매물 작성 페이지 로딩 : "+id);
-                        ModelAndView mv = new ModelAndView("item/write");
-                        mv.addObject("item_id", id);
-                        return mv;
-                    }
-                }
-            }
-        }
-
-        ModelAndView mv = new ModelAndView("alert");
-        mv.addObject("msg", "타인 글 수정 불가\n");
-        mv.addObject("url", "/item/detail/"+item.getApt().getRoadAddress());
+    public ModelAndView edit(@PathVariable("item_id") Long id){
+        System.out.println("매물 작성 페이지 로딩 : "+id);
+        ModelAndView mv = new ModelAndView("item/write");
+        mv.addObject("item_id", id);
         return mv;
     }
 

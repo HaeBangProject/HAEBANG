@@ -19,7 +19,7 @@ public class AptDocument {
     @Field(type = FieldType.Text)
     String dp;// 한 건물당 하나의 도로명주소가짐 (아파트/건물이름)
 
-    public static AptDocument form(Apt apt){
+    public static AptDocument from(Apt apt){
         return AptDocument.builder()
                 .id(apt.getId())
                 .roadAddress(apt.getRoadAddress())
