@@ -11,7 +11,9 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Data
@@ -47,6 +49,9 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     Member member;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    List<S3File> s3Files = new ArrayList<>();
 
     public void update(AptItemReq req){
         this.phoneNumber = req.getPhoneNumber();

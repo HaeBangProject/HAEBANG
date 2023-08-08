@@ -4,11 +4,14 @@ import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.dto.AptItemReq;
 import com.haebang.haebang.entity.Item;
 import com.haebang.haebang.entity.Member;
+import com.haebang.haebang.entity.S3File;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.MemberRepository;
 import com.haebang.haebang.service.AptService;
+import com.haebang.haebang.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.client.ml.inference.preprocessing.Multi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,8 +20,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,10 +36,13 @@ import java.util.Map;
 public class AptController {
     final AptService aptService;
     final MemberRepository memberRepository;
+    final private S3Service s3Service;
 
     @PostMapping("item")// 집 내놓기
-    public ResponseEntity createAptItem(@Validated @RequestBody AptItemReq req, BindingResult bindingResult,
-                                        Authentication authentication){
+    public ResponseEntity createAptItem(/*@Validated*/ @RequestPart("form") AptItemReq req,
+                                        @RequestPart("photos") List<MultipartFile> multipartFiles,
+                                        BindingResult bindingResult,
+                                        Authentication authentication) throws IOException {
         log.info("집 내놓기");
 
         System.out.println(req.toString());
@@ -48,12 +58,24 @@ public class AptController {
             return ResponseEntity.badRequest().body(sb.toString());
         }
 
-        return new ResponseEntity(aptService.createItem(authentication ,req), HttpStatus.OK);
+        Item createdItem = aptService.createItem(authentication, req);
+
+        ArrayList<S3File> s3FileList = new ArrayList<>();
+        if(multipartFiles.size()>0){
+            log.info("파일 들어옴");
+            for(MultipartFile multipartFile : multipartFiles){
+                s3FileList.add( s3Service.uploadFile(multipartFile, createdItem) );
+            }
+        }
+
+        return new ResponseEntity(createdItem, HttpStatus.OK);
     }
 
     @PutMapping("item/{id}")// 글 수정
     public ResponseEntity editAptItem(@PathVariable("id") Long id,
-                                      @Validated @RequestBody AptItemReq req, BindingResult bindingResult,
+                                      @Validated @RequestPart AptItemReq req,
+                                      @RequestPart MultipartFile multipartFile,
+                                      BindingResult bindingResult,
                                       Authentication authentication
     ){
         if(!authentication.isAuthenticated())
@@ -66,6 +88,11 @@ public class AptController {
                 sb.append(fieldError.getDefaultMessage()).append("\n");
             }
             return ResponseEntity.badRequest().body(sb.toString());
+        }
+
+        if(!multipartFile.isEmpty()){
+            log.info("파일 업로드 - "+multipartFile.getName());
+            System.out.println(multipartFile);
         }
 
         return new ResponseEntity(aptService.updateItem(authentication.getName(), id, req), HttpStatus.OK);
