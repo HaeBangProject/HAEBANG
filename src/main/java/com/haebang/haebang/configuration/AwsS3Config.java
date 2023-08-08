@@ -16,9 +16,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class AwsS3Config {
+    @Value("${cloud.aws.region.static}")
+    private String region;
 @Bean
 public AmazonS3Client amazonS3Client() {
     return (AmazonS3Client) AmazonS3ClientBuilder.standard()
+            .withRegion(region)
             .enablePathStyleAccess()// "s3.{region}.amazonaws.com/{bucketname}/..."
             .build();
 }
