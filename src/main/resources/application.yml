@@ -41,6 +41,16 @@ spring:
     host: elastic_host
     port: 9200
 
+cloud:
+  aws:
+    s3:
+      bucket: s3_bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      instance-profile: true
 
 logging:
   level:
