@@ -1,5 +1,5 @@
 
-function showLoadImage() {
+function showLoadingImage() {
     var top = ( $(window).height() - 50 ) / 2 + $(window).scrollTop();
     var left = ( $(window).width() - 50 ) / 2 + $(window).scrollLeft();
     document.getElementById("load_image").hidden = false;

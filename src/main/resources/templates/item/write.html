@@ -13,7 +13,6 @@
 <div th:insert="layout/default :: nav">
 </div>
 <div class="form-container">
-    <div>
 <form class="form" id="form">
 <input type="hidden" id="item_id" th:value="${item_id}" name="id" class="form-control">
 <input type="hidden" name="apt_id" class="form-control">
@@ -86,11 +85,17 @@
             <legend>상세 정보</legend>
     <label>제목<input name="title" type="text" class="form-control" placeholder="제목" aria-label="title"></label>
     <label>설명<textarea cols="200" rows="10" name="text" type="text" class="form-control" placeholder="매물과 계약에 관한 설명을 적어주세요" aria-label="text"></textarea></label>
-    </fieldset>
-</form>
+
+
+    <label for="photos"> 파일
+    <input type="file" multiple accept="image/*" name="photos" id="photos">
+    </label>
+<!--    <input type="button" value="사진업로드" onclick="upload_photos()">-->
+    <div id="uploaded-photos"></div>
+        </fieldset>
 
 <button class="btn btn-secondary" id="btn-post" type="button" onclick="post()">집 내놓기</button>
-    </div>
+</form>
 </div>
 
 <img id="load_image" src="/img/loading_image.gif" alt="LOADING" hidden="true">
@@ -147,10 +152,6 @@
         }
     }
 
-    function upload_file(file, dataObj){
-
-    }
-
     function get_item(item_id){
         console.log(item_id+"번 매물 로딩");
         $.ajax({
@@ -168,8 +169,15 @@
             })
     }
     function post(){
-        var formData = $("#form").serializeArray();
-        var data = formToJSONObject(formData);
+        var formData = new FormData();
+        var form = $("#form").serializeArray();
+        var data = formToJSONObject(form);
+        formData.append("form", new Blob([JSON.stringify(data)], {type : "application/json"}));
+        var photos = document.getElementById("photos");
+        for (var i = 0; i < photos.files.length; i++) {
+            formData.append("photos", photos.files[i]);
+        }
+
         var method;
         var url = "/api/apt/item";
         if(item_id > 0){
@@ -182,9 +190,12 @@
         $.ajax({
             type: method,
             url: url,
-            headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
+            headers: {'Authorization':'Bearer '+getCookie("ATK").substring(4)},
             dataType: "json",
-            data: JSON.stringify(data)
+            data: formData,
+            contentType: false,               // * 중요 *
+            processData: false,               // * 중요 *
+            enctype : 'multipart/form-data',  // * 중요 *
         })
             .done(function (response) {
                 alert("성공");

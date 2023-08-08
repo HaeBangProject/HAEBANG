@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HAEBANG</title>
     <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
-    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/detail.css">
 </head>
 <body>
 <div th:insert="layout/default :: nav">
@@ -29,7 +29,6 @@
     /*<![CDATA[*/
     var itmes;
     $(document).ready(function (){
-
         login_or_logout();
         findItems( /*[[${apt.roadAddress}]]*/);
     })
@@ -43,45 +42,128 @@
         })
             .done(function (response) {
                 console.log(response);
-                items = response;
-                var html =``;
-
-                if(!response.length) html += '등록된 매물이 없습니다.';
-                else{
-                    html += '<div class="container">\n' +
-                        '  <div class="row">';
-
-                    response.forEach((obj, idx) => {
-                        console.log(obj);
-                        html += `<div class="col card" style="width: 18rem; margin: 5px;">\n` +
-                            `<div class="card-header">${obj.title}` +
-                            `  <div class="card-body">\n` +
-                            `    <h6 class="card-subtitle mb-2 text-body-secondary">${obj.created_date}</h6>\n` +
-                            `    <p>${obj.username}님 작성</p>\n`+
-                            `    <h5 class="card-title">매매|전/월세 : ${obj.dp_amount}</h5>\n`+
-                            `    <p>계약날짜 : ${obj.contract_date}</p>\n`+
-                            `    <p>${obj.phone_number}</p>\n`+
-                            `<ul class="list-group list-group-flush">
-                                <li class="list-group-item">${obj.dp_area}</li>
-                                <li class="list-group-item">${obj.dong}(동)</li>
-                                <li class="list-group-item">${obj.floor}층</li>
-                                <li class="list-group-item">${obj.build_year}년도 건설</li>
-                              </ul>`+
-                            `    <p class="card-text">상세설명 : ${obj.text}</p>\n` +
-                            '    <div id="mark"><i onclick="bookmark('+obj.id+')" class="bi bi-bookmark-plus"></i></div>'+
-                            `  </div>\n` +
-                            `</div>`+
-                        `</div>`;
-                    })
-                    html += '  </div>\n' +
-                        '</div>';
+                if(!response.length){
+                    document.body.innerHTML = '<h6>등록된 매물이 없습니다</h6>';
                 }
-
-                $("#items").append(html);
+                else{
+                    makeCardElement(response);
+                }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 alert("실패 : "+jqXHR.responseText);
             })
+    }
+
+    function makeCardElement(response){// response[ item[photo[],photo[]..  ],item[photo[]..], item[..]]
+        var containerDiv = document.createElement("div");
+        containerDiv.className = "container";
+        // var rowDiv = document.createElement("div");
+        // rowDiv.className="row";
+
+        response.forEach((obj, idx) => {
+            var cardDiv = document.createElement("div");
+            cardDiv.classList.add('card');
+            // cardDiv.style.width = "30rem";
+            // cardDiv.style.margin = "5px";
+
+            cardDiv.appendChild(makeCarouselElement(idx, obj.s3_files));
+
+            var cardHaeder = document.createElement("div");
+            cardHaeder.className = "card-header";
+            cardHaeder.innerText = obj.title;
+            var cardBody = document.createElement("div");
+            cardBody.className = "card-body";
+            cardBody.innerHTML = ` <h6 class="card-subtitle mb-2 text-body-secondary">${obj.created_date}</h6>\n` +
+                `    <p>${obj.username}님 작성</p>\n`+
+                `    <h5 class="card-title">매매|전/월세 : ${obj.dp_amount}</h5>\n`+
+                `    <p>계약날짜 : ${obj.contract_date}</p>\n`+
+                `    <p>${obj.phone_number}</p>\n`+
+                `    <p>${obj.dp_area}</p>`+
+                `    <p>${obj.dong}(동)</p>`+
+                `    <p>${obj.floor}층</p>`+
+                `    <p>${obj.build_year}년도 건설</p>`+
+                `    <p class="card-text">상세설명 : ${obj.text}</p>\n` +
+                '    <div id="mark"><i onclick="bookmark('+obj.id+')" class="bi bi-bookmark-plus"></i></div>';
+
+            cardDiv.appendChild(cardHaeder);
+            cardDiv.appendChild(cardBody);
+            containerDiv.appendChild(cardDiv);
+        });
+
+        // containerDiv.appendChild(rowDiv);
+        document.body.appendChild(containerDiv);
+    }
+    function makeCarouselElement(idx, images){// carousel이 여러개일 경우 carousel마다 id를 다르게 줘야함
+    // Create main carousel element
+        const carouselDiv = document.createElement('div');
+        carouselDiv.classList.add('carousel', 'slide');
+        carouselDiv.id = 'carouselExampleIndicators'+idx;
+
+    // Create carousel indicators
+        const indicatorsDiv = document.createElement('div');
+        indicatorsDiv.classList.add('carousel-indicators');
+
+        for (let i = 0; i < images.length; i++) {
+            const indicatorButton = document.createElement('button');
+            indicatorButton.type = 'button';
+            indicatorButton.dataset.bsTarget = '#carouselExampleIndicators'+idx;
+            indicatorButton.dataset.bsSlideTo = i;
+            indicatorButton.setAttribute('aria-label', `Slide ${i + 1}`);
+
+            if (i === 0) {
+                indicatorButton.classList.add('active');
+                indicatorButton.setAttribute('aria-current', 'true');
+            }
+
+            indicatorsDiv.appendChild(indicatorButton);
+        }
+
+    // Create carousel inner container
+        const innerDiv = document.createElement('div');
+        innerDiv.classList.add('carousel-inner');
+
+        for (let i = 0; i < images.length; i++) {
+            const carouselItemDiv = document.createElement('div');
+            carouselItemDiv.classList.add('carousel-item');
+
+            if (i === 0) {
+                carouselItemDiv.classList.add('active');
+            }
+
+            const img = document.createElement('img');
+            img.src = images[i].s3_url;
+            img.classList.add('d-block', 'w-100');
+            img.alt = `Image ${i + 1}`;
+
+            carouselItemDiv.appendChild(img);
+            innerDiv.appendChild(carouselItemDiv);
+        }
+
+        // create prev,next button
+        var prevBtn = document.createElement("button");
+        prevBtn.type = "button";
+        prevBtn.className = "carousel-control-prev";
+        prevBtn.dataset.bsTarget = "#carouselExampleIndicators"+idx;
+        prevBtn.dataset.bsSlide = "prev";
+        prevBtn.innerHTML = '<span className="carousel-control-prev-icon" aria-hidden="true"></span>'+
+                            '<span className="visually-hidden">Previous</span>';
+        var nextBtn = document.createElement("button");
+        nextBtn.type = "button";
+        nextBtn.className = "carousel-control-next";
+        nextBtn.dataset.bsTarget = "#carouselExampleIndicators"+idx;
+        nextBtn.dataset.bsSlide = "next";
+        nextBtn.innerHTML = '<span className="carousel-control-next-icon" aria-hidden="true"></span>'+
+                            '<span className="visually-hidden">Next</span>';
+
+        // Append elements to the main container
+        carouselDiv.appendChild(indicatorsDiv);
+        carouselDiv.appendChild(innerDiv);
+        carouselDiv.appendChild(prevBtn);
+        carouselDiv.appendChild(nextBtn);
+
+    // Append the main container to the document
+    //     document.body.appendChild(carouselDiv);
+        return carouselDiv;
     }
 
     function bookmark(item_id){
