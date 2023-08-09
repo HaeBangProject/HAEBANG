@@ -2,25 +2,29 @@ package com.haebang.haebang.service;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.S3Resource;
 import com.amazonaws.services.s3.model.*;
+import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.entity.Item;
 import com.haebang.haebang.entity.S3File;
 import com.haebang.haebang.enums.FileCategory;
+import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.S3FileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import marvin.image.MarvinImage;
+import org.marvinproject.image.transform.scale.Scale;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.File;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,10 +36,16 @@ public class S3Service {
     private final AmazonS3Client amazonS3Client;
     private final S3FileRepository s3FileRepository;
 
-    public S3File uploadFile(MultipartFile multipartFile, Item createdItem) throws IOException{
+    public S3File uploadFile(MultipartFile multipartFile, Item item) throws IOException{
         log.info("==============s3 service=============");
         String fileName = multipartFile.getOriginalFilename();
-        String dirName = "img/"+String.valueOf( createdItem.getId() )+"/";
+        String dirName = "img/"+String.valueOf( item.getId() )+"/";
+
+        String fileFormatName = multipartFile.getContentType()
+                .substring(multipartFile.getContentType().lastIndexOf("/") + 1);
+
+        // 이미지 크기 줄이기
+        multipartFile = resize(multipartFile, fileFormatName, fileName,250);
 
         //파일 형식 구하기
         String ext = fileName.split("\\.")[1];
@@ -70,17 +80,41 @@ public class S3Service {
             e.printStackTrace();
         }
 
-        //object 정보 가져오기
-//        ListObjectsV2Result listObjectsV2Result = amazonS3Client.listObjectsV2(bucket);
-//        List<S3ObjectSummary> objectSummaries = listObjectsV2Result.getObjectSummaries();
-//
-//        for (S3ObjectSummary object: objectSummaries) {
-//            System.out.println("object = " + object.toString());
-//        }
-
         String s3FileUrl = amazonS3Client.getUrl(bucket, dirName+fileName).toString();
 
-        return saveS3Photo(s3FileUrl, dirName, fileName, createdItem);
+        return saveS3Photo(s3FileUrl, dirName, fileName, item);
+    }
+
+    public MultipartFile resize(MultipartFile originalImage, String fileFormatName, String fileName, int targetWidth){
+        try {
+            // MultipartFile -> BufferedImage Convert
+            BufferedImage image = ImageIO.read(originalImage.getInputStream());
+            // newWidth : newHeight = originWidth : originHeight
+            int originWidth = image.getWidth();
+            int originHeight = image.getHeight();
+
+            // origin 이미지가 resizing될 사이즈보다 작을 경우 resizing 작업 안 함
+            if(originWidth < targetWidth)
+                return originalImage;
+
+            MarvinImage imageMarvin = new MarvinImage(image);
+
+            Scale scale = new Scale();
+            scale.load();
+            scale.setAttribute("newWidth", targetWidth);
+            scale.setAttribute("newHeight", targetWidth * originHeight / originWidth);
+            scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
+
+            BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(imageNoAlpha, fileFormatName, baos);
+            baos.flush();
+
+            return new MockMultipartFile(fileName, baos.toByteArray());
+
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 리사이즈에 실패했습니다.");
+        }
     }
 
     public S3File saveS3Photo(String s3FileUrl, String dirName, String fileName, Item createdItem){
@@ -92,5 +126,15 @@ public class S3Service {
                 .item(createdItem)
                 .build();
         return s3FileRepository.save(s3File);
+    }
+
+    public void deletePhoto(Long id) {
+        try {
+            S3File s3File = s3FileRepository.findById(id).orElseThrow();
+            amazonS3Client.deleteObject(bucket, s3File.getDirName() + s3File.getFileName());
+            s3FileRepository.delete(s3File);
+        } catch (Exception e){
+            throw new CustomException(CustomErrorCode.S3_PHOTO_NOT_DELETED);
+        }
     }
 }

@@ -35,6 +35,7 @@ public class Member implements UserDetails {// user은 ddl예약어로 member로
     private String email;
     String role;
 
+    @Builder.Default
     @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     List<Item> items = new ArrayList<>();

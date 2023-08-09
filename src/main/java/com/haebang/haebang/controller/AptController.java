@@ -74,10 +74,10 @@ public class AptController {
     @PutMapping("item/{id}")// 글 수정
     public ResponseEntity editAptItem(@PathVariable("id") Long id,
                                       @Validated @RequestPart AptItemReq req,
-                                      @RequestPart MultipartFile multipartFile,
+                                      @RequestPart("photos") List<MultipartFile> multipartFiles,
                                       BindingResult bindingResult,
                                       Authentication authentication
-    ){
+    ) throws IOException {
         if(!authentication.isAuthenticated())
             throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
 
@@ -90,12 +90,17 @@ public class AptController {
             return ResponseEntity.badRequest().body(sb.toString());
         }
 
-        if(!multipartFile.isEmpty()){
-            log.info("파일 업로드 - "+multipartFile.getName());
-            System.out.println(multipartFile);
+        Item updatedItem = aptService.updateItem(authentication.getName(), id, req);
+
+        ArrayList<S3File> s3FileList = new ArrayList<>();
+        if(multipartFiles.size()>0){
+            log.info("파일 들어옴");
+            for(MultipartFile multipartFile : multipartFiles){
+                s3FileList.add( s3Service.uploadFile(multipartFile, updatedItem) );
+            }
         }
 
-        return new ResponseEntity(aptService.updateItem(authentication.getName(), id, req), HttpStatus.OK);
+        return new ResponseEntity(updatedItem, HttpStatus.OK);
     }
 
     @GetMapping("myitems")

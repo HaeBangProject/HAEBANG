@@ -19,7 +19,9 @@ public enum CustomErrorCode {
     RTK_REISSUE_ERROR(403, "경고 : 재발급 불가 재로그인 바랍니다"),
 
     INVALID_FORMAT_ADDRESS(400, "도로명 주소를 다시 작성해 주세요. format : '000로(00길) 00'"),
-    STOMP_NO_MATCH_USER(400, "stomp : 토큰과 유저 불일치");
+    STOMP_NO_MATCH_USER(400, "stomp : 토큰과 유저 불일치"),
+
+    S3_PHOTO_NOT_DELETED(500, "사진이 완전히 지워지지 않았습니다");
 
     private final int code;
     private final String message;

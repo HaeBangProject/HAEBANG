@@ -3,6 +3,7 @@ package com.haebang.haebang.service;
 import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.document.AptDocument;
 import com.haebang.haebang.dto.AptItemReq;
+import com.haebang.haebang.dto.AptItemRes;
 import com.haebang.haebang.entity.Apt;
 import com.haebang.haebang.entity.Item;
 import com.haebang.haebang.entity.Member;
@@ -76,12 +77,16 @@ public class AptService {
         itemRepository.save(entity);
         return entity;
     }
-    public AptItemReq getItemForEdit(Long idx){
+    public AptItemRes getItemForEdit(Long idx){// apt+item+images
         Item item = itemRepository.findById(idx).orElseThrow();
-        Apt apt = aptRepository.findById(item.getApt().getId()).orElseThrow();
-        AptItemReq dto = new AptItemReq();
-        dto.fromEntityToDto(apt, item);
-        return dto;
+        AptItemReq req = new AptItemReq();
+        req.fromEntityToDto(item.getApt(), item);
+
+        AptItemRes response = new AptItemRes();
+        response.setAptItemReq(req);
+        response.setS3Files(item.getS3Files());
+
+        return response;
     }
 
     public Item updateItem(String username, Long idx, AptItemReq req){

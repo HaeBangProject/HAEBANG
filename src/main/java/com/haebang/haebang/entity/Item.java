@@ -6,13 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.haebang.haebang.dto.AptItemReq;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
@@ -40,16 +37,17 @@ public class Item {
 
     String username;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    //    @JsonIgnore
+    @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "apt_id")// casecadeType = ALL 코드 지워서 부모까지 지워지는거 막음
-    Apt apt;
+            Apt apt;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     Member member;
 
+    @Builder.Default
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     List<S3File> s3Files = new ArrayList<>();
 

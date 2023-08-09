@@ -13,89 +13,89 @@
 <div th:insert="layout/default :: nav">
 </div>
 <div class="form-container">
-<form class="form" id="form">
-<input type="hidden" id="item_id" th:value="${item_id}" name="id" class="form-control">
-<input type="hidden" name="apt_id" class="form-control">
-    <fieldset>
-        <legend>아파트 정보</legend>
-<label>도로명주소
-    <a href="#" id="tooltip2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="right"
-       data-bs-title="주소를 검색하면 장소가 지도에 표시됩니다.">
-        <i class="bi bi-question-square-fill"></i>
-    </a>
-    <input id="road_address" name="road_address" type="text" class="form-control" placeholder="도로명주소 선택" aria-label="road_address"></label>
-    <input id="search_btn" type="button" class="btn btn-secondary" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
-    <div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
-    <label>아파트이름 <a href="#" id="tooltip1"
-                                          data-bs-toggle="tooltip"
-                                          data-bs-placement="right"
-                                          data-bs-title="같은 도로명주소의 매물이 존재하는 경우 기존 아파트명으로 게시됩니다. 변경이 필요한 경우 채팅문의 바랍니다.">
-        <i class="bi bi-question-square-fill"></i>
-    </a>
-<input id="dp" name="dp" type="text" class="form-control" placeholder="아파트명 ex)해방아파트" aria-label="dp"></label>
-<label>건축연도<input name="build_year" type="number" value="2000" class="form-control" placeholder="건축연도" aria-label="build_year"></label>
-    </fieldset>
+    <form class="form" id="form">
+        <input type="hidden" id="item_id" th:value="${item_id}" name="id" class="form-control">
+        <input type="hidden" name="apt_id" class="form-control">
+        <fieldset>
+            <legend>아파트 정보</legend>
+            <label>도로명주소
+                <a href="#" id="tooltip2"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="right"
+                   data-bs-title="주소를 검색하면 장소가 지도에 표시됩니다.">
+                    <i class="bi bi-question-square-fill"></i>
+                </a>
+                <input id="road_address" name="road_address" type="text" class="form-control" placeholder="도로명주소 선택" aria-label="road_address"></label>
+            <input id="search_btn" type="button" class="btn btn-secondary" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
+            <div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
+            <label>아파트이름 <a href="#" id="tooltip1"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="right"
+                            data-bs-title="같은 도로명주소의 매물이 존재하는 경우 기존 아파트명으로 게시됩니다. 변경이 필요한 경우 채팅문의 바랍니다.">
+                <i class="bi bi-question-square-fill"></i>
+            </a>
+                <input id="dp" name="dp" type="text" class="form-control" placeholder="아파트명 ex)해방아파트" aria-label="dp"></label>
+            <label>건축연도<input name="build_year" type="number" value="2000" class="form-control" placeholder="건축연도" aria-label="build_year"></label>
+        </fieldset>
 
-<br><hr><br>
+        <br><hr><br>
 
 
-    <fieldset>
-        <legend>매물 정보</legend>
-<label>동<input name="dong" type="text" class="form-control" placeholder="숫자/한글/영어+동" aria-label="dong"></label>
-<label>층<input name="floor" type="number" class="form-control" placeholder="숫자입력" aria-label="floor"></label>
-        <br>
-<label>아파트면적
-    <a href="#" id="tooltip5"
-       data-bs-toggle="tooltip"
-       data-bs-placement="right"
-       data-bs-title="m2 기준으로 저장됩니다.">
-        <i class="bi bi-question-square-fill"></i>
-    </a>
-    <div class="input-container">
-    <input id="area_m2" oninput="convert('m2')" name="dp_area" type="number" class="form-control" placeholder="m2" aria-label="dp_area">
-        <span>m2 = </span><input id="area_pyeong" name="dp_pyeong" oninput="convert('pyeong')" type="number" class="form-control" placeholder="평">평
-    </div>
-</label>
+        <fieldset>
+            <legend>매물 정보</legend>
+            <label>동<input name="dong" type="text" class="form-control" placeholder="숫자/한글/영어+동" aria-label="dong"></label>
+            <label>층<input name="floor" type="number" class="form-control" placeholder="숫자입력" aria-label="floor"></label>
+            <br>
+            <label>아파트면적
+                <a href="#" id="tooltip5"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="right"
+                   data-bs-title="m2 기준으로 저장됩니다.">
+                    <i class="bi bi-question-square-fill"></i>
+                </a>
+                <div class="input-container">
+                    <input id="area_m2" oninput="convert('m2')" name="dp_area" type="number" class="form-control" placeholder="m2" aria-label="dp_area">
+                    <span>m2 = </span><input id="area_pyeong" name="dp_pyeong" oninput="convert('pyeong')" type="number" class="form-control" placeholder="평">평
+                </div>
+            </label>
 
-<label>매매가
-    <a href="#" id="tooltip3"
-       data-bs-toggle="tooltip"
-       data-bs-placement="right"
-       data-bs-title="전/월세의 경우 해당되지 않습니다. 억 단위로 작성햐야 합니다.">
-        <i class="bi bi-question-square-fill"></i>
-    </a>
-    <input name="dp_amount" type="number" class="form-control" placeholder="억 단위 (1억5천 -> 1.5)" aria-label="dp_amount"></label>
-<label>계약날짜<input name="contract_date" type="date" class="form-control" placeholder="원하는 계약 년/월/일" aria-label="contract_date"></label>
-    <label>연락처
-        <a href="#" id="tooltip4"
-           data-bs-toggle="tooltip"
-           data-bs-placement="right"
-           data-bs-title=" -를 포함하는 형식을 지켜주세요. ex) 010-0000-0000">
-            <i class="bi bi-question-square-fill"></i>
-        </a>
-        <input name="phone_number" type="text" class="form-control" placeholder="010-1234-5678" aria-label="phone_number"></label>
-    </fieldset>
+            <label>매매가
+                <a href="#" id="tooltip3"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="right"
+                   data-bs-title="전/월세의 경우 해당되지 않습니다. 억 단위로 작성햐야 합니다.">
+                    <i class="bi bi-question-square-fill"></i>
+                </a>
+                <input name="dp_amount" type="number" class="form-control" placeholder="억 단위 (1억5천 -> 1.5)" aria-label="dp_amount"></label>
+            <label>계약날짜<input name="contract_date" type="date" class="form-control" placeholder="원하는 계약 년/월/일" aria-label="contract_date"></label>
+            <label>연락처
+                <a href="#" id="tooltip4"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="right"
+                   data-bs-title=" -를 포함하는 형식을 지켜주세요. ex) 010-0000-0000">
+                    <i class="bi bi-question-square-fill"></i>
+                </a>
+                <input name="phone_number" type="text" class="form-control" placeholder="010-1234-5678" aria-label="phone_number"></label>
+        </fieldset>
 
         <br><hr><br>
 
 
         <fieldset>
             <legend>상세 정보</legend>
-    <label>제목<input name="title" type="text" class="form-control" placeholder="제목" aria-label="title"></label>
-    <label>설명<textarea cols="200" rows="10" name="text" type="text" class="form-control" placeholder="매물과 계약에 관한 설명을 적어주세요" aria-label="text"></textarea></label>
+            <label>제목<input name="title" type="text" class="form-control" placeholder="제목" aria-label="title"></label>
+            <label>설명<textarea cols="200" rows="10" name="text" type="text" class="form-control" placeholder="매물과 계약에 관한 설명을 적어주세요" aria-label="text"></textarea></label>
 
 
-    <label for="photos"> 파일
-    <input type="file" multiple accept="image/*" name="photos" id="photos">
-    </label>
-<!--    <input type="button" value="사진업로드" onclick="upload_photos()">-->
-    <div id="uploaded-photos"></div>
+            <label for="photos"> 사진
+                <input type="file" multiple accept="image/*" name="photos" id="photos">
+            </label>
+            <!--    <input type="button" value="사진업로드" onclick="upload_photos()">-->
+            <div id="uploaded-photos"></div>
         </fieldset>
 
-<button class="btn btn-secondary" id="btn-post" type="button" onclick="post()">집 내놓기</button>
-</form>
+        <button class="btn btn-secondary" id="btn-post" type="button" onclick="post()">집 내놓기</button>
+    </form>
 </div>
 
 <img id="load_image" src="/img/loading_image.gif" alt="LOADING" hidden="true">
@@ -161,13 +161,28 @@
             dataType: "json",
         })
             .done(function (response) {
-                JSONtoForm(response);
+                console.log(response);
+                JSONtoForm(response.data);
+                createUploadedPhotos(response.s3_files);
                 //alert("성공");
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 alert("실패 : "+jqXHR.responseText);
             })
     }
+
+    function createUploadedPhotos(images){// 업로드된 이미지 보이게
+        var uploadedPhotos = document.getElementById("uploaded-photos");
+        for(i=0; i<images.length; i++){
+            var image = document.createElement("img");
+            image.src = images[i].s3_url;
+            var delBtn = document.createElement("button");
+            delBtn.onclick = check_deleted_photo(images[i].id);
+            uploadedPhotos.appendChild(image);
+            uploadedPhotos.appendChild(delBtn);
+        }
+    }
+    function check_deleted_photo(image_id){}
     function post(){
         var formData = new FormData();
         var form = $("#form").serializeArray();
