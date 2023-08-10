@@ -9,6 +9,7 @@
     <title>HAEBANG</title>
     <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
     <link rel="stylesheet" href="/css/common.css">
+    <script type="text/javascript" src="/js/detail.js"></script>
 </head>
 <body>
 <div th:insert="layout/default :: nav">
@@ -25,78 +26,6 @@
         login_or_logout();
         findMyItems();
     })
-function findMyItems(){
-$.ajax({
-type: "GET",
-url: "/api/apt/myitems",
-headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
-dataType: "json",
-})
-.done(function (response) {
-console.log(response);
-items = response;
-var html =``;
 
-if(!response.length) html += '등록된 매물이 없습니다.';
-else{
-html += '<div class="container">\n' +
-    '  <div class="row">';
-
-        response.forEach((obj, idx) => {
-        console.log(obj);
-        html += `<div class="col card" style="width: 18rem; margin: 5px;">\n` +
-            `<div class="card-header">${obj.title}` +
-                `  <div class="card-body">\n` +
-                    `    <h6 class="card-subtitle mb-2 text-body-secondary">${obj.created_date}</h6>\n` +
-                    `    <p>${obj.username}님 작성</p>\n`+
-                    `    <h5 class="card-title">매매|전/월세 : ${obj.dp_amount}</h5>\n`+
-                    `    <p>계약날짜 : ${obj.contract_date}</p>\n`+
-                    `    <p>${obj.phone_number}</p>\n`+
-                    `<ul class="list-group list-group-flush">
-                        <li class="list-group-item">${obj.dp_area}</li>
-                        <li class="list-group-item">${obj.dong}(동)</li>
-                        <li class="list-group-item">${obj.floor}층</li>
-                        <li class="list-group-item">${obj.build_year}년도 건설</li>
-                    </ul>`+
-                    `    <p class="card-text">상세설명 : ${obj.text}</p>\n` +
-                    '    <button type="button" onclick="edit_item('+obj.id+')" class="btn btn-secondary">수정</button>\n' +
-                    '    <button type="button" onclick="delete_item('+obj.id+')" class="btn btn-secondary">삭제</button>\n' +
-                    `  </div>\n` +
-                `</div>`+
-            `</div>`;
-        })
-        html += '  </div>\n' +
-    '</div>';
-}
-
-$("#items").append(html);
-})
-.fail(function (jqXHR, textStatus, errorThrown) {
-alert("실패 : "+jqXHR.responseText);
-})
-}
-
-function edit_item(item_id){
-    confirm("이 글을 수정하시겠습니까?");
-    location.href = "/item/edit/"+item_id;
-}
-
-function delete_item(item_id){
-    console.log(item_id);
-    confirm("이 글을 삭제하시겠습니까?");
-    $.ajax({
-        type: "DELETE",
-        url: "/api/apt/item/"+item_id,
-        headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
-        dataType: "text",
-    })
-        .done(function (response) {
-
-            window.location.href = '/apt';
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("실패 : "+jqXHR.responseText);
-        })
-}
 </script>
 </html>

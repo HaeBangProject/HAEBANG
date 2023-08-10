@@ -162,7 +162,7 @@
         })
             .done(function (response) {
                 console.log(response);
-                JSONtoForm(response.data);
+                JSONtoForm(response.apt_item_req);
                 createUploadedPhotos(response.s3_files);
                 //alert("성공");
             })
@@ -177,12 +177,31 @@
             var image = document.createElement("img");
             image.src = images[i].s3_url;
             var delBtn = document.createElement("button");
-            delBtn.onclick = check_deleted_photo(images[i].id);
+            delBtn.type = "button";
+            delBtn.onclick = function(){
+                check_deleted_photo(images[i].id);
+            }
+            delBtn.innerText = "삭제";
             uploadedPhotos.appendChild(image);
             uploadedPhotos.appendChild(delBtn);
         }
     }
-    function check_deleted_photo(image_id){}
+    function check_deleted_photo(image_id){
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/file/'+image_id,
+            headers: {'Authorization':'Bearer '+getCookie("ATK").substring(4)},
+            dataType: 'text'
+        })
+            .done(function (response) {
+                alert("성공");
+                window.location.href = '/mypage/items';
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert("실패 : "+jqXHR.responseText);
+            })
+
+    }
     function post(){
         var formData = new FormData();
         var form = $("#form").serializeArray();

@@ -73,7 +73,7 @@ public class AptController {
 
     @PutMapping("item/{id}")// 글 수정
     public ResponseEntity editAptItem(@PathVariable("id") Long id,
-                                      @Validated @RequestPart AptItemReq req,
+                                      @Validated @RequestPart("form") AptItemReq req,
                                       @RequestPart("photos") List<MultipartFile> multipartFiles,
                                       BindingResult bindingResult,
                                       Authentication authentication
