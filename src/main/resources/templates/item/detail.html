@@ -10,6 +10,7 @@
     <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
     <link rel="stylesheet" href="/css/detail.css">
     <script type="text/javascript" src="/js/detail.js"></script>
+    <script type="text/javascript" src="/js/common.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
 </head>
 <body>
@@ -25,7 +26,6 @@
     $(document).ready(function (){
         login_or_logout();
         getItemsByRoadAddress( /*[[${road_address}]]*/);
-        // get_bookmark_list();
     })
 
     function getItemsByRoadAddress(roadAddress){

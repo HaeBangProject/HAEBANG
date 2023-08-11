@@ -2,14 +2,15 @@
 function showLoadingImage() {
     var top = ( $(window).height() - 50 ) / 2 + $(window).scrollTop();
     var left = ( $(window).width() - 50 ) / 2 + $(window).scrollLeft();
-    document.getElementById("load_image").hidden = false;
-    if($("#load_image").length != 0) {
-        $("#load_image").css({
-            "position": "absolute",
-            "top": top + "px",
-            "left": left + "px"
-        });
-    }
+
+    var loadImage = document.createElement("div");
+    loadImage.id = "load_image";
+    loadImage.style.visibility = "visible";
+    loadImage.style.position = "absolute";
+    loadImage.style.top = top+"px";
+    loadImage.style.left = left+"px";
+
+    document.body.appendChild(loadImage);
 }
 function hideLoadImage() {
     document.getElementById("load_image").hidden = true;

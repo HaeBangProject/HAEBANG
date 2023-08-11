@@ -14,12 +14,17 @@ function delete_item(item_id){
         dataType: "text",
     })
         .done(function (response) {
-
-            window.location.href = '/apt';
+            hideLoadImage();
+            confirm("삭제 완료")
+            window.location.href = '/mypage/items';
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
+            hideLoadImage();
             alert("실패 : "+jqXHR.responseText);
         })
+        .ajaxStart(
+            showLoadingImage()
+        )
 }
 
 function makeCardElement(response, del_edit_btn, bookmark_icon){// response[ item[photo[],photo[]..  ],item[photo[]..], item[..]]
@@ -102,7 +107,13 @@ function makeCardElement(response, del_edit_btn, bookmark_icon){// response[ ite
             editbtn.onclick = function (){
                 edit_item(obj.id);
             }
+            // 버튼 간격 조절용
+            var buttonSpacing = document.createElement("span");
+            buttonSpacing.className = "button-spacing";
+            buttonSpacing.style.marginRight = "10px";
+
             cardBody.appendChild(editbtn);
+            cardBody.appendChild(buttonSpacing);
             cardBody.appendChild(delbtn);
         }
 
@@ -185,38 +196,6 @@ function makeCarouselElement(idx, images){// carousel이 여러개일 경우 car
     //     document.body.appendChild(carouselDiv);
     return carouselDiv;
 }
-
-function check_bookmark(response){
-    var bookmarkList = new Set(response);
-    // item_id가 같은 cardBody div를 찾아서 체크된 bookmarked가 보이게 변경
-    var cardBodies = document.getElementsByClassName("card-body");
-    console.log(cardBodies);
-    for (i=0; i<cardBodies.length; i++){
-        var card_item_id =  cardBodies[i].getAttribute("item_id");
-        if( bookmarkList.has(card_item_id) ){
-            var bookmarked = document.getElementById("bookmarked"+card_item_id);
-            var bookmark = document.getElementById("bookmark"+card_item_id);
-            bookmarked.style.visibility = "visible";
-            bookmark.style.visibility ="hidden";
-        }
-    }
-}
-
-function get_bookmark_list(){// 쿠키로 사용자 이름 가져가서 조회 -> response = [item_id, item_id, ..]
-    $.ajax({
-        type: "GET",
-        url: "/api/bookmark",
-        headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
-        dataType: "json",
-    })
-        .done(function (response){
-            check_bookmark(response);
-        })
-        .fail(function (jqXHR, textStatus, errorThrown){
-            alert("실패 : "+jqXHR.responseText);
-    });
-}
-
 function post_bookmark(item_id){
     $.ajax({
         type: "POST",

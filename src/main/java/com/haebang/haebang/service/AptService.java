@@ -124,9 +124,11 @@ public class AptService {
         if(!item.getUsername().equals(username)) throw new CustomException(CustomErrorCode.INVALID_EDIT_USER);
         itemRepository.deleteById(idx);
         item.getApt().decreaseCnt();
+        item.getApt().decreaseCnt();
         if(item.getApt().getCnt() > 0){
             aptRepository.save(item.getApt());
         }else{
+            // 더이상 존재하는 item 이없는 apt 일 경우 - db 애서 지우고, 검색에 안뜨게 elastic search 애서도 지우기
             aptRepository.delete(item.getApt());
             aptSearchRepository.delete(AptDocument.from(item.getApt()));
         }
