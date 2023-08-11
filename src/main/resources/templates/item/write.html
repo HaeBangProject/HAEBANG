@@ -171,17 +171,19 @@
             })
     }
 
-    function createUploadedPhotos(images){// 업로드된 이미지 보이게
+    function createUploadedPhotos(images) {
         var uploadedPhotos = document.getElementById("uploaded-photos");
-        for(i=0; i<images.length; i++){
+        for (var i = 0; i < images.length; i++) {
             var image = document.createElement("img");
             image.src = images[i].s3_url;
             var delBtn = document.createElement("button");
             delBtn.type = "button";
-            delBtn.onclick = function(){
-                check_deleted_photo(images[i].id);
-            }
+            delBtn.setAttribute("data-image-id", images[i].id); // 이미지 id를 데이터 속성에 저장
             delBtn.innerText = "삭제";
+            delBtn.onclick = function() {
+                var imageId = this.getAttribute("data-image-id"); // 클릭된 버튼의 데이터 속성에서 이미지 id를 가져옴
+                check_deleted_photo(imageId);
+            };
             uploadedPhotos.appendChild(image);
             uploadedPhotos.appendChild(delBtn);
         }

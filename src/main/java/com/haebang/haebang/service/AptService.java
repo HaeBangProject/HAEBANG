@@ -23,6 +23,7 @@ public class AptService {
     private final AptRepository aptRepository;
     private final ItemRepository itemRepository;
     private final AptSearchRepository aptSearchRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     public Item createItem(Authentication authentication, AptItemReq req) {
         Apt apt = new Apt();
@@ -117,6 +118,9 @@ public class AptService {
 
     public boolean deleteItem(String username, Long idx){
         Item item = itemRepository.findById(idx).orElseThrow();
+        // item삭제시 관련 북마크 삭제
+//        bookmarkRepository.deleteAllByItem(item);
+
         if(!item.getUsername().equals(username)) throw new CustomException(CustomErrorCode.INVALID_EDIT_USER);
         itemRepository.deleteById(idx);
         item.getApt().decreaseCnt();

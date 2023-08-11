@@ -13,7 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,11 +29,18 @@ public class BookmarkController {
     private final ItemRepository itemRepository;
 
     @GetMapping("bookmark")
-    ResponseEntity getBookmarkList(Authentication authentication){
+    ResponseEntity getBookmarkList(@CookieValue(name = "username")String username){
 // 로그인 된 사람만, jwt 토큰 검사 필요
-        Member member = memberRepository.findByUsername( authentication.getName()).orElseThrow();
+        Member member = memberRepository.findByUsername( username ).orElseThrow();
         List<Bookmark> bookmarkList = bookmarkRepository.findBookmarkByMember(member);
-        return new ResponseEntity(bookmarkList, HttpStatus.OK);
+
+        List<Long> idList = bookmarkList.stream().map(bookmark -> bookmark.getItem().getId()) // Bookmark 객체에서 Item의 id 필드를 추출하여 Long으로 매핑
+                .collect(Collectors.toList());
+        // 으아아아ㅏ 내가 한 북마크 목록 어떻게 불러와야 하리 모르겠어어어어ㅓㅓㅓ
+        // bookmark에 있는 item 이그노어 풀면 재귀걸리고
+        // member에 해당하는 item 가져오는 건 저것 밖에 없고
+        List<Item> items = itemRepository.findAllById(idList);
+        return new ResponseEntity(items, HttpStatus.OK);
     }
 
     @PostMapping("bookmark/{item_id}")
@@ -43,8 +53,7 @@ public class BookmarkController {
                 .member(member)
                 .item(item)
                 .build();
-        Bookmark savedBookmark = bookmarkRepository.save(bookmark);
-        log.info( "book mark + = "+savedBookmark );
+        bookmarkRepository.save(bookmark);
         return new ResponseEntity( "북마크 완료", HttpStatus.OK);
     }
 
@@ -57,9 +66,8 @@ public class BookmarkController {
                 .member(member)
                 .item(item)
                 .build();
-        log.info("book mark deleted : "+bookmark);
         bookmarkRepository.delete(bookmark);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity("북마크 취소", HttpStatus.OK);
     }
 }

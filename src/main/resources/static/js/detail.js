@@ -1,44 +1,3 @@
-function findItems(roadAddress){
-    $.ajax({
-        type: "GET",
-        url: "/api/apt/items?road_address="+roadAddress,
-        headers: {"content-type": "application/json"},
-        dataType: "json",
-    })
-        .done(function (response) {
-            console.log(response);
-            if(!response.length){
-                document.body.innerHTML = '<h6>등록된 매물이 없습니다</h6>';
-            }
-            else{
-                makeCardElement(response, false);
-            }
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("실패 : "+jqXHR.responseText);
-        })
-}
-
-function findMyItems(){
-    $.ajax({
-        type: "GET",
-        url: "/api/apt/myitems",
-        headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
-        dataType: "json",
-    })
-        .done(function (response) {
-            console.log(response);
-            if(!response.length){
-                document.body.innerHTML = '<h6>등록된 매물이 없습니다</h6>';
-            }
-            else{
-                makeCardElement(response, true);
-            }
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("실패 : "+jqXHR.responseText);
-        })
-}
 
 function edit_item(item_id){
     confirm("이 글을 수정하시겠습니까?");
@@ -63,26 +22,27 @@ function delete_item(item_id){
         })
 }
 
-function makeCardElement(response, del_edit_btn){// response[ item[photo[],photo[]..  ],item[photo[]..], item[..]]
+function makeCardElement(response, del_edit_btn, bookmark_icon){// response[ item[photo[],photo[]..  ],item[photo[]..], item[..]]
     var containerDiv = document.createElement("div");
     containerDiv.className = "container";
-    // var rowDiv = document.createElement("div");
-    // rowDiv.className="row";
+    var user_id = parseInt( getCookie("user_id").substring(8) );
 
-    response.forEach((obj, idx) => {
+    response.forEach((obj) => {
+        console.log(obj);
         var cardDiv = document.createElement("div");
         cardDiv.classList.add('card');
-        // cardDiv.style.width = "30rem";
-        // cardDiv.style.margin = "5px";
 
-        cardDiv.appendChild(makeCarouselElement(idx, obj.s3_files));
+        cardDiv.appendChild(makeCarouselElement(obj.id, obj.s3_files));
 
         var cardHaeder = document.createElement("div");
         cardHaeder.className = "card-header";
         cardHaeder.innerText = obj.title;
         var cardBody = document.createElement("div");
+        cardBody.setAttribute("item_id", obj.id);
         cardBody.className = "card-body";
-        cardBody.innerHTML = ` <h6 class="card-subtitle mb-2 text-body-secondary">${obj.created_date}</h6>\n` +
+        cardBody.innerHTML = `<h4>주소 : ${obj.apt.road_address}</h4>`+
+            `    <h4>아파트명 : ${obj.apt.dp}</h4>`+
+            `    <h6 class="card-subtitle mb-2 text-body-secondary">${obj.created_date}</h6>\n` +
             `    <p>${obj.username}님 작성</p>\n`+
             `    <h5 class="card-title">매매|전/월세 : ${obj.dp_amount}</h5>\n`+
             `    <p>계약날짜 : ${obj.contract_date}</p>\n`+
@@ -91,8 +51,41 @@ function makeCardElement(response, del_edit_btn){// response[ item[photo[],photo
             `    <p>${obj.dong}(동)</p>`+
             `    <p>${obj.floor}층</p>`+
             `    <p>${obj.build_year}년도 건설</p>`+
-            `    <p class="card-text">상세설명 : ${obj.text}</p>\n` +
-            '    <div id="mark"><i onclick="bookmark('+obj.id+')" class="bi bi-bookmark-plus"></i></div>';
+            `    <p class="card-text">상세설명 : ${obj.text}</p>`;
+
+        if(bookmark_icon==true){
+            const bookmarkSet = new Set();
+            obj.bookmarks.forEach((bookmark) => {
+                bookmarkSet.add(bookmark.member.userId);
+            })
+            console.log(bookmarkSet);
+
+            var bookmark = document.createElement("i");
+            bookmark.id = "bookmark"+obj.id;
+            bookmark.classList.add('bi', 'bi-bookmark-plus');
+            bookmark.style.fontSize = "2rem";
+            bookmark.onclick = function (){
+                post_bookmark(obj.id);
+            }
+            var bookmarked = document.createElement("i");
+            bookmarked.id = "bookmarked"+obj.id;
+            bookmarked.classList.add('bi', 'bi-bookmark-check-fill');
+            bookmarked.style.fontSize = "2rem";
+            bookmarked.onclick = function (){
+                delete_bookmark(obj.id);
+            }
+
+            if(bookmarkSet.has(user_id)){
+                bookmarked.style.visibility = "visible";
+                bookmark.style.visibility ="hidden";
+            }else{
+                bookmarked.style.visibility = "hidden";
+                bookmark.style.visibility ="visible";
+            }
+
+            cardBody.appendChild(bookmark);
+            cardBody.appendChild(bookmarked);
+        }
 
         if(del_edit_btn==true){
             var delbtn = document.createElement("button");
@@ -118,8 +111,7 @@ function makeCardElement(response, del_edit_btn){// response[ item[photo[],photo
         containerDiv.appendChild(cardDiv);
     });
 
-    // containerDiv.appendChild(rowDiv);
-    document.body.appendChild(containerDiv);
+    return containerDiv;
 }
 function makeCarouselElement(idx, images){// carousel이 여러개일 경우 carousel마다 id를 다르게 줘야함
     // Create main carousel element
@@ -194,7 +186,38 @@ function makeCarouselElement(idx, images){// carousel이 여러개일 경우 car
     return carouselDiv;
 }
 
-function bookmark(item_id){
+function check_bookmark(response){
+    var bookmarkList = new Set(response);
+    // item_id가 같은 cardBody div를 찾아서 체크된 bookmarked가 보이게 변경
+    var cardBodies = document.getElementsByClassName("card-body");
+    console.log(cardBodies);
+    for (i=0; i<cardBodies.length; i++){
+        var card_item_id =  cardBodies[i].getAttribute("item_id");
+        if( bookmarkList.has(card_item_id) ){
+            var bookmarked = document.getElementById("bookmarked"+card_item_id);
+            var bookmark = document.getElementById("bookmark"+card_item_id);
+            bookmarked.style.visibility = "visible";
+            bookmark.style.visibility ="hidden";
+        }
+    }
+}
+
+function get_bookmark_list(){// 쿠키로 사용자 이름 가져가서 조회 -> response = [item_id, item_id, ..]
+    $.ajax({
+        type: "GET",
+        url: "/api/bookmark",
+        headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
+        dataType: "json",
+    })
+        .done(function (response){
+            check_bookmark(response);
+        })
+        .fail(function (jqXHR, textStatus, errorThrown){
+            alert("실패 : "+jqXHR.responseText);
+    });
+}
+
+function post_bookmark(item_id){
     $.ajax({
         type: "POST",
         url: "/api/bookmark/"+item_id,
@@ -202,8 +225,29 @@ function bookmark(item_id){
         dataType: "text",
     })
         .done(function (response) {
-            var empty_mark = document.getElementById("mark");
-            empty_mark.innerHTML = '<i class="bi bi-bookmark-check-fill"></i>';
+            var empty_mark = document.getElementById("bookmark"+item_id);
+            empty_mark.style.visibility = "hidden";
+            var full_mark = document.getElementById("bookmarked"+item_id);
+            full_mark.style.visibility = "visible";
+
+            alert(response);
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("실패 : "+jqXHR.responseText);
+        })
+}
+function delete_bookmark(item_id){
+    $.ajax({
+        type: "DELETE",
+        url: "/api/bookmark/"+item_id,
+        headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
+        dataType: "text",
+    })
+        .done(function (response) {
+            var empty_mark = document.getElementById("bookmark"+item_id);
+            empty_mark.style.visibility = "visible";
+            var full_mark = document.getElementById("bookmarked"+item_id);
+            full_mark.style.visibility = "hidden";
 
             alert(response);
         })

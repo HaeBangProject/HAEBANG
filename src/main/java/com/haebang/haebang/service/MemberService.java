@@ -52,6 +52,7 @@ public class MemberService {
                 .refreshToken(refreshToken)
                 .accessToken(accessToken)
                 .username(member.getUsername())
+                .userId(member.getUserId())
                 .build();
     }
 

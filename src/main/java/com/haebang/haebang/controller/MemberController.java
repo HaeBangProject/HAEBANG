@@ -74,6 +74,12 @@ public class MemberController {
                         .path("/")
                         .build()
                         .toString());
+        headers.add(HttpHeaders.SET_COOKIE,
+                ResponseCookie.from("user_id", token.getUserId().toString())
+                        .maxAge(24*60*60*30)
+                        .path("/")
+                        .build()
+                        .toString());
         log.info("headers : {}", headers);
         return ResponseEntity.ok().headers(headers).body(token);
     }

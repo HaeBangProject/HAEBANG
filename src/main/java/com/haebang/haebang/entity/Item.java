@@ -1,6 +1,7 @@
 package com.haebang.haebang.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.haebang.haebang.dto.AptItemReq;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Data
 @Builder
@@ -51,6 +53,10 @@ public class Item {
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     List<S3File> s3Files = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    List<Bookmark> bookmarks = new ArrayList<>();
+
     public void update(AptItemReq req){
         this.phoneNumber = req.getPhoneNumber();
         this.title = req.getTitle();
@@ -62,4 +68,5 @@ public class Item {
         this.build_year = req.getBuild_year();
         this.contract_date = req.getContract_date();
     }
+
 }

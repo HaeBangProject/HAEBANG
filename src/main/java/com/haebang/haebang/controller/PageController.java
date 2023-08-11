@@ -52,8 +52,7 @@ public class PageController {
     @RequestMapping("/item/detail/{road_address}")
     public String dp_detail(Model model,@PathVariable("road_address") String road_address){
         System.out.println(road_address);
-        Apt apt = aptService.findAptByRoadAddress(road_address);
-        model.addAttribute("apt", apt);
+        model.addAttribute("road_address", road_address);
         return "item/detail";
     }
 

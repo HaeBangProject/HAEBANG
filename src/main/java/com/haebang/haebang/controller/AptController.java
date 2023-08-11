@@ -6,6 +6,7 @@ import com.haebang.haebang.entity.Item;
 import com.haebang.haebang.entity.Member;
 import com.haebang.haebang.entity.S3File;
 import com.haebang.haebang.exception.CustomException;
+import com.haebang.haebang.repository.ItemRepository;
 import com.haebang.haebang.repository.MemberRepository;
 import com.haebang.haebang.service.AptService;
 import com.haebang.haebang.service.S3Service;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,11 +38,12 @@ import java.util.Map;
 public class AptController {
     final AptService aptService;
     final MemberRepository memberRepository;
+    final ItemRepository itemRepository;
     final private S3Service s3Service;
 
     @PostMapping("item")// 집 내놓기
-    public ResponseEntity createAptItem(/*@Validated*/ @RequestPart("form") AptItemReq req,
-                                        @RequestPart("photos") List<MultipartFile> multipartFiles,
+    public ResponseEntity createAptItem(@Validated @RequestPart("form") AptItemReq req,
+                                        @RequestPart("photos") Optional<List<MultipartFile>> multipartFilesOPT,
                                         BindingResult bindingResult,
                                         Authentication authentication) throws IOException {
         log.info("집 내놓기");
@@ -58,23 +61,25 @@ public class AptController {
             return ResponseEntity.badRequest().body(sb.toString());
         }
 
+        // 사진 저장
         Item createdItem = aptService.createItem(authentication, req);
 
         ArrayList<S3File> s3FileList = new ArrayList<>();
-        if(multipartFiles.size()>0){
+        if(multipartFilesOPT.isPresent()){
+            List<MultipartFile> multipartFiles = multipartFilesOPT.get();
             log.info("파일 들어옴");
             for(MultipartFile multipartFile : multipartFiles){
                 s3FileList.add( s3Service.uploadFile(multipartFile, createdItem) );
             }
         }
-
+        log.info("before="+itemRepository.findById(createdItem.getId()).toString());
         return new ResponseEntity(createdItem, HttpStatus.OK);
     }
 
     @PutMapping("item/{id}")// 글 수정
     public ResponseEntity editAptItem(@PathVariable("id") Long id,
                                       @Validated @RequestPart("form") AptItemReq req,
-                                      @RequestPart("photos") List<MultipartFile> multipartFiles,
+                                      @RequestPart("photos") Optional<List<MultipartFile>> multipartFilesOPT,
                                       BindingResult bindingResult,
                                       Authentication authentication
     ) throws IOException {
@@ -93,13 +98,13 @@ public class AptController {
         Item updatedItem = aptService.updateItem(authentication.getName(), id, req);
 
         ArrayList<S3File> s3FileList = new ArrayList<>();
-        if(multipartFiles.size()>0){
+        if(multipartFilesOPT.isPresent()) {
+            List<MultipartFile> multipartFiles = multipartFilesOPT.get();
             log.info("파일 들어옴");
-            for(MultipartFile multipartFile : multipartFiles){
-                s3FileList.add( s3Service.uploadFile(multipartFile, updatedItem) );
+            for (MultipartFile multipartFile : multipartFiles) {
+                s3FileList.add(s3Service.uploadFile(multipartFile, updatedItem));
             }
         }
-
         return new ResponseEntity(updatedItem, HttpStatus.OK);
     }
 

@@ -1,11 +1,14 @@
 package com.haebang.haebang.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Getter
 @Setter
 @NoArgsConstructor
