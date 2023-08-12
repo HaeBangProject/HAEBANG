@@ -64,7 +64,6 @@ public class ChatRoomRepository {
         }
     }
     public ChannelTopic getTopic(String roomId) {
-        System.out.println(roomId);
         return topics.get(roomId);
     }
 
