@@ -37,8 +37,10 @@ public class AptService {
             apt = optionalApt.get();
             apt.increaseCnt();
         }else{// 새 아파트 등록할때
+            if(req.getDp().length() > 3){
+                apt.setDp( req.getDp().replace("*아파트", "") );
+            }
             apt.setRoadAddress(req.getRoadAddress());
-            apt.setDp(req.getDp());
             apt.setCnt(1L);
             System.out.println("아파트 새로 저장"+apt.getRoadAddress()+" "+apt.getDp());
             apt = aptRepository.save(apt);

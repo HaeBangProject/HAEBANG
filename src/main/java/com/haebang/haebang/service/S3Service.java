@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.imageio.ImageIO;
+import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -128,6 +129,7 @@ public class S3Service {
         return s3FileRepository.save(s3File);
     }
 
+    @Transactional
     public void deletePhoto(Long id) {
         try {
             S3File s3File = s3FileRepository.findById(id).orElseThrow();

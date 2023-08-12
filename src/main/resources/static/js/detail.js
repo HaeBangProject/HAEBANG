@@ -14,16 +14,17 @@ function delete_item(item_id){
         dataType: "text",
     })
         .done(function (response) {
-            hideLoadImage();
             confirm("삭제 완료")
+            hideLoadImage();
             window.location.href = '/mypage/items';
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
-            hideLoadImage();
             alert("실패 : "+jqXHR.responseText);
+            hideLoadImage();
         })
-        .ajaxStart(
-            showLoadingImage()
+        .ajaxStart(()=>{
+                showLoadingImage();
+            }
         )
 }
 
@@ -42,21 +43,21 @@ function makeCardElement(response, del_edit_btn, bookmark_icon){// response[ ite
         var cardHaeder = document.createElement("div");
         cardHaeder.className = "card-header";
         cardHaeder.innerText = obj.title;
+
         var cardBody = document.createElement("div");
         cardBody.setAttribute("item_id", obj.id);
         cardBody.className = "card-body";
-        cardBody.innerHTML = `<h4>주소 : ${obj.apt.road_address}</h4>`+
-            `    <h4>아파트명 : ${obj.apt.dp}</h4>`+
-            `    <h6 class="card-subtitle mb-2 text-body-secondary">${obj.created_date}</h6>\n` +
-            `    <p>${obj.username}님 작성</p>\n`+
-            `    <h5 class="card-title">매매|전/월세 : ${obj.dp_amount}</h5>\n`+
-            `    <p>계약날짜 : ${obj.contract_date}</p>\n`+
-            `    <p>${obj.phone_number}</p>\n`+
-            `    <p>${obj.dp_area}</p>`+
+        cardBody.innerHTML = `<p class="card-subtitle mb-2 text-body-secondary">작성일 ${obj.created_date} |  by ${obj.username}</p>\n`+
+            `    <p>주소 : ${obj.apt.road_address}</p>`+
+            `    <p>${obj.apt.dp} 아파트</p>`+
+            `    <p>매매가 : ${obj.dp_amount}억 원</p>\n`+
+            `    <p>면적 : ${obj.dp_area}m<sup>2</sup></p>`+
+            `    <p>${obj.build_year}년도 건설</p>`+
             `    <p>${obj.dong}(동)</p>`+
             `    <p>${obj.floor}층</p>`+
-            `    <p>${obj.build_year}년도 건설</p>`+
-            `    <p class="card-text">상세설명 : ${obj.text}</p>`;
+            `    <p>계약날짜 : ${obj.contract_date}</p>\n`+
+            `    <p>${obj.phone_number}</p>\n`+
+            `    <p class="card-text">상세내용 : ${obj.text}</p>`;
 
         if(bookmark_icon==true){
             const bookmarkSet = new Set();
