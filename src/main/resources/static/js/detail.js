@@ -177,14 +177,14 @@ function makeCarouselElement(idx, images){// carousel이 여러개일 경우 car
     prevBtn.dataset.bsTarget = "#carouselExampleIndicators"+idx;
     prevBtn.dataset.bsSlide = "prev";
     prevBtn.innerHTML = '<span className="carousel-control-prev-icon" aria-hidden="true"></span>'+
-        '<span className="visually-hidden">Previous</span>';
+        '<span className="visually-hidden"><</span>';
     var nextBtn = document.createElement("button");
     nextBtn.type = "button";
     nextBtn.className = "carousel-control-next";
     nextBtn.dataset.bsTarget = "#carouselExampleIndicators"+idx;
     nextBtn.dataset.bsSlide = "next";
     nextBtn.innerHTML = '<span className="carousel-control-next-icon" aria-hidden="true"></span>'+
-        '<span className="visually-hidden">Next</span>';
+        '<span className="visually-hidden">></span>';
 
     // Append elements to the main container
     carouselDiv.appendChild(indicatorsDiv);

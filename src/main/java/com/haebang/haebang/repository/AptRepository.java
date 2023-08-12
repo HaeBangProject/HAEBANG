@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface AptRepository extends JpaRepository<Apt, Long> {
     Optional<Apt> findByRoadAddress(String roadAddress);
-    @Transactional
     void deleteByRoadAddress(String roadAddress);
 
 

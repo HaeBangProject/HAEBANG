@@ -45,7 +45,7 @@ public class S3Service {
                 .substring(multipartFile.getContentType().lastIndexOf("/") + 1);
 
         // 이미지 크기 줄이기
-        multipartFile = resize(multipartFile, fileFormatName, fileName,250);
+        multipartFile = resize(multipartFile, fileFormatName, fileName,612);
 
         //파일 형식 구하기
         String ext = fileName.split("\\.")[1];
