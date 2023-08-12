@@ -1,17 +1,17 @@
-package com.haebang.haebang.dto;
+package com.haebang.haebang.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.socket.WebSocketSession;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.UUID;
 
 @Getter
 @Setter
+@Entity
 public class ChatRoomDTO {
-
+    @Id
     private String roomId;
     private String name;
 

@@ -1,17 +1,19 @@
 package com.haebang.haebang.controller;
 
-import com.haebang.haebang.dto.ChatRoomDTO;
+import com.haebang.haebang.entity.ChatRoomDTO;
+import com.haebang.haebang.repository.ChatRepository;
 import com.haebang.haebang.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ import java.util.List;
 @RequestMapping(value = "chat")
 public class RoomController {
     private final ChatRoomRepository repository;
+    private final ChatRepository chatRepository;
 
     //채팅방 목록 조회
     @RequestMapping(value = "rooms")
@@ -26,8 +29,8 @@ public class RoomController {
         log.info("# All Chat Rooms");
 
         ModelAndView mv = new ModelAndView("chat/rooms");
-        mv.addObject("list", repository.findAllRooms());
-        System.out.println(repository.findAllRooms());;
+        mv.addObject("list", chatRepository.findAll());
+        System.out.println(chatRepository.findAll());;
 
         return mv;
 
@@ -43,7 +46,14 @@ public class RoomController {
 
         log.info("# Create Chat Room , name: " + name);
         ChatRoomDTO dto = repository.createChatRoomDTO(name);
+
+        //ChatRoomDTO chat_name = chatRepository.findByName(name);
+
+        chatRepository.save(dto);
+        List<ChatRoomDTO> all_chat = chatRepository.findAll();
+
         model.addAttribute("room",dto);
+
         return "chat/room";
     }
 
@@ -53,15 +63,17 @@ public class RoomController {
 
         log.info("# get Chat Room, roomID : " + roomId);
 
-        model.addAttribute("room", repository.findRoomById(roomId));
+        model.addAttribute("room", chatRepository.findByRoomId(roomId));
 //        model.addAttribute("member", memberReqDto);
 
     }
 
     //채팅방 종료
+    @Transactional
     @PostMapping("exit")
     public String exitRoom(String roomId,Model model){
-        repository.deleteRoomById(roomId);
+        ChatRoomDTO delete_room = chatRepository.findByRoomId(roomId);
+        chatRepository.delete(delete_room);
         model.addAttribute("msg", "채팅이 종료되었습니다.");
         model.addAttribute("url", "/");
         return "alert";
