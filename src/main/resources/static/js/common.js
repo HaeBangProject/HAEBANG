@@ -1,28 +1,30 @@
-
 jQuery(document).ajaxStart(function() {
-    showLoadingImage();
+        showLoadingImage();
     })
-    .ajaxComplete(function (){
+    .ajaxStop(function (){
         hideLoadImage();
     });
-
-function showLoadingImage() {
+function createLoadingImage(){
     var top = ( $(window).height() - 50 ) / 2 + $(window).scrollTop();
     var left = ( $(window).width() - 50 ) / 2 + $(window).scrollLeft();
 
     var loadImage = document.createElement("img");
     loadImage.id = "load_image";
     loadImage.src = "/img/loading_image.gif";
-    loadImage.style.visibility = "visible";
+    loadImage.style.visibility = "hidden";
     loadImage.style.position = "absolute";
     loadImage.style.top = top+"px";
     loadImage.style.left = left+"px";
 
     document.body.appendChild(loadImage);
 }
+function showLoadingImage() {
+    document.getElementById("load_image").style.visibility = "visible";
+    document.getElementById("load_image").style.zIndex = "9999";
+}
 function hideLoadImage() {
-    document.getElementById("load_image").hidden = "true";
-    }
+    document.getElementById("load_image").style.visibility = "hidden";
+}
 
 function login_or_logout(){
     var to_login = document.getElementById("to_login");

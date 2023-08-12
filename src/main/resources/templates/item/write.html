@@ -6,8 +6,6 @@
     <title>HAEBANG | 매물 작성하기</title>
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/detail.css">
-    <link rel="icon" href="https://github.com/HaeBangProject/HAEBANG/assets/59076085/e7e057ea-f288-4271-8305-f9d9141f043e">
-    <script type="text/javascript" src="/js/common.js"></script>
 </head>
 <body>
 <div th:insert="layout/default :: nav">
@@ -98,10 +96,7 @@
     </form>
 </div>
 
-<img id="load_image" src="/img/loading_image.gif" alt="LOADING" hidden="true">
-
 </body>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2e1ab347af966350cd08e84de51d9fdb&libraries=services"></script>
 <script type="text/javascript">
@@ -109,6 +104,7 @@
     let item_id;
 
     $(document).ready(function(){
+        createLoadingImage();
         login_or_logout();
 
         item_id = [[${item_id}]]
@@ -238,6 +234,7 @@
                 window.location.href = '/apt';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
+                hideLoadImage();
                 alert("실패 : "+jqXHR.responseText);
             })
     }

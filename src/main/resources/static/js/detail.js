@@ -1,12 +1,12 @@
 
 function edit_item(item_id){
-    confirm("이 글을 수정하시겠습니까?");
+    if(!confirm("이 글을 수정하시겠습니까?")) return;
     location.href = "/item/edit/"+item_id;
 }
 
 function delete_item(item_id){
     console.log(item_id);
-    confirm("이 글을 삭제하시겠습니까?");
+    if(!confirm("이 글을 삭제하시겠습니까?")) return;
     $.ajax({
         type: "DELETE",
         url: "/api/apt/item/"+item_id,
@@ -14,18 +14,14 @@ function delete_item(item_id){
         dataType: "text",
     })
         .done(function (response) {
-            confirm("삭제 완료")
             hideLoadImage();
+            alert("삭제 완료");
             window.location.href = '/mypage/items';
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("실패 : "+jqXHR.responseText);
             hideLoadImage();
+            alert("실패 : "+jqXHR.responseText);
         })
-        .ajaxStart(()=>{
-                showLoadingImage();
-            }
-        )
 }
 
 function makeCardElement(response, del_edit_btn, bookmark_icon){// response[ item[photo[],photo[]..  ],item[photo[]..], item[..]]
@@ -209,10 +205,11 @@ function post_bookmark(item_id){
             empty_mark.style.visibility = "hidden";
             var full_mark = document.getElementById("bookmarked"+item_id);
             full_mark.style.visibility = "visible";
-
+            hideLoadImage();
             alert(response);
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
+            hideLoadImage();
             alert("실패 : "+jqXHR.responseText);
         })
 }
@@ -228,10 +225,11 @@ function delete_bookmark(item_id){
             empty_mark.style.visibility = "visible";
             var full_mark = document.getElementById("bookmarked"+item_id);
             full_mark.style.visibility = "hidden";
-
+            hideLoadImage();
             alert(response);
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
+            hideLoadImage();
             alert("실패 : "+jqXHR.responseText);
         })
 }
