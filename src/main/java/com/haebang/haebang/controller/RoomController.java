@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,22 +24,17 @@ public class RoomController {
     @RequestMapping(value = "rooms")
     public ModelAndView rooms(HttpServletRequest request){
         log.info("# All Chat Rooms");
-        if(request.getCookies() != null){// 쿠키가 존재할때만 쿠키 검사
-            for(Cookie cookie : request.getCookies()){
-                if(cookie.getName().equals("username") || cookie.getName().equals("ATK")){
-                    if(cookie.getValue()!=null){
-                        ModelAndView mv = new ModelAndView("chat/rooms");
-                        mv.addObject("list", repository.findAllRooms());
 
-                        return mv;
-                    }
-                }
-            }
-        }
-        ModelAndView mv = new ModelAndView("alert");
-        mv.addObject("msg", "로그인을 해주세요.\n");
-        mv.addObject("url", "/");
+        ModelAndView mv = new ModelAndView("chat/rooms");
+        mv.addObject("list", repository.findAllRooms());
+        System.out.println(repository.findAllRooms());;
+
         return mv;
+
+//        ModelAndView mv = new ModelAndView("alert");
+//        mv.addObject("msg", "로그인을 해주세요.\n");
+//        mv.addObject("url", "/");
+//        return mv;
     }
 
     //채팅방 개설
