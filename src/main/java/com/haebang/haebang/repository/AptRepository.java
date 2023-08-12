@@ -12,7 +12,4 @@ public interface AptRepository extends JpaRepository<Apt, Long> {
     Optional<Apt> findByRoadAddress(String roadAddress);
     void deleteByRoadAddress(String roadAddress);
 
-
-
-
 }

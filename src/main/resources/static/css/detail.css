@@ -50,13 +50,13 @@
 }
 @media (max-width: 2000px) {
     .card {
-        width: calc(33% - 20px);
+        width: 300px;
     }
 }
 
 @media (max-width: 780px) {
     .card {
-        width: calc(50% - 20px);
+        width: 240px;
     }
 }
 
