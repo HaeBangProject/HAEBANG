@@ -64,12 +64,17 @@ public class ChatRoomRepository {
         }
     }
     public ChannelTopic getTopic(String roomId) {
-        System.out.println(roomId);
         return topics.get(roomId);
     }
 
     public void deleteRoomById(String id){
-        topics.remove(id);
+        ChannelTopic topic = topics.get(id);
+        if (topic != null) {
+            redisMessageListener.removeMessageListener(redisSubscriber, topic);
+            topics.remove(id);
+        }
+        opsHashChatRoom.delete(CHAT_ROOMS, id);
+
     }
 
 

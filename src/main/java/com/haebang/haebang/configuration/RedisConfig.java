@@ -32,7 +32,7 @@ public class RedisConfig {
         lettuceConnectionFactory.setPassword(password); // 비밀번호 설정
         return lettuceConnectionFactory;
     }
-//    @Bean
+    //    @Bean
 //    public RedisTemplate<String, String> redisTemplate() {
 //        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
 //        redisTemplate.setKeySerializer(new StringRedisSerializer());//key 깨짐 방지
@@ -43,12 +43,12 @@ public class RedisConfig {
     //redis 이용한 pub/sub 메세지 처리 listener 설정
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
-    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-    redisTemplate.setConnectionFactory(connectionFactory);
-    redisTemplate.setKeySerializer(new StringRedisSerializer());
-    redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
-    return redisTemplate;
-}
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(connectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
+        return redisTemplate;
+    }
     @Bean
     public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
