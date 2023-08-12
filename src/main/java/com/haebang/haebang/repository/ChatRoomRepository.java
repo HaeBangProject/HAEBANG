@@ -1,8 +1,16 @@
 package com.haebang.haebang.repository;
 
+import com.haebang.haebang.entity.ChatRoom;
 import com.haebang.haebang.entity.ChatRoomDTO;
+import com.haebang.haebang.service.RedisSubscriber;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -11,35 +19,64 @@ import java.util.*;
 @Getter
 @Setter
 @Repository
+@RequiredArgsConstructor
 public class ChatRoomRepository {
-
-    private Map<String, ChatRoomDTO> chatRoomDTOMap;
+    // 채팅방(topic)에 발행되는 메시지를 처리할 Listner
+    private final RedisMessageListenerContainer redisMessageListener;
+    // 구독 처리 서비스
+    private final RedisSubscriber redisSubscriber;
+    // Redis
+    private static final String CHAT_ROOMS = "CHAT_ROOM";
+    private final RedisTemplate<String, Object> redisTemplate;
+    private HashOperations<String, String, ChatRoom> opsHashChatRoom;
+    // 채팅방의 대화 메시지를 발행하기 위한 redis topic 정보. 서버별로 채팅방에 매치되는 topic정보를 Map에 넣어 roomId로 찾을수 있도록 한다.
+    private Map<String, ChannelTopic> topics;
+    // 채팅방의 대화 메시지를 발행하기 위한 redis topic 정보. 서버별로 채팅방에 매치되는 topic정보를 Map에 넣어 roomId로 찾을수 있도록 한다.
 
     @PostConstruct
-    private void init(){
-        chatRoomDTOMap = new LinkedHashMap<>();
+    private void init() {
+        opsHashChatRoom = redisTemplate.opsForHash();
+        topics = new HashMap<>();
     }
-
-    public List<ChatRoomDTO> findAllRooms(){
-        //채팅방 생성 순서 최근 순으로 반환
-        List<ChatRoomDTO> result = new ArrayList<>(chatRoomDTOMap.values());
-        Collections.reverse(result);
-
-        return result;
+    public List<ChatRoom> findAllRoom() {
+        return opsHashChatRoom.values(CHAT_ROOMS);
     }
-
-    public ChatRoomDTO findRoomById(String id){
-        return chatRoomDTOMap.get(id);
+    public ChatRoom findRoomById(String id) {
+        return opsHashChatRoom.get(CHAT_ROOMS, id);
     }
-
-    public ChatRoomDTO createChatRoomDTO(String name){
-        ChatRoomDTO room = ChatRoomDTO.create(name);
-        chatRoomDTOMap.put(room.getRoomId(), room);
-
-        return room;
+    /**
+     * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
+     */
+    public ChatRoom createChatRoom(String name) {
+        ChatRoom chatRoom = ChatRoom.create(name);
+        opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+        return chatRoom;
+    }
+    /**
+     * 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정한다.
+     */
+    public void enterChatRoom(String roomId) {
+        ChannelTopic topic = topics.get(roomId);
+        if (topic == null) {
+            topic = new ChannelTopic(roomId);
+            redisMessageListener.addMessageListener(redisSubscriber, topic);
+            topics.put(roomId, topic);
+        }
+    }
+    public ChannelTopic getTopic(String roomId) {
+        System.out.println(roomId);
+        return topics.get(roomId);
     }
 
     public void deleteRoomById(String id){
-        chatRoomDTOMap.remove(id);
+        ChannelTopic topic = topics.get(id);
+        if (topic != null) {
+            redisMessageListener.removeMessageListener(redisSubscriber, topic);
+            topics.remove(id);
+        }
+        opsHashChatRoom.delete(CHAT_ROOMS, id);
+
     }
+
+
 }

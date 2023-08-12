@@ -2,6 +2,7 @@ package com.haebang.haebang.controller;
 
 import com.haebang.haebang.dto.ChatMessageDTO;
 import com.haebang.haebang.repository.ChatRoomRepository;
+import com.haebang.haebang.service.RedisPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -22,15 +23,21 @@ import javax.websocket.Session;
 @RequiredArgsConstructor
 public class StompChatController {
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
-
+    private final RedisPublisher redisPublisher;
+    private final ChatRoomRepository chatRoomRepository;
     //Client가 SEND할 수 있는 경로
     //stompConfig에서 설정한 applicationDestinationPrefixes와 @MessageMapping 경로가 병합됨
     //"/pub/chat/enter"
 
     @MessageMapping(value = "/chat/enter")
     public void enter(ChatMessageDTO message){
-        message.setMessage(message.getWriter() + "님이 채팅방에 참여하였습니다.");
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        //message.setMessage(message.getWriter() + "님이 채팅방에 참여하였습니다.");
+        //template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        // Websocket에 발행된 메시지를 redis로 발행한다(publish)
+        chatRoomRepository.enterChatRoom(message.getRoomId());
+        message.setMessage(message.getWriter() + "님이 입장하셨습니다.");
+
+        redisPublisher.publish(chatRoomRepository.getTopic(message.getRoomId()), message);
     }
 
     @MessageMapping(value = "/chat/message")
