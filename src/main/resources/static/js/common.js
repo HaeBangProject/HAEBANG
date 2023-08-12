@@ -1,10 +1,18 @@
 
+jQuery(document).ajaxStart(function() {
+    showLoadingImage();
+    })
+    .ajaxComplete(function (){
+        hideLoadImage();
+    });
+
 function showLoadingImage() {
     var top = ( $(window).height() - 50 ) / 2 + $(window).scrollTop();
     var left = ( $(window).width() - 50 ) / 2 + $(window).scrollLeft();
 
-    var loadImage = document.createElement("div");
+    var loadImage = document.createElement("img");
     loadImage.id = "load_image";
+    loadImage.src = "/img/loading_image.gif";
     loadImage.style.visibility = "visible";
     loadImage.style.position = "absolute";
     loadImage.style.top = top+"px";
@@ -13,7 +21,7 @@ function showLoadingImage() {
     document.body.appendChild(loadImage);
 }
 function hideLoadImage() {
-    document.getElementById("load_image").hidden = true;
+    document.getElementById("load_image").hidden = "true";
     }
 
 function login_or_logout(){

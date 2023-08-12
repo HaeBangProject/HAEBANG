@@ -55,7 +55,7 @@
                 </a>
                 <div class="input-container">
                     <input id="area_m2" oninput="convert('m2')" name="dp_area" type="number" class="form-control" placeholder="m2" aria-label="dp_area">
-                    <span>m2 = </span><input id="area_pyeong" name="dp_pyeong" oninput="convert('pyeong')" type="number" class="form-control" placeholder="평">평
+                    <span>m<sup>2</sup></span><input id="area_pyeong" name="dp_pyeong" oninput="convert('pyeong')" type="number" class="form-control" placeholder="평">평
                 </div>
             </label>
 
@@ -140,7 +140,7 @@
 
     });
 
-    function convert(m2_or_pyeong) {
+    function convert(m2_or_pyeong) {// 제곱미터-평 단위 자동 변환
         if(m2_or_pyeong == 'm2'){
             const m2Value = parseFloat(document.getElementById("area_m2").value);
             const pyeongValue = m2Value * 0.3025;
@@ -182,13 +182,13 @@
             delBtn.innerText = "삭제";
             delBtn.onclick = function() {
                 var imageId = this.getAttribute("data-image-id"); // 클릭된 버튼의 데이터 속성에서 이미지 id를 가져옴
-                check_deleted_photo(imageId);
+                delete_uploaded_image(imageId);
             };
             uploadedPhotos.appendChild(image);
             uploadedPhotos.appendChild(delBtn);
         }
     }
-    function check_deleted_photo(image_id){
+    function delete_uploaded_image(image_id){
         $.ajax({
             type: 'DELETE',
             url: '/api/file/'+image_id,
@@ -234,17 +234,12 @@
             enctype : 'multipart/form-data',  // * 중요 *
         })
             .done(function (response) {
-                hideLoadImage();
                 alert("성공");
                 window.location.href = '/apt';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 alert("실패 : "+jqXHR.responseText);
-                hideLoadImage();
             })
-            .ajaxStart(
-                showLoadingImage()
-            )
     }
     function formToJSONObject(formData){
         var data = {};
