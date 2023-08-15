@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,10 @@ public class BookmarkController {
         List<Long> idList = bookmarkList.stream().map(bookmark -> bookmark.getItem().getId()) // Bookmark 객체에서 Item의 id 필드를 추출하여 Long으로 매핑
                 .collect(Collectors.toList());
 
-        return new ResponseEntity(itemRepository.findAllById(idList), HttpStatus.OK);
+        List<Item> items = new ArrayList<>();
+        for(Bookmark bookmark : bookmarkList) items.add(bookmark.getItem());
+
+        return new ResponseEntity(items, HttpStatus.OK);
     }
 
     @PostMapping("bookmark/{item_id}")
