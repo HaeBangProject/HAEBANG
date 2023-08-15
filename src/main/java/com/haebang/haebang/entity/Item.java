@@ -45,7 +45,7 @@ public class Item {
             Apt apt;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     Member member;
 
@@ -54,7 +54,7 @@ public class Item {
     List<S3File> s3Files = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
     List<Bookmark> bookmarks = new ArrayList<>();
 
     public void update(AptItemReq req){
