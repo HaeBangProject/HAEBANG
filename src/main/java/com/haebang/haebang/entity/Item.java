@@ -45,7 +45,7 @@ public class Item {
             Apt apt;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     Member member;
 
