@@ -22,13 +22,13 @@ import java.util.List;
 @IdClass(BookmarkId.class)
 public class Bookmark {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private Member member;
 
     @Id
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "item_id")
     private Item item;
 

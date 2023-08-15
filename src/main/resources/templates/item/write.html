@@ -171,6 +171,7 @@
         var uploadedPhotos = document.getElementById("uploaded-photos");
         for (var i = 0; i < images.length; i++) {
             var image = document.createElement("img");
+            image.setAttribute("data-image-id", images[i].id);
             image.src = images[i].s3_url;
             var delBtn = document.createElement("button");
             delBtn.type = "button";
@@ -179,6 +180,7 @@
             delBtn.onclick = function() {
                 var imageId = this.getAttribute("data-image-id"); // 클릭된 버튼의 데이터 속성에서 이미지 id를 가져옴
                 delete_uploaded_image(imageId);
+                this.style.display = "none";
             };
             uploadedPhotos.appendChild(image);
             uploadedPhotos.appendChild(delBtn);
@@ -192,6 +194,10 @@
             dataType: 'text'
         })
             .done(function (response) {
+                var selector = 'img[data-image-id="'+image_id+'"]';
+                var deletedImage = document.querySelector(selector);
+                console.log(deletedImage);
+                deletedImage.style.display = "none";
                 alert("사진이 삭제되었습니다.");
             })
 

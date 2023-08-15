@@ -5,22 +5,21 @@ jQuery(document).ajaxStart(function() {
         hideLoadImage();
     });
 function createLoadingImage(){
-    var top = ( $(window).height() - 50 ) / 2 + $(window).scrollTop();
-    var left = ( $(window).width() - 50 ) / 2 + $(window).scrollLeft();
-
     var loadImage = document.createElement("img");
     loadImage.id = "load_image";
     loadImage.src = "/img/loading_image.gif";
     loadImage.style.visibility = "hidden";
     loadImage.style.position = "absolute";
-    loadImage.style.top = top+"px";
-    loadImage.style.left = left+"px";
 
     document.body.appendChild(loadImage);
 }
 function showLoadingImage() {
+    var top = ( $(window).height() - 50 ) / 2 + $(window).scrollTop();
+    var left = ( $(window).width() - 50 ) / 2 + $(window).scrollLeft();
     document.getElementById("load_image").style.visibility = "visible";
     document.getElementById("load_image").style.zIndex = "9999";
+    document.getElementById("load_image").style.top = top+"px";
+    document.getElementById("load_image").style.left = left+"px";
 }
 function hideLoadImage() {
     document.getElementById("load_image").style.visibility = "hidden";
