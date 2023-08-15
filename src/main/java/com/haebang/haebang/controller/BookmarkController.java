@@ -36,11 +36,8 @@ public class BookmarkController {
 
         List<Long> idList = bookmarkList.stream().map(bookmark -> bookmark.getItem().getId()) // Bookmark 객체에서 Item의 id 필드를 추출하여 Long으로 매핑
                 .collect(Collectors.toList());
-        // 으아아아ㅏ 내가 한 북마크 목록 어떻게 불러와야 하리 모르겠어어어어ㅓㅓㅓ
-        // bookmark에 있는 item 이그노어 풀면 재귀걸리고
-        // member에 해당하는 item 가져오는 건 저것 밖에 없고
-        List<Item> items = itemRepository.findAllById(idList);
-        return new ResponseEntity(items, HttpStatus.OK);
+
+        return new ResponseEntity(itemRepository.findAllById(idList), HttpStatus.OK);
     }
 
     @PostMapping("bookmark/{item_id}")
