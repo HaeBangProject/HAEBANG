@@ -24,15 +24,18 @@ public class RoomController {
     @RequestMapping(value = "rooms")
     public ModelAndView rooms(HttpServletRequest request){
         log.info("# All Chat Rooms");
+        if(request.getCookies()!=null) {// 로그인 유무
 
-        ModelAndView mv = new ModelAndView("chat/rooms");
-        mv.addObject("list", repository.findAllRoom());
+            ModelAndView mv = new ModelAndView("chat/rooms");
+            mv.addObject("list", repository.findAllRoom());
+            return mv;
+
+        }
+
+        ModelAndView mv = new ModelAndView("alert");
+        mv.addObject("msg", "로그인을 해주세요.\n");
+        mv.addObject("url", "/");
         return mv;
-
-//        ModelAndView mv = new ModelAndView("alert");
-//        mv.addObject("msg", "로그인을 해주세요.\n");
-//        mv.addObject("url", "/");
-//        return mv;
     }
 
     //채팅방 개설

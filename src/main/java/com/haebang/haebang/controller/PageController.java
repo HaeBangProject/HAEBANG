@@ -28,8 +28,13 @@ public class PageController {
     final ItemRepository itemRepository;
 
     @GetMapping("mypage")
-    public String mypage(){
-        return "mypage";
+    public String mypage(HttpServletRequest request,Model model){
+        if(request.getCookies()!=null) {// 로그인 유무
+            return "mypage";
+        }
+        model.addAttribute("msg", "로그인을 해주세요.\n");
+        model.addAttribute("url", "/");
+        return "alert";
     }
     @GetMapping("mypage/items")
     public String myItems(){return "mypage/items";}

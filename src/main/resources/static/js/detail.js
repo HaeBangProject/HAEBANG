@@ -16,7 +16,7 @@ function delete_item(item_id){
         .done(function (response) {
             hideLoadImage();
             alert("삭제 완료");
-            window.location.href = '/mypage/items';
+            window.location.href = '/';
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             hideLoadImage();
@@ -174,14 +174,14 @@ function makeCarouselElement(idx, images){// carousel이 여러개일 경우 car
     prevBtn.dataset.bsTarget = "#carouselExampleIndicators"+idx;
     prevBtn.dataset.bsSlide = "prev";
     prevBtn.innerHTML = '<span className="carousel-control-prev-icon" aria-hidden="true"></span>'+
-        '<span className="visually-hidden"><</span>';
+        '<span className="visually-hidden" style="font-size: 30px; font-weight: bold;"><</span>';
     var nextBtn = document.createElement("button");
     nextBtn.type = "button";
     nextBtn.className = "carousel-control-next";
     nextBtn.dataset.bsTarget = "#carouselExampleIndicators"+idx;
     nextBtn.dataset.bsSlide = "next";
     nextBtn.innerHTML = '<span className="carousel-control-next-icon" aria-hidden="true"></span>'+
-        '<span className="visually-hidden">></span>';
+        '<span className="visually-hidden" style="font-size: 30px; font-weight: bold;">></span>';
 
     // Append elements to the main container
     carouselDiv.appendChild(indicatorsDiv);

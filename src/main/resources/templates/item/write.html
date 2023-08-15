@@ -192,12 +192,9 @@
             dataType: 'text'
         })
             .done(function (response) {
-                alert("성공");
-                window.location.href = '/mypage/items';
+                alert("사진이 삭제되었습니다.");
             })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                alert("실패 : "+jqXHR.responseText);
-            })
+
 
     }
     function post(){
