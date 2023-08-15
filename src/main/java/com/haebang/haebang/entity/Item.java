@@ -39,10 +39,9 @@ public class Item {
 
     String username;
 
-    //    @JsonIgnore
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "apt_id")// casecadeType = ALL 코드 지워서 부모까지 지워지는거 막음
-            Apt apt;
+    Apt apt;
 
     @JsonIgnore
     @ManyToOne
@@ -57,6 +56,7 @@ public class Item {
     @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
     List<Bookmark> bookmarks = new ArrayList<>();
 
+    @JsonIgnore
     public void update(AptItemReq req){
         this.phoneNumber = req.getPhoneNumber();
         this.title = req.getTitle();

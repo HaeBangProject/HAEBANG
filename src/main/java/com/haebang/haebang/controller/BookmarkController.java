@@ -1,5 +1,6 @@
 package com.haebang.haebang.controller;
 
+import com.haebang.haebang.dto.ItemDto;
 import com.haebang.haebang.entity.Bookmark;
 import com.haebang.haebang.entity.Item;
 import com.haebang.haebang.entity.Member;
@@ -34,14 +35,12 @@ public class BookmarkController {
 // 로그인 된 사람만, jwt 토큰 검사 필요
         Member member = memberRepository.findByUsername( username ).orElseThrow();
         List<Bookmark> bookmarkList = bookmarkRepository.findBookmarkByMember(member);
+        List<ItemDto> itemDtos = new ArrayList<>();
+        for(Bookmark bookmark : bookmarkList){
+            itemDtos.add(new ItemDto(bookmark.getItem()));
+        }
 
-        List<Long> idList = bookmarkList.stream().map(bookmark -> bookmark.getItem().getId()) // Bookmark 객체에서 Item의 id 필드를 추출하여 Long으로 매핑
-                .collect(Collectors.toList());
-
-        List<Item> items = new ArrayList<>();
-        for(Bookmark bookmark : bookmarkList) items.add(bookmark.getItem());
-
-        return new ResponseEntity(items, HttpStatus.OK);
+        return new ResponseEntity(itemDtos, HttpStatus.OK);
     }
 
     @PostMapping("bookmark/{item_id}")
