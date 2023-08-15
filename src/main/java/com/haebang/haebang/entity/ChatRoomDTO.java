@@ -14,6 +14,7 @@ public class ChatRoomDTO {
     @Id
     private String roomId;
     private String name;
+    private String username;
 
     public static ChatRoomDTO create(String name){
         ChatRoomDTO room = new ChatRoomDTO();

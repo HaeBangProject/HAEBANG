@@ -25,11 +25,18 @@ public class RoomController {
     public ModelAndView rooms(HttpServletRequest request){
         log.info("# All Chat Rooms");
         if(request.getCookies()!=null) {// 로그인 유무
-
             ModelAndView mv = new ModelAndView("chat/rooms");
+            for(Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("username")) {
+                    String username = cookie.getValue(); // Example: Extract substring
+                    System.out.println(username);
+                    mv.addObject("cookie_name", username);
+
+                }
+
+            }
             mv.addObject("list", repository.findAllRoom());
             return mv;
-
         }
 
         ModelAndView mv = new ModelAndView("alert");
@@ -40,11 +47,17 @@ public class RoomController {
 
     //채팅방 개설
     @PostMapping(value = "room")
-    public String create(Model model,@RequestParam String name){
+    public String create(Model model,@RequestParam String name,HttpServletRequest request){
+        for(Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals("username")) {
+                String username = cookie.getValue(); // Example: Extract substring
 
-        log.info("# Create Chat Room , name: " + name);
-        ChatRoom dto = repository.createChatRoom(name);
-        model.addAttribute("room",dto);
+                log.info("# Create Chat Room , name: " + name);
+                ChatRoom dto = repository.createChatRoom(name, username);
+
+                model.addAttribute("room", dto);
+            }
+        }
         return "chat/room";
     }
 

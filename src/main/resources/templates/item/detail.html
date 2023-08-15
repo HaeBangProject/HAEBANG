@@ -37,7 +37,8 @@
                     document.body.appendChild( makeCardElement(response, false, true));
                 }
                 else{
-                    document.body.innerHTML = '<h6>등록된 매물이 없습니다</h6>';
+                    alert("등록된 매물이 없습니다.");
+                    window.location.href="/";
                 }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
