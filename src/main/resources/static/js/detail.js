@@ -41,6 +41,7 @@ function makeCardElement(response, del_edit_btn, bookmark_icon){// response[ ite
         cardHaeder.innerText = obj.title;
 
         var cardBody = document.createElement("div");
+        cardBody.style.position = "relative";
         cardBody.setAttribute("item_id", obj.id);
         cardBody.className = "card-body";
         cardBody.innerHTML = `<p class="card-subtitle mb-2 text-body-secondary">작성일 ${obj.created_date} |  by ${obj.username}</p>\n`+
@@ -66,6 +67,9 @@ function makeCardElement(response, del_edit_btn, bookmark_icon){// response[ ite
             bookmark.id = "bookmark"+obj.id;
             bookmark.classList.add('bi', 'bi-bookmark-plus');
             bookmark.style.fontSize = "2rem";
+            bookmark.style.position = "absolute";
+            bookmark.style.top = "90%";
+            bookmark.style.left = "85%";
             bookmark.onclick = function (){
                 post_bookmark(obj.id);
             }
@@ -73,6 +77,9 @@ function makeCardElement(response, del_edit_btn, bookmark_icon){// response[ ite
             bookmarked.id = "bookmarked"+obj.id;
             bookmarked.classList.add('bi', 'bi-bookmark-check-fill');
             bookmarked.style.fontSize = "2rem";
+            bookmarked.style.position = "absolute";
+            bookmarked.style.top = "90%";
+            bookmarked.style.left = "85%";
             bookmarked.onclick = function (){
                 delete_bookmark(obj.id);
             }
