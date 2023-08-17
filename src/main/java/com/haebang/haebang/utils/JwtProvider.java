@@ -1,6 +1,8 @@
 package com.haebang.haebang.utils;
 
+import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.entity.Member;
+import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.repository.MemberRepository;
 import com.haebang.haebang.service.RedisService;
 import io.jsonwebtoken.*;
@@ -76,6 +78,7 @@ public class JwtProvider {
             log.info("유효하지 않은 Jwt Token");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT Token", e);
+            throw new CustomException(CustomErrorCode.EXPIRED_ACCESS_TOKEN);
         } catch (UnsupportedJwtException e) {
             log.info("지원하지않는 JWT Token", e);
         } catch (IllegalArgumentException e) {

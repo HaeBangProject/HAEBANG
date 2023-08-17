@@ -9,6 +9,7 @@ import com.haebang.haebang.entity.Member;
 import com.haebang.haebang.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,10 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
+    @Value("${jwt.duration.atk}")
+    private Long atkDuration;
+    @Value("${jwt.duration.rtk}")
+    private Long rtkDuration;
     private final JwtProvider jwtProvider;
     private final RedisService redisService;
     private final MemberRepository memberRepository;
@@ -43,8 +48,8 @@ public class MemberService {
             throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
         }
 
-        String accessToken = jwtProvider.createToken(member, "ATK", 720L);
-        String refreshToken = jwtProvider.createToken(member, "RTK", 720L);
+        String accessToken = jwtProvider.createToken(member, "ATK", atkDuration);
+        String refreshToken = jwtProvider.createToken(member, "RTK", rtkDuration);
 
         jwtProvider.setTokenValueAndTime(refreshToken, member.getEmail());
 
@@ -65,7 +70,7 @@ public class MemberService {
 
         String accessToken = null;
         if(value.equals(email)){
-            accessToken = jwtProvider.createToken(member, "ATK", 24L);
+            accessToken = jwtProvider.createToken(member, "ATK", atkDuration);
         }
         log.info(username+"님 재발급 : "+accessToken);
         return accessToken;

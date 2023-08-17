@@ -8,6 +8,7 @@ import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,10 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("api/member")
 public class MemberController {
     private final MemberService memberService;
+    @Value("${jwt.duration.atk}")
+    private Long atkDuration;
+    @Value("${jwt.duration.rtk}")
+    private Long rtkDuration;
     // 회원 가입
     @PostMapping("join")
     public ResponseEntity<?> join(@Validated @RequestBody JoinDto joinReqDto, BindingResult bindingResult){
@@ -58,13 +63,13 @@ public class MemberController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE,
                 ResponseCookie.from("ATK", token.getAccessToken())
-                        .maxAge(24*60*60*30)
+                        .maxAge(60*60*atkDuration)
                         .path("/")
                         .build()
                         .toString());
         headers.add(HttpHeaders.SET_COOKIE,
                 ResponseCookie.from("RTK", token.getRefreshToken())
-                .maxAge(24*60*60*30)
+                .maxAge(60*60*rtkDuration)
                         .path("/")
                         .build()
                         .toString());
@@ -122,7 +127,7 @@ public class MemberController {
                 .username(username)
                 .build();
         System.out.println(jwtDto);
-        memberService.toBlackListed(jwtDto); //TODO: 배포할땐 주석해제하기, GETDEL 명령어 안먹어서 주석처리 해둠
+        memberService.toBlackListed(jwtDto);
         log.info("ATK 블랙리스트에 등록");
 
         HttpHeaders headers = new HttpHeaders();
@@ -140,6 +145,12 @@ public class MemberController {
                         .toString());
         headers.add(HttpHeaders.SET_COOKIE,
                 ResponseCookie.from("username", null)
+                        .maxAge(0)
+                        .path("/")
+                        .build()
+                        .toString());
+        headers.add(HttpHeaders.SET_COOKIE,
+                ResponseCookie.from("user_id", null)
                         .maxAge(0)
                         .path("/")
                         .build()
