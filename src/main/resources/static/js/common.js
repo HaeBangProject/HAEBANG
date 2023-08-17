@@ -39,6 +39,8 @@ function login_or_logout(){
     }
 }
 function logout() {
+    createLoadingImage();
+    showLoadingImage();
     var data = {
         grant_type : "Bearer",
         access_token : getCookie("ATK").substring(4),
@@ -53,10 +55,12 @@ function logout() {
         dataType: "text",
         data: JSON.stringify(data)})
         .done(function (result) {
+            hideLoadImage();
             alert(result);
             window.location.href = '/';
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
+            hideLoadImage();
             alert("실패 : "+jqXHR.responseText);
         })
 };

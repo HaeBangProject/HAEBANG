@@ -20,6 +20,10 @@
     <script th:inline="javascript">
     $(document).ready(function(){
         login_or_logout();
+        if(getCookie("atk")==null || getCookie("username")==null){
+            alert("로그인이 필요한 서비스입니다.");
+            window.location.href = "/memberLogin";
+        }
     });
 
 

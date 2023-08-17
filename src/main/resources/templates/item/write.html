@@ -105,6 +105,10 @@
 
     $(document).ready(function(){
         createLoadingImage();
+        if(getCookie("atk")==null || getCookie("username")==null){
+            alert("로그인이 필요한 서비스입니다.");
+            window.location.href = "/memberLogin";
+        }
         login_or_logout();
 
         item_id = [[${item_id}]]
