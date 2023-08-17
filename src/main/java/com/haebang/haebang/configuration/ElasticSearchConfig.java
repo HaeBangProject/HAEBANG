@@ -21,6 +21,8 @@ public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
     public RestHighLevelClient elasticsearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo(host + ":" + port)
+                .withConnectTimeout(10000)
+                .withSocketTimeout(30000)
                 .build();
         return RestClients.create(clientConfiguration).rest();
     }
