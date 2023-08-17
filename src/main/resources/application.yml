@@ -1,5 +1,8 @@
 jwt:
   secret: jwt_secret
+  duration:
+    atk: 1
+    rtk: 336
 haebang:
   secret:
     key: haebang_secretkey
