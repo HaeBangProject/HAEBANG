@@ -29,9 +29,9 @@ function login_or_logout(){
         to_login.hidden = true;
     }
     else{// 나머지 경우 로그인 보이게
-        setCookie('username', '', 0);
-        setCookie('user_id', '', 0);
-        setCookie('ATK', '', 0);
+        setCookie('username', '', -1);
+        setCookie('user_id', '', -1);
+        setCookie('ATK', '', -1);
         logout_btn.hidden = true;
         to_login.hidden = false;
     }
@@ -42,7 +42,8 @@ function logout() {
         grant_type : "Bearer",
         access_token : getCookie("ATK").substring(4),
         refresh_token : localStorage.getItem('RTK'),
-        username : getCookie("username").substring(9)
+        username : getCookie("username").substring(9),
+        user_id : getCookie("user_id").substring(8)
     }
     console.log(data);
     $.ajax({
@@ -96,13 +97,12 @@ function getCookie(name){
     }
     return "";
 }
-function setCookie(name, value, expiredays) {
-    var todayDate = new Date();
-    todayDate.setTime(todayDate.getTime() + 0);
-    if (todayDate > expiredays) {
-        document.cookie = name + "=" + value + "; path=/; expires=" + expiredays + ";";
-    } else if (todayDate < expiredays) {
-        todayDate.setDate(todayDate.getDate() + expiredays);
-        document.cookie = name + "=" + value + "; path=/; expires=" + todayDate.getTime()+0 + ";";
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
     }
+    document.cookie = name + "=" + value + expires + "; path=/";
 }

@@ -20,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -55,6 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                                         userDetails.getAuthorities());
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         log.info(authorization + "통과");
+                        log.info("만료기간 : "+new Date(jwtProvider.getExpireTime(token)));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }

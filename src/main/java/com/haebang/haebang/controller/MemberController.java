@@ -6,6 +6,7 @@ import com.haebang.haebang.dto.JoinDto;
 import com.haebang.haebang.dto.LoginDto;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.service.MemberService;
+import com.haebang.haebang.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("api/member")
 public class MemberController {
     private final MemberService memberService;
+    private final JwtProvider jwtProvider;
     @Value("${jwt.duration.atk}")
     private Long atkDuration;
     @Value("${jwt.duration.rtk}")
@@ -97,9 +99,21 @@ public class MemberController {
     }
 
     @GetMapping("reissue")
-    public ResponseEntity<?> reissue(@CookieValue(name = "RTK", defaultValue = "")String rtk){
+    public ResponseEntity<?> reissue(HttpServletRequest request){
         // 리프레시 토큰 쿠키로 받아서 -> access token 새로 쿠키에 넣어주기
-        String accessToken = memberService.reissue(rtk);
+        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String token = null;
+        if(authorization == null|| !authorization.startsWith("Bearer ")){
+            throw new CustomException(CustomErrorCode.RTK_REISSUE_ERROR);
+        }else{
+            token = authorization.split(" ")[1];
+        }
+
+        if(!jwtProvider.getValueFromToken(token).equals(jwtProvider.getEmail(token))) {
+            throw new CustomException(CustomErrorCode.EXPIRED_REFRESH_TOKEN);
+        }
+
+        String accessToken = memberService.reissue(authorization.split(" ")[1]);
         if(accessToken==null) throw new CustomException(CustomErrorCode.RTK_REISSUE_ERROR);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, ResponseCookie.from("ATK", accessToken)
                 .maxAge(60*60*rtkDuration)
@@ -110,17 +124,7 @@ public class MemberController {
 
     // 로그아윳
     @PostMapping("logout")
-    public ResponseEntity<?> logout(
-            @CookieValue(name = "RTK", defaultValue = "")String rtk,
-            @CookieValue(name = "ATK", defaultValue = "")String atk,
-            @CookieValue(name = "username", defaultValue = "")String username
-    ){
-        JwtDto jwtDto = JwtDto.builder()
-                .accessToken(atk)
-                .refreshToken(rtk)
-                .username(username)
-                .build();
-        System.out.println(jwtDto);
+    public ResponseEntity<?> logout(@RequestBody JwtDto jwtDto){
         memberService.toBlackListed(jwtDto);
         log.info("ATK 블랙리스트에 등록");
 
