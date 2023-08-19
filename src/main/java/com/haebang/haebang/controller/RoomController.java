@@ -29,7 +29,6 @@ public class RoomController {
             for(Cookie cookie : request.getCookies()) {
                 if (cookie.getName().equals("username")) {
                     String username = cookie.getValue(); // Example: Extract substring
-                    System.out.println(username);
                     mv.addObject("cookie_name", username);
 
                 }

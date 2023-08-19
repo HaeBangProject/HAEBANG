@@ -1,10 +1,8 @@
 package com.haebang.haebang.repository;
 
 import com.haebang.haebang.entity.ChatRoom;
-import com.haebang.haebang.entity.ChatRoomDTO;
 import com.haebang.haebang.service.RedisSubscriber;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.redis.core.HashOperations;
