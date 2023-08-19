@@ -19,10 +19,13 @@
     <!-- js 부분 -->
     <script th:inline="javascript">
     $(document).ready(function(){
+        createLoadingImage();
         login_or_logout();
-        if(getCookie("atk")==null || getCookie("username")==null){
+        if(getCookie("username")==''){
             alert("로그인이 필요한 서비스입니다.");
             window.location.href = "/memberLogin";
+        }else if(getCookie("ATK")==''){
+            reissue();
         }
     });
 

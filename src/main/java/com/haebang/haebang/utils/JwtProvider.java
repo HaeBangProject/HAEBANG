@@ -41,7 +41,7 @@ public class JwtProvider {
     public String createToken(Member dto, String typ, Long duration){
         Claims claims = Jwts.claims();
         claims.put("username", dto.getUsername());
-        claims.put("auth", "ROLE_USER");
+        claims.put("auth", dto.getRole());
         claims.put("email", dto.getEmail());
 
         String token = Jwts.builder()

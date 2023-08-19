@@ -167,7 +167,8 @@
                 //alert("성공");
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert("실패 : "+jqXHR.responseText);
+                if(jqXHR.status === 401) reissue();
+                else alert("실패 : "+jqXHR.responseText);
             })
     }
 
@@ -242,7 +243,8 @@
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 hideLoadImage();
-                alert("실패 : "+jqXHR.responseText);
+                if(jqXHR.status === 401) reissue();
+                else alert("실패 : "+jqXHR.responseText);
             })
     }
     function formToJSONObject(formData){

@@ -62,17 +62,17 @@ public class MemberService {
     }
 
     public String reissue(String refreshToken){
-        String value = jwtProvider.getValueFromToken(refreshToken);
+        String redisValue = jwtProvider.getValueFromToken(refreshToken);
         String username = jwtProvider.getUsername(refreshToken);
         String email = jwtProvider.getEmail(refreshToken);
 
-        Member member = (Member)jwtProvider.getUserDetails(refreshToken);
+        Member member = (Member)jwtProvider.getUserDetails(username);
 
         String accessToken = null;
-        if(value.equals(email)){
+        if(redisValue.equals(email)){
             accessToken = jwtProvider.createToken(member, "ATK", atkDuration);
         }
-        log.info(username+"님 재발급 : "+accessToken);
+        log.info(username+"님 재발급");
         return accessToken;
     }
 

@@ -63,7 +63,7 @@ public class MemberController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE,
                 ResponseCookie.from("ATK", token.getAccessToken())
-                        .maxAge(60*60*atkDuration)
+                        .maxAge(60*60*rtkDuration)
                         .path("/")
                         .build()
                         .toString());
@@ -108,7 +108,7 @@ public class MemberController {
         String accessToken = memberService.reissue(rtk);
         if(accessToken==null) throw new CustomException(CustomErrorCode.RTK_REISSUE_ERROR);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, ResponseCookie.from("ATK", accessToken)
-                .maxAge(24*60*60*30)
+                .maxAge(60*60*rtkDuration)
                 .path("/")
                 .build()
                 .toString()).body(accessToken);

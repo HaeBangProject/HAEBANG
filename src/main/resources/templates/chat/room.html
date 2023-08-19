@@ -40,6 +40,7 @@
 <script th:inline="javascript">
     $(document).ready(function(){
         login_or_logout();
+        createLoadingImage();
 
         var ATK = getCookie("ATK").substring(4);
         var roomName = [[${room.name}]];

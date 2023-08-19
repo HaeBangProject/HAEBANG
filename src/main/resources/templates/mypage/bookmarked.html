@@ -43,7 +43,8 @@
                 }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert("실패 : "+jqXHR.responseText);
+                if(jqXHR.status === 401) reissue();
+                else alert("실패 : "+jqXHR.responseText);
             })
     }
 </script>

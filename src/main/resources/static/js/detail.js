@@ -5,6 +5,7 @@ function edit_item(item_id){
 }
 
 function delete_item(item_id){
+    showLoadingImage();
     console.log(item_id);
     if(!confirm("이 글을 삭제하시겠습니까?")) return;
     $.ajax({
@@ -20,7 +21,8 @@ function delete_item(item_id){
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             hideLoadImage();
-            alert("실패 : "+jqXHR.responseText);
+            if(jqXHR.status === 401) reissue();
+            else alert("실패 : "+jqXHR.responseText);
         })
 }
 
@@ -194,6 +196,7 @@ function makeCarouselElement(idx, images){// carousel이 여러개일 경우 car
     return carouselDiv;
 }
 function post_bookmark(item_id){
+    showLoadingImage();
     $.ajax({
         type: "POST",
         url: "/api/bookmark/"+item_id,
@@ -210,10 +213,12 @@ function post_bookmark(item_id){
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             hideLoadImage();
-            alert("실패 : "+jqXHR.responseText);
+            if(jqXHR.status === 401) reissue();
+            else alert("실패 : "+jqXHR.responseText);
         })
 }
 function delete_bookmark(item_id){
+    showLoadingImage();
     $.ajax({
         type: "DELETE",
         url: "/api/bookmark/"+item_id,
@@ -230,6 +235,7 @@ function delete_bookmark(item_id){
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             hideLoadImage();
-            alert("실패 : "+jqXHR.responseText);
+            if(jqXHR.status === 401) reissue();
+            else alert("실패 : "+jqXHR.responseText);
         })
 }

@@ -47,6 +47,7 @@
         }
     }
     function login() {
+        showLoadingImage();
         var form = document.getElementById("login-form");
         console.log(form);
 
@@ -64,16 +65,18 @@
             data: JSON.stringify(data)
         })
             .done(function (response) {
+                hideLoadImage();
                 alert("성공");
-
                 window.location.href = '/';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
+                hideLoadImage();
                 alert("실패 : "+jqXHR.responseText);
             })
     };
 
     function join() {
+        showLoadingImage();
         var form = document.getElementById("register-form");
         console.log(form);
 
@@ -90,11 +93,13 @@
             dataType: "text",
             data: JSON.stringify(data)})
             .done(function (result) {
+                hideLoadImage();
                 alert("성공");
                 console.log(result)
                 window.location.href = '/memberLogin';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
+                hideLoadImage();
                 alert("실패 : "+jqXHR.responseText);
             })
     };
