@@ -42,7 +42,8 @@ function logout() {
         grant_type : "Bearer",
         access_token : getCookie("ATK").substring(4),
         refresh_token : localStorage.getItem('RTK'),
-        username : getCookie("username").substring(9)
+        username : getCookie("username").substring(9),
+        user_id : getCookie("user_id").substring(8)
     }
     console.log(data);
     $.ajax({

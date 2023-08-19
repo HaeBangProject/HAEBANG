@@ -110,17 +110,7 @@ public class MemberController {
 
     // 로그아윳
     @PostMapping("logout")
-    public ResponseEntity<?> logout(
-            @CookieValue(name = "RTK", defaultValue = "")String rtk,
-            @CookieValue(name = "ATK", defaultValue = "")String atk,
-            @CookieValue(name = "username", defaultValue = "")String username
-    ){
-        JwtDto jwtDto = JwtDto.builder()
-                .accessToken(atk)
-                .refreshToken(rtk)
-                .username(username)
-                .build();
-        System.out.println(jwtDto);
+    public ResponseEntity<?> logout(@RequestBody JwtDto jwtDto){
         memberService.toBlackListed(jwtDto);
         log.info("ATK 블랙리스트에 등록");
 
