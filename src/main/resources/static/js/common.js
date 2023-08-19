@@ -23,13 +23,17 @@ function login_or_logout(){
     var to_login = document.getElementById("to_login");
     var logout_btn = document.getElementById("logout_btn");
 
-    if(getCookie("username")=='' && getCookie("ATK")== ''){// 로그인 보이게
-        to_login.hidden = false;
-        logout_btn.hidden = true;
-    }
-    else{// 로그아웃 보이게
+    if(getCookie('ATK').length>0 && getCookie('user_id').length>0 && getCookie('username').length>0){
+        // 필요한게 다 있으면 로그아웃 보이게
         logout_btn.hidden = false;
         to_login.hidden = true;
+    }
+    else{// 나머지 경우 로그인 보이게
+        setCookie('username', '', 0);
+        setCookie('user_id', '', 0);
+        setCookie('ATK', '', 0);
+        logout_btn.hidden = true;
+        to_login.hidden = false;
     }
 }
 function logout() {
@@ -37,7 +41,7 @@ function logout() {
     var data = {
         grant_type : "Bearer",
         access_token : getCookie("ATK").substring(4),
-        refresh_token : getCookie("RTK").substring(4),
+        refresh_token : localStorage.getItem('RTK'),
         username : getCookie("username").substring(9)
     }
     console.log(data);
@@ -62,7 +66,7 @@ function reissue(){
     $.ajax({
         type: "GET",
         url: "/api/member/reissue",
-        headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("RTK").substring(4)},
+        headers: {"content-type": "application/json", 'Authorization':'Bearer '+localStorage.getItem('RTK')},
         dataType: "text"
     })
         .done(function (result) {

@@ -65,6 +65,7 @@
             data: JSON.stringify(data)
         })
             .done(function (response) {
+                localStorage.setItem('RTK', response.refresh_token);
                 hideLoadImage();
                 alert("성공");
                 window.location.href = '/';

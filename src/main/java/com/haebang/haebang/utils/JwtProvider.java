@@ -83,6 +83,7 @@ public class JwtProvider {
             log.info("지원하지않는 JWT Token", e);
         } catch (IllegalArgumentException e) {
             log.info("토큰이 비어있는 예외", e);
+            throw new CustomException(CustomErrorCode.EMPTY_ACCESS_TOKEN);
         }
         return false;
     }

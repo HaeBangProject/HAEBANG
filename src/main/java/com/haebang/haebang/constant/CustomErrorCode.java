@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum CustomErrorCode {
-    INVALID_ACCESS_TOKEN(401, "잘못된 토큰 입니다"),
+    INVALID_ACCESS_TOKEN(401, "잘못된 토큰 입니다"), // 토큰이 잘못됐을시 새로 로그인 위한 상태코드 401로 설정
     EXPIRED_ACCESS_TOKEN(401, "만료된 엑세스토큰 입니다"),
-    EXPIRED_REFRESH_TOKEN(403, "만료된 리프레시토큰 입니다"),
-    EMPTY_ACCESS_TOKEN(400, "토큰이 비어있습니다"),
+    EXPIRED_REFRESH_TOKEN(401, "만료된 리프레시토큰 입니다"),
+    EMPTY_ACCESS_TOKEN(401, "토큰이 비어있습니다"),
     ALREADY_JOINED_MEMBER(400, "이미 존재하는 회원이름 입니다"),
     INVALID_MEMBER_INFO(400, "잘못된 회원정보 입니다"),
     UNSUPPORTED_TOKEN(401, "지원하지 않는 토큰입니다"),
