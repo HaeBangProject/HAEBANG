@@ -68,12 +68,6 @@ public class MemberController {
                         .build()
                         .toString());
         headers.add(HttpHeaders.SET_COOKIE,
-                ResponseCookie.from("RTK", token.getRefreshToken())
-                .maxAge(60*60*rtkDuration)
-                        .path("/")
-                        .build()
-                        .toString());
-        headers.add(HttpHeaders.SET_COOKIE,
                 ResponseCookie.from("username", token.getUsername())
                 .maxAge(24*60*60*30)
                         .path("/")
@@ -133,12 +127,6 @@ public class MemberController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE,
                 ResponseCookie.from("ATK", null)
-                        .maxAge(0)
-                        .path("/")
-                        .build()
-                        .toString());
-        headers.add(HttpHeaders.SET_COOKIE,
-                ResponseCookie.from("RTK", null)
                         .maxAge(0)
                         .path("/")
                         .build()
