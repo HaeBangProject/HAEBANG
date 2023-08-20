@@ -187,8 +187,8 @@
   - item_id와 member_id 로 복합키 생성해 boomark:item = N:1, bookmark:member = N:1 관계 형성
   - item에 bookmarks를 함께 보내 프론트에서 북마크 유무 확인
     
-    ### 관리자 문의
-    
+### 관리자 문의
+
 - STOMP와 SockJS를 이용해 채팅을 구현하여 실시간으로 관리자와 1:1 문의가 가능하도록 구현
   - 세션을 직접관리 않고 여러 채팅방을 개설하기 위해 WebSocket 기반의 STOMP 이용
   - WebSocket을 지원하지 않는 브라우저에서 서버-클라이언트 간 통신이 끊기지 않게 하기 위해 SockJS를 이용
