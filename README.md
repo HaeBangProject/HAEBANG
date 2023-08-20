@@ -225,12 +225,12 @@
     
 - Redis의 sorted set 자료구조를 이용해 인기 지역 검색 순위를 구현하는 과정에서 동점처리를 못해 공동 순위를 구현하지 못하는 문제가 발생
   - [Map 자료구조를 이용해 score값을 기준으로 다시 검색데이터를 분류해 같은 score값을 가진 데이터를 카운트 해 reverseRange()를 이용해 동점처리 된 데이터도 공동순위에 들어가게 구현](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/service/RedisService.java#L40)
-  - 관리자 문의 채팅 기능에서 WebSocket과 Stomp만으로 여러 서버에서 채팅방 접속과 메세지를 주고받지 못하는 문제가 발생
-    - Redis를 이용해 채팅방을 엔티티로 구현한 뒤 pub/sub 시스템을 구축해 메세지를 주고받도록 구현해 해결
-      - 채팅방 정보가 초기화 되지 않도록 생성시 redis hash에 저장하도록 처리
-      - 채팅방 입장시에는 채팅방 id로 redis topic(채팅방)을 조회해 pub/sub메세지 리스너와 연동
+- 관리자 문의 채팅 기능에서 WebSocket과 Stomp만으로 여러 서버에서 채팅방 접속과 메세지를 주고받지 못하는 문제가 발생
+  - Redis를 이용해 채팅방을 엔티티로 구현한 뒤 pub/sub 시스템을 구축해 메세지를 주고받도록 구현해 해결
+    - 채팅방 정보가 초기화 되지 않도록 생성시 redis hash에 저장하도록 처리
+    - 채팅방 입장시에는 채팅방 id로 redis topic(채팅방)을 조회해 pub/sub메세지 리스너와 연동
 - CI/CD가 될때마다 redis 컨테이너의 저장된 데이터 값이 삭제되는 문제가 발생
-  - [redis-cli를 설정할때 --requirepass [password] 명령어를 사용해서 비밀번호를 설정해 데이터가 초기화 되는 문제를 해결](#https://lemonade99.tistory.com/8)
+  - [redis-cli를 설정할때 --requirepass [password] 명령어를 사용해서 비밀번호를 설정해 데이터가 초기화 되는 문제를 해결](https://lemonade99.tistory.com/8)
 - spring Security 5.7 & JWT 변경사항
   
   - [spring boot 2.7.3 은 spring security 5.7 버전을 포함한다. 5.7버전은 어댑터를 사용하지 않고 bean 등록방식을 사용하도록 바뀌었기 때문에 오버라이드 해서 구현했던 방식 대신 bean으로 등록하여 사용하면 된다. WebSecurityConfigurerAdapter (기존) → FilterChain (변경)](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/configuration/SecurityConfig.java#L20))
