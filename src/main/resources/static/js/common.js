@@ -49,7 +49,7 @@ function logout() {
     $.ajax({
         type: "POST",
         url: "/api/member/logout",
-        headers: {"content-type": "application/json", 'Authorization':'Bearer '+getCookie("ATK").substring(4)},
+        headers: {"content-type": "application/json"},
         dataType: "text",
         data: JSON.stringify(data)})
         .done(function (result) {
@@ -58,8 +58,12 @@ function logout() {
             window.location.href = '/';
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
+            setCookie('ATK', '', -1);
+            setCookie('username', '', -1);
+            setCookie('user_id', '', -1);
             hideLoadImage();
-            alert("실패 : "+jqXHR.responseText);
+            alert('로그아웃');
+            window.location.href = '/';
         })
 };
 
@@ -76,13 +80,12 @@ function reissue(){
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             hideLoadImage();
+            setCookie('ATK', '', -1);
+            setCookie('username', '', -1);
+            setCookie('user_id', '', -1);
             window.location.href = "/memberLogin";
             alert("새 로그인 필요");
         })
-}
-function makeApiRequestWithAccessToken(){
-    var atk = getCookie("ATK").substring(4);
-    if(getCookie("ATK").substring(4)=='') reissue();
 }
 function getCookie(name){
     var search = name +"=";

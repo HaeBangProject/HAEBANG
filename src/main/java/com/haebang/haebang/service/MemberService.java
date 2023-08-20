@@ -80,7 +80,6 @@ public class MemberService {
         System.out.println("toBlackListed atk logout");
         Long duration = jwtProvider.getExpireTime(jwtDto.getAccessToken()) - new Date(System.currentTimeMillis()).getTime();
         redisService.setStringValueExpire(jwtDto.getAccessToken(), "logout", Duration.ofMillis(duration));
-        System.out.println("남은 기간 : "+duration );
         System.out.println("toBlackListed rtk delete");
         redisService.deleteKey(jwtDto.getRefreshToken());
         System.out.println("finish");
