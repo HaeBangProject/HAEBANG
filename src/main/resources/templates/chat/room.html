@@ -54,7 +54,7 @@
         var stomp = Stomp.over(sockJs);
 
         //2. connection이 맺어지면 실행
-        stomp.connect({}, function (){
+        stomp.connect({"token":ATK}, function (){
             console.log("STOMP Connection")
 
             //4. subscribe(path, callback)으로 메세지를 받을 수 있음
@@ -83,21 +83,21 @@
             console.log(stomp);
 
             //3. send(path, header, message)로 메세지를 보낼 수 있음
-            stomp.send('/pub/chat/enter', {},JSON.stringify({roomId: roomId, message: msg.value, writer: username}));
+            stomp.send('/pub/chat/enter', {"token":ATK},JSON.stringify({roomId: roomId, message: msg.value, writer: username}));
         });
 
         $("#button-send").on("click", function(e){
             var msg = document.getElementById("msg");
 
             console.log(username + ":" + msg.value);
-            stomp.send('/pub/chat/message',{}, JSON.stringify({roomId: roomId, message: msg.value, writer: username}));
+            stomp.send('/pub/chat/message',{"token":ATK}, JSON.stringify({roomId: roomId, message: msg.value, writer: username}));
             msg.value = '';
         });
         $("#button-exit").on("click", function(e){
             var msg = "채팅이 종료되었습니다.";
 
             console.log(username + ":" + msg);
-            stomp.send('/pub/chat/exit',  {},JSON.stringify({roomId: roomId, message: msg, writer: username}));
+            stomp.send('/pub/chat/exit',{"token":ATK},JSON.stringify({roomId: roomId, message: msg, writer: username}));
         });
     });
 
