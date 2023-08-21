@@ -1,6 +1,6 @@
 package com.haebang.haebang.repository;
 
-import com.haebang.haebang.entity.ChatRoom;
+import com.haebang.haebang.model.ChatRoom;
 import com.haebang.haebang.service.RedisSubscriber;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,6 @@ public class ChatRoomRepository {
     private HashOperations<String, String, ChatRoom> opsHashChatRoom;
     // 채팅방의 대화 메시지를 발행하기 위한 redis topic 정보. 서버별로 채팅방에 매치되는 topic정보를 Map에 넣어 roomId로 찾을수 있도록 한다.
     private Map<String, ChannelTopic> topics;
-    // 채팅방의 대화 메시지를 발행하기 위한 redis topic 정보. 서버별로 채팅방에 매치되는 topic정보를 Map에 넣어 roomId로 찾을수 있도록 한다.
 
     @PostConstruct
     private void init() {

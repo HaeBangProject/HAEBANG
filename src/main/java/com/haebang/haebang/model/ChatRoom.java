@@ -1,4 +1,4 @@
-package com.haebang.haebang.entity;
+package com.haebang.haebang.model;
 
 import lombok.Getter;
 import lombok.Setter;

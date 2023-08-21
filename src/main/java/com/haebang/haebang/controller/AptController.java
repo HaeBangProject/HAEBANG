@@ -39,7 +39,7 @@ public class AptController {
     final AptService aptService;
     final MemberRepository memberRepository;
     final ItemRepository itemRepository;
-    final private S3Service s3Service;
+    private final S3Service s3Service;
 
     @PostMapping("item")// 집 내놓기
     public ResponseEntity createAptItem(@Validated @RequestPart("form") AptItemReq req,

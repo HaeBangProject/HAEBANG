@@ -1,7 +1,7 @@
 package com.haebang.haebang.controller;
 
 
-import com.haebang.haebang.entity.ChatRoom;
+import com.haebang.haebang.model.ChatRoom;
 import com.haebang.haebang.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

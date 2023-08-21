@@ -1,11 +1,11 @@
-package com.haebang.haebang.dto;
+package com.haebang.haebang.model;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ChatMessageDTO {
+public class ChatMessage {
 
 
     private String roomId; // 방번호

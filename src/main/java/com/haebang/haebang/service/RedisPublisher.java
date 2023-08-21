@@ -1,6 +1,6 @@
 package com.haebang.haebang.service;
 
-import com.haebang.haebang.dto.ChatMessageDTO;
+import com.haebang.haebang.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RedisPublisher {
     private final RedisTemplate<String, Object> redisTemplate;
-    public void publish(ChannelTopic topic, ChatMessageDTO message) {
+    public void publish(ChannelTopic topic, ChatMessage message) {
         redisTemplate.convertAndSend(topic.getTopic(), message);
     }
 }
