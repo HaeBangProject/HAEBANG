@@ -14,7 +14,6 @@ import java.time.LocalDate;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Data
-
 public class AptItemReq {
     // 아파트 정보
     @NotBlank(message = "도로명 주소는 필수 입력값입니다.")

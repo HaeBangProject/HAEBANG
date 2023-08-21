@@ -70,7 +70,7 @@ public class JwtProvider {
         return memberRepository.findByUsername(username).get();
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) throws CustomException{
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -98,13 +98,17 @@ public class JwtProvider {
                 .parseClaimsJws(token).getHeader().getType();
     }
 
-    public String getValueFromToken(String token){
+    public String getValueFromToken(String token) throws CustomException{
         String value = redisService.getStringValue(token);
         System.out.println("jwtProvider 100 line 토큰이 레디스에 저장되어있는지 값 확인 :"+value);
-        if(value!=null) return redisService.getStringValue(token);// logout(ATK) or email(RTK)
 
-//        new CustomException(CustomErrorCode.LOGOUTED_MEMBER_WARN);
-        return null;
+        if(getTokenType(token).equals("RTK")){
+            if(value==null) throw new CustomException(CustomErrorCode.EXPIRED_REFRESH_TOKEN);
+        }
+        else if(getTokenType(token).equals("ATK")){
+            if(value=="logout") throw new CustomException(CustomErrorCode.EXPIRED_ACCESS_TOKEN);
+        }
+        return value;
     }
 
     /**
