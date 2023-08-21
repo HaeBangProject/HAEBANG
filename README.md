@@ -141,7 +141,7 @@
 
 ## ERD-구조
 
-	![ERD](https://github.com/HaeBangProject/HAEBANG/assets/57720285/cd200289-7a10-4cdc-b00f-f860311edd6a)
+![ERD](https://github.com/HaeBangProject/HAEBANG/assets/57720285/cd200289-7a10-4cdc-b00f-f860311edd6a)
 
 ## 핵심 기능
 
@@ -254,7 +254,7 @@
     - 채팅방 입장시에는 채팅방 id로 redis topic(채팅방)을 조회해 pub/sub메세지 리스너와 연동
 
 - CI/CD가 될때마다 redis 컨테이너의 저장된 데이터 값이 삭제되는 문제가 발생
-  - [redis-cli를 설정할때 --requirepass [password] 명령어를 사용해서 비밀번호를 설정해 데이터가 초기화 되는 문제를 해결](#https://lemonade99.tistory.com/8)
+  - [redis-cli를 설정할때 --requirepass [password] 명령어를 사용해서 비밀번호를 설정해 데이터가 초기화 되는 문제를 해결](https://lemonade99.tistory.com/8)
 
 - spring Security 5.7 & JWT 변경사항
   - [spring boot 2.7.3 은 spring security 5.7 버전을 포함한다. 5.7버전은 어댑터를 사용하지 않고 bean 등록방식을 사용하도록 바뀌었기 때문에 오버라이드 해서 구현했던 방식 대신 bean으로 등록하여 사용하면 된다. WebSecurityConfigurerAdapter (기존) → FilterChain (변경)](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/configuration/SecurityConfig.java#L20))
@@ -271,5 +271,5 @@
   - [복잡한 Entity의 경우 @JsonIgnore로 해결이 불가해 새로운 response 용 Dto를 만들어 필요한 정보만 넣어 반환](https://github.com/HaeBangProject/HAEBANG/blob/bf32b9907e2d811f7b2a99d1e651d1f5a0a930b0/src/main/java/com/haebang/haebang/dto/AptItemRes.java#L14)
 
 - 연관된 Entity가 삭제/생성시 연동되지 않는 문제
-  - [bookmark 에 item과 memeber가 있어서 item 삭제시 bookmark 때문에 지워지지 않는 현상 & item 삭제시 S3File이 남아있는 현상 - item삭제시 관련된 bookmark와 S3File이 지워지도록 설정 `casecade.REMOVE](https://github.com/HaeBangProject/HAEBANG/blob/bf32b9907e2d811f7b2a99d1e651d1f5a0a930b0/src/main/java/com/haebang/haebang/entity/Item.java#L52)`
+  - [bookmark 에 item과 memeber가 있어서 item 삭제시 bookmark 때문에 지워지지 않는 현상 & item 삭제시 S3File이 남아있는 현상 - item삭제시 관련된 bookmark와 S3File이 지워지도록 설정 cascade.REMOVE](https://github.com/HaeBangProject/HAEBANG/blob/bf32b9907e2d811f7b2a99d1e651d1f5a0a930b0/src/main/java/com/haebang/haebang/entity/Item.java#L52)
   - [Apt가 자식이 없을때 삭제하기 위해 카운트를 만들어 0이 될때 Apt와 AptDocument (elastic search)를 삭제시켜줌](https://github.com/HaeBangProject/HAEBANG/blob/bf32b9907e2d811f7b2a99d1e651d1f5a0a930b0/src/main/java/com/haebang/haebang/service/AptService.java#L121)
