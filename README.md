@@ -13,20 +13,20 @@
 - [시스템 아키텍처](#시스템-아키텍처)
 - [API 명세서](#api-명세서)
 - [프로젝트 목적](#프로젝트-목적)
-- [화면 구성](#화면-구성)
-- [HAEBANG 회고](#haebang-회고)
-- [ERD 구조](#erd-구조)
+- [화면구성](#화면구성)
+- [HAEBANG 회고록](#HAEBANG-회고록)
+- [ERD 구조](#ERD-구조)
 - [핵심 기능](#핵심-기능)
   - [로그인/회원가입](#로그인회원가입)
   - [아파트 매매 정보](#아파트-매매-정보)
   - [인기 검색 순위](#인기-검색-순위)
-  - [매물 CRUD](#매물-crud)
+  - [매물 CRUD](#매물-CRUD)
   - [관리자 문의](#관리자-문의)
-  - [검색어 자동완성](#검색어-자동완성)
-- [CI/CD](#cicd)
-  - [CI](#ci)
-  - [CD](#cd)
-- [Trouble Shooting](#trouble-shooting)
+  - [검색어 자동완성](# 검색어 자동완성)
+- [CI/CD](#CI/CD)
+  - [CI](#CI)
+  - [CD](#CD)
+- [Trouble Shooting](#Trouble-Shooting)
 
 ## Project Members
 
@@ -261,11 +261,10 @@
   - [new release 1.0.x 부터 parse 대신 builder()로, <u>signWith( 알고리즘, 세가지형태시크릿키)</u>에서 <u>signWith( byte[]형만되는시크릿키, 알고리즘 )</u> 으로 변경. ](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/utils/JwtProvider.java#L29))
     signWith에 필요한 시크릿키는 Keys.hmacShaKeyFor('keyBytes')로 인코딩 된 키로 sign하도록 변경됨 ('keybytes'는 32byte보다 길어야 함)
 
-- 웹소켓 통신시 jwt 적용과 유저 구분 문제 - 토큰으로 여부를 구분하기 때문에 토큰을 담아 보내고 검증하는 것에 어려움 발생
-  - [토큰으로 회원여부를 구분하기 때문에 stomp의 헤더에 토큰을 담아 보내고, 이를 stomp hadler를 거쳐 검증함](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/utils/StompHandler.java#L20)
-  - [핸들러를 통해 <u>세션id와 토큰으로 부터 가져온 유저네임을 맵핑시키는 방식</u>에서, 최초 로그인시 토큰과 유저정보를 쿠키에 저장하도록 해 소켓 <u>통신시 토큰과 유저네임을 함께 보내도록해 보다 </u>편리하게 변경](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/utils/StompHandler.java#L20)
+- 웹소켓 통신시에도 보안을 위해 기존의 http통신처럼 jwt인증을 적용하는 문제
+  - [stomp의 헤더에 access_token을 넣어 전송하면 stomp hadler에서 `CONNECT`,`SEND`의 경우 토큰을 검증](https://github.com/HaeBangProject/HAEBANG/blob/19f77a023c8d561d5899bc2715c33faed6ae40f9/src/main/java/com/haebang/haebang/utils/StompHandler.java#L18)
 
-- Entity 순환참조 문제
+- JPA 양방향 연관 관계를 가진 객체들을 응답 시에 JSON 직렬화하는 과정에서 순환 참조 문제가 발생
   - @JsonIgnore 어노테이션을 추가해 필요하지 않는 객체는 제외
   - [지연로딩 옵션을 선택했을 시 발생하는 문제 해결 위해 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 추가](https://github.com/HaeBangProject/HAEBANG/blob/bf32b9907e2d811f7b2a99d1e651d1f5a0a930b0/src/main/java/com/haebang/haebang/entity/Member.java#L24C63-L24C63)
   - [복잡한 Entity의 경우 @JsonIgnore로 해결이 불가해 새로운 response 용 Dto를 만들어 필요한 정보만 넣어 반환](https://github.com/HaeBangProject/HAEBANG/blob/bf32b9907e2d811f7b2a99d1e651d1f5a0a930b0/src/main/java/com/haebang/haebang/dto/AptItemRes.java#L14)
