@@ -7,6 +7,12 @@ haebang:
   secret:
     key: haebang_secretkey
 
+server:
+  servlet:
+    session:
+      cookie:
+        secure: true
+        http-only: true
 
 spring:
   sql:
