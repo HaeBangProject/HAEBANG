@@ -15,10 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,7 +43,6 @@ public class BookmarkController {
     @PostMapping("bookmark/{item_id}")
     ResponseEntity doBookmark(@PathVariable("item_id") Long itemId, Authentication authentication){
         // 로그인 된 사람만, jwt 토큰 검사 필요
-        log.info("북마크 post 요청");
         Member member = memberRepository.findByUsername( authentication.getName()).orElseThrow();
         Item item = itemRepository.findById(itemId).orElseThrow();
         Bookmark bookmark = Bookmark.builder()

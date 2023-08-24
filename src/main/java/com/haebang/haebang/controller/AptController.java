@@ -12,7 +12,6 @@ import com.haebang.haebang.service.AptService;
 import com.haebang.haebang.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.client.ml.inference.preprocessing.Multi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,9 +21,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +45,6 @@ public class AptController {
                                         Authentication authentication) throws IOException {
         log.info("집 내놓기");
 
-        System.out.println(req.toString());
-
         if(!authentication.isAuthenticated()) throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
 
         if(bindingResult.hasErrors()){
@@ -72,7 +67,6 @@ public class AptController {
                 s3FileList.add( s3Service.uploadFile(multipartFile, createdItem) );
             }
         }
-        log.info("before="+itemRepository.findById(createdItem.getId()).toString());
         return new ResponseEntity(createdItem, HttpStatus.OK);
     }
 
@@ -100,7 +94,7 @@ public class AptController {
         ArrayList<S3File> s3FileList = new ArrayList<>();
         if(multipartFilesOPT.isPresent()) {
             List<MultipartFile> multipartFiles = multipartFilesOPT.get();
-            log.info("파일 들어옴");
+            log.info("파일 추가");
             for (MultipartFile multipartFile : multipartFiles) {
                 s3FileList.add(s3Service.uploadFile(multipartFile, updatedItem));
             }
@@ -111,7 +105,6 @@ public class AptController {
     @GetMapping("myitems")
     public ResponseEntity getMyItems(Authentication authentication){
         Member member = memberRepository.findByUsername(authentication.getName()).orElseThrow();
-        log.info(member+"의 전체 글 조회");
         return new ResponseEntity(aptService.findItemsByMember(member), HttpStatus.OK);
     }
     @GetMapping("items")// 도로명 주소에 따른 매물 검색
@@ -142,7 +135,6 @@ public class AptController {
     public ResponseEntity deleteApt(@PathVariable("id") Long id,
                                     Authentication authentication
     ){
-        System.out.println(id+"아이템 삭제");
         if(!aptService.deleteItem(authentication.getName(), id)){
             return new ResponseEntity("삭제 안됨", HttpStatus.INTERNAL_SERVER_ERROR);
         }

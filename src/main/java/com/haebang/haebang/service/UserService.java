@@ -19,12 +19,10 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member entity = memberRepository.findByUsername(username).get();
-//        System.out.println("loadUserByUsername: "+entity.getUsername()+","+ entity.getEmail()+","+ entity.getPassword());
         if(entity==null){
             throw new UsernameNotFoundException(username+"을 찾을 수 없습니다");
             // 로그인 실패시 예외 던지기
         }
-        log.info("load by username");
         return Member.builder()
                 .userId(entity.getUserId())
                 .username(entity.getUsername())

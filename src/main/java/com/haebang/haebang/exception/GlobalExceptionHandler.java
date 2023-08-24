@@ -1,6 +1,5 @@
 package com.haebang.haebang.exception;
 
-import com.haebang.haebang.constant.CustomErrorCode;
 import com.haebang.haebang.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ public class GlobalExceptionHandler {
                         .code(e.getCustomErrorCode().getCode())
                         .message(e.getCustomErrorCode().getMessage())
                         .build(),
-                HttpStatus.BAD_REQUEST
+                HttpStatus.valueOf(e.getCustomErrorCode().getCode())
         );
     }
 

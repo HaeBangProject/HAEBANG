@@ -1,6 +1,5 @@
 package com.haebang.haebang.controller;
 
-import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

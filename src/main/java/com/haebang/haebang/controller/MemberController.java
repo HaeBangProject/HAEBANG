@@ -45,7 +45,6 @@ public class MemberController {
             }
             return ResponseEntity.badRequest().body(sb.toString());
         }
-        System.out.println(joinReqDto.toString());
         String text = memberService.join(joinReqDto.getUsername(), joinReqDto.getPassword(), joinReqDto.getEmail());
         log.info(text);
         return ResponseEntity.ok().body(text);
@@ -81,7 +80,6 @@ public class MemberController {
                         .path("/")
                         .build()
                         .toString());
-        log.info("headers : {}", headers);
         return ResponseEntity.ok().headers(headers).body(token);
     }
     //인중
@@ -148,7 +146,6 @@ public class MemberController {
                         .build()
                         .toString());
 
-        log.info("headers : {}", headers);
         return ResponseEntity.ok().headers(headers)
                 .body("로그아웃이 완료되었습니다");
     }

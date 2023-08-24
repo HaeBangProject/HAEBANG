@@ -1,11 +1,9 @@
 package com.haebang.haebang.dto;
 
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Builder
 @AllArgsConstructor

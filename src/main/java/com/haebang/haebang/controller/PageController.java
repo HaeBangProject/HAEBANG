@@ -1,11 +1,9 @@
 package com.haebang.haebang.controller;
 
 import com.haebang.haebang.entity.Apt;
-import com.haebang.haebang.entity.Item;
 import com.haebang.haebang.repository.ItemRepository;
 import com.haebang.haebang.service.AptService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.net.http.HttpRequest;
-import java.util.HashMap;
 import java.util.List;
-import java.util.SortedMap;
 
 @RequiredArgsConstructor
 @Controller
@@ -68,7 +62,6 @@ public class PageController {
     }
     @GetMapping("item/edit/{item_id}")
     public ModelAndView edit(@PathVariable("item_id") Long id){
-        System.out.println("매물 작성 페이지 로딩 : "+id);
         ModelAndView mv = new ModelAndView("item/write");
         mv.addObject("item_id", id);
         return mv;

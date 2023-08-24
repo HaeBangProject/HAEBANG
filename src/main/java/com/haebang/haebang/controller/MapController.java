@@ -4,12 +4,9 @@ import com.haebang.haebang.dto.MapDto;
 import com.haebang.haebang.service.MapService;
 import com.haebang.haebang.service.RedisService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.*;
@@ -26,7 +23,6 @@ public class MapController {
         List<MapDto> list = mapservice.search_map(year,month,sggCd,dong);
 
 
-        System.out.println(list);
         model.addAttribute("list",list);
 
 

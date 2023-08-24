@@ -35,7 +35,7 @@ public class JwtProvider {
     /**
      * @param dto 로그인 한 사람의 정보
      * @param typ ATK, RFT 타입
-     * @param duration 1시간 단위
+     * @param duration 1시간 단위 -> 2분 단위로 잠시 바꿈
      * @return 토큰
      */
     public String createToken(Member dto, String typ, Long duration){
@@ -48,10 +48,10 @@ public class JwtProvider {
                 .setClaims(claims)
                 .setHeaderParam("typ", typ)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + duration * 1000*60*60L))// 한시간
+                .setExpiration(new Date(System.currentTimeMillis() + duration * 1000*(60/30)*60L))// 한시간단위
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
+        //TODO: 2분 단위로 했으니까 다시 1시간 단위로 바꾸기
         return token;
     }
 
@@ -70,7 +70,7 @@ public class JwtProvider {
         return memberRepository.findByUsername(username).get();
     }
 
-    public boolean validateToken(String token) throws CustomException{
+    public boolean validateToken(String token){
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -78,12 +78,12 @@ public class JwtProvider {
             log.info("유효하지 않은 Jwt Token");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT Token", e);
-            throw new CustomException(CustomErrorCode.EXPIRED_ACCESS_TOKEN);
+            new CustomException(CustomErrorCode.EXPIRED_ACCESS_TOKEN);
         } catch (UnsupportedJwtException e) {
             log.info("지원하지않는 JWT Token", e);
         } catch (IllegalArgumentException e) {
             log.info("토큰이 비어있는 예외", e);
-            throw new CustomException(CustomErrorCode.EMPTY_ACCESS_TOKEN);
+            new CustomException(CustomErrorCode.EMPTY_ACCESS_TOKEN);
         }
         return false;
     }
@@ -100,7 +100,6 @@ public class JwtProvider {
 
     public String getValueFromToken(String token) throws CustomException{
         String value = redisService.getStringValue(token);
-        System.out.println("jwtProvider 100 line 토큰이 레디스에 저장되어있는지 값 확인 :"+value);
 
         if(getTokenType(token).equals("RTK")){
             if(value==null) throw new CustomException(CustomErrorCode.EXPIRED_REFRESH_TOKEN);
@@ -118,7 +117,6 @@ public class JwtProvider {
      */
     public void setTokenValueAndTime(String token, String value){
         Long duration = getExpireTime(token) - new Date(System.currentTimeMillis()).getTime();
-        System.out.println("남은 기간 : "+duration );
         redisService.setStringValueExpire(token, value, Duration.ofMillis(duration));
     }
 

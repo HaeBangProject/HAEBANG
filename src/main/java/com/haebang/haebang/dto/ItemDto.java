@@ -8,7 +8,6 @@ import com.haebang.haebang.entity.Bookmark;
 import com.haebang.haebang.entity.Item;
 import com.haebang.haebang.entity.S3File;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.util.List;

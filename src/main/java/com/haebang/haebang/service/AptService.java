@@ -27,28 +27,21 @@ public class AptService {
 
     public Item createItem(Authentication authentication, AptItemReq req) {
         Apt apt = new Apt();
-        if (req.getRoadAddress() == null) {// 주소가 있어야함
-            System.out.println(req.getRoadAddress());
-            throw new CustomException(CustomErrorCode.INVALID_FORMAT_ADDRESS);
-        }
 
         Optional<Apt> optionalApt = aptRepository.findByRoadAddress(req.getRoadAddress());
         if(optionalApt.isPresent()){// 이미 저장된 apt 가 있을때
             apt = optionalApt.get();
             apt.increaseCnt();
         }else{// 새 아파트 등록할때
-            if(req.getDp().length() > 3){
-                apt.setDp( req.getDp().replace("*아파트", "") );
-            }
+            apt.setDp( req.getDp().replace("아파트", "") );
             apt.setRoadAddress(req.getRoadAddress());
             apt.setCnt(1L);
-            System.out.println("아파트 새로 저장"+apt.getRoadAddress()+" "+apt.getDp());
             apt = aptRepository.save(apt);
         }
         Optional<Member> optionalMember = memberRepository.findByUsername(authentication.getName());
         Member member = new Member();
         if(optionalMember.isEmpty()){
-            System.out.println(authentication.getName()+" : 빈 member 객체임");
+            throw new CustomException(CustomErrorCode.INVALID_MEMBER_INFO);
         }else{
             member = optionalMember.get();
         }

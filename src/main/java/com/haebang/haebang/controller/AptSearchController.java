@@ -1,4 +1,5 @@
 package com.haebang.haebang.controller;
+
 import com.haebang.haebang.repository.AptSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ public class AptSearchController {
     private final AptSearchRepository aptSearchRepository;
     @GetMapping("apt")
     public ResponseEntity searchApt(@RequestParam(value = "search_condition") String searchCondition){
-        log.info("search apt 조건 = "+searchCondition);
         return new ResponseEntity(aptSearchRepository.findAptDocumentsByRoadAddressOrDp(searchCondition, searchCondition), HttpStatus.OK);
     }
 

@@ -38,7 +38,6 @@ public class S3Service {
     private final S3FileRepository s3FileRepository;
 
     public S3File uploadFile(MultipartFile multipartFile, Item item) throws IOException{
-        log.info("==============s3 service=============");
         String fileName = multipartFile.getOriginalFilename();
         String dirName = "img/"+String.valueOf( item.getId() )+"/";
 
@@ -74,11 +73,10 @@ public class S3Service {
 
             amazonS3Client.putObject(new PutObjectRequest(bucket, dirName+fileName, multipartFile.getInputStream(), metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
-            log.info("s3 upload ok!");
         } catch (AmazonServiceException e) {
-            e.printStackTrace();
+            log.error("s3 upload", e);
         } catch (SdkClientException e) {
-            e.printStackTrace();
+            log.error("s3 upload", e);
         }
 
         String s3FileUrl = amazonS3Client.getUrl(bucket, dirName+fileName).toString();

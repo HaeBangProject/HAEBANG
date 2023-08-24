@@ -29,7 +29,6 @@ public class ElasticsearchDataChecker {
 
         for (SearchHit hit : searchResponse.getHits().getHits()) {
             String sourceAsString = hit.getSourceAsString();
-            System.out.println("AptDocument 데이터: " + sourceAsString);
         }
     }
 }

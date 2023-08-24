@@ -19,7 +19,7 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
                 .csrf().disable() // cross site 도메인 다를때 허용
@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .antMatchers("/api/member/logout").permitAll()
                 .antMatchers("/api/mypage/**").authenticated()
                 .antMatchers("/api/member/*").anonymous()
+                .antMatchers("/api/bookmark**").authenticated()
                 .and()
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -72,16 +72,13 @@ public class MemberService {
         if(redisValue.equals(email)){
             accessToken = jwtProvider.createToken(member, "ATK", atkDuration);
         }
-        log.info(username+"님 재발급");
+        log.info("===={} 토큰 재발급====", username);
         return accessToken;
     }
 
     public void toBlackListed(JwtDto jwtDto){
-        System.out.println("toBlackListed atk logout");
         Long duration = jwtProvider.getExpireTime(jwtDto.getAccessToken()) - new Date(System.currentTimeMillis()).getTime();
         redisService.setStringValueExpire(jwtDto.getAccessToken(), "logout", Duration.ofMillis(duration));
-        System.out.println("toBlackListed rtk delete");
         redisService.deleteKey(jwtDto.getRefreshToken());
-        System.out.println("finish");
     }
 }

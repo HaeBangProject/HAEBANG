@@ -96,15 +96,9 @@ public class RedisService {
     public void setStringValueExpire(String key, String value, Duration duraionTime) {
         ValueOperations<String, String> stringValueOperations = redisTemplate.opsForValue();
         stringValueOperations.set(key, value, duraionTime);
-        System.out.println("redis set----------------------------");
-        System.out.println("Redis key : " + key);
-        System.out.println("Redis value : " + stringValueOperations.get(key));
     }
     public String getStringValue(String key){
         ValueOperations<String, String> stringValueOperations = redisTemplate.opsForValue();
-        System.out.println("redis get-------------------------------");
-        System.out.println("Redis key : " + key);
-        System.out.println("Redis value : " + stringValueOperations.get(key));
         return stringValueOperations.get(key);
     }
 
