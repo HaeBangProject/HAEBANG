@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .antMatchers("/api/mypage/**").authenticated()
                 .antMatchers("/api/member/*").anonymous()
                 .antMatchers("/api/bookmark**").authenticated()
+                .antMatchers("/chat/rooms").permitAll()
                 .and()
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

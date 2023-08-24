@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 if (type.equals("ATK")) {// 엑세스 토큰 일떄
                     log.info("유효한 엑세스 토큰요청");
 
-                    if ( !jwtProvider.getValueFromToken(token).equals("logout") ) {
+                    if ( jwtProvider.getValueFromToken(token) == null) {
                         // 로그아웃되지 않은 ATK라면 정상 작동 하도록
                         String username = jwtProvider.getUsername(token);
                         UserDetails userDetails = jwtProvider.getUserDetails(username);

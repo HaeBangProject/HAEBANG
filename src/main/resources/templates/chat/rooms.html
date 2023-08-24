@@ -38,6 +38,8 @@ console.log([[${list}]])
     $(document).ready(function(){
         createLoadingImage();
 
+        getChatRooms();
+
         var roomName = [[${roomName}]];
 
         if(roomName != null)
@@ -55,6 +57,21 @@ console.log([[${list}]])
         });
 
     });
+
+    function getChatRooms() {
+        $.ajax({
+            type: "GET",
+            url: "/chat/rooms",
+            headers: {'Authorization':'Bearer '+getCookie("ATK").substring(4)},
+        })
+            .done(function (response){
+                console.log(response);
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
+                alert("실패 : "+jqXHR.responseText);
+            })
+    }
 </script>
     </th:block>
 

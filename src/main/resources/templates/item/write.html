@@ -112,7 +112,6 @@
         login_or_logout();
 
         item_id = [[${item_id}]]
-        console.log(item_id);
         if(item_id > 0){
             get_item(item_id);
             document.getElementById("btn-post").innerText = "저장하기";
@@ -161,7 +160,6 @@
             dataType: "json",
         })
             .done(function (response) {
-                console.log(response);
                 JSONtoForm(response.apt_item_req);
                 createUploadedPhotos(response.s3_files);
                 //alert("성공");
@@ -242,24 +240,21 @@
                 window.location.href = '/apt';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                hideLoadImage();
                 if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
+                hideLoadImage();
                 else alert("실패 : "+jqXHR.responseText);
             })
     }
     function formToJSONObject(formData){
         var data = {};
-        console.log(form)
         for(idx in formData){
             data[formData[idx].name] = formData[idx].value;
         }
-        console.log(data);
         return data;
     }
     function JSONtoForm(data){
         for(key in data){
             let form = document.getElementById("form");
-            console.log("form"+" : "+form[key].name+"="+form[key].value);
             form[key].value = data[key];
         }
     }

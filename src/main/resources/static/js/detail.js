@@ -6,7 +6,6 @@ function edit_item(item_id){
 
 function delete_item(item_id){
     showLoadingImage();
-    console.log(item_id);
     if(!confirm("이 글을 삭제하시겠습니까?")) return;
     $.ajax({
         type: "DELETE",
@@ -32,7 +31,6 @@ function makeCardElement(response, del_edit_btn, bookmark_icon){// response[ ite
     var user_id = parseInt( getCookie("user_id").substring(8) );
 
     response.forEach((obj) => {
-        console.log(obj);
         var cardDiv = document.createElement("div");
         cardDiv.classList.add('card');
 
@@ -62,7 +60,6 @@ function makeCardElement(response, del_edit_btn, bookmark_icon){// response[ ite
             obj.bookmarks.forEach((bookmark) => {
                 bookmarkSet.add(bookmark.member.userId);
             })
-            console.log(bookmarkSet);
 
             var bookmark = document.createElement("i");
             bookmark.id = "bookmark"+obj.id;

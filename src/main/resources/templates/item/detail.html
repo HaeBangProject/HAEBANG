@@ -33,7 +33,6 @@
             dataType: "json",
         })
             .done(function (response) {
-                console.log(response);
                 if(response.length){
                     document.body.appendChild( makeCardElement(response, false, true));
                 }

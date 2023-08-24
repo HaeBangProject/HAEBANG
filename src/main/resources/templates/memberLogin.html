@@ -49,13 +49,11 @@
     function login() {
         showLoadingImage();
         var form = document.getElementById("login-form");
-        console.log(form);
 
         var data = {
             username: form.username2.value,
             password: form.password2.value
         }
-        console.log(data)
 
         $.ajax({
             type: "POST",
@@ -79,14 +77,12 @@
     function join() {
         showLoadingImage();
         var form = document.getElementById("register-form");
-        console.log(form);
 
         var data = {
             username : form.username.value,
             email : form.email.value,
             password : form.password.value
         }
-        console.log(data)
         $.ajax({
             type: "POST",
             url: "/api/member/join",
@@ -96,7 +92,6 @@
             .done(function (result) {
                 hideLoadImage();
                 alert("성공");
-                console.log(result)
                 window.location.href = '/memberLogin';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
