@@ -48,10 +48,9 @@ public class JwtProvider {
                 .setClaims(claims)
                 .setHeaderParam("typ", typ)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + duration * 1000*(60/30)*60L))// 한시간단위
+                .setExpiration(new Date(System.currentTimeMillis() + duration * 1000*60*60L))// 한시간단위
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-        //TODO: 2분 단위로 했으니까 다시 1시간 단위로 바꾸기
         return token;
     }
 
