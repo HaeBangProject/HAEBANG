@@ -53,7 +53,7 @@
                 </a>
                 <div class="input-container">
                     <input id="area_m2" oninput="convert('m2')" name="dp_area" type="number" class="form-control" placeholder="m2" aria-label="dp_area">
-                    <span>m<sup>2</sup></span><input id="area_pyeong" name="dp_pyeong" oninput="convert('pyeong')" type="number" class="form-control" placeholder="평">평
+                    <span>m<sup>2</sup>=</span><input id="area_pyeong" name="dp_pyeong" oninput="convert('pyeong')" type="number" class="form-control" placeholder="평">평
                 </div>
             </label>
 
@@ -105,7 +105,7 @@
 
     $(document).ready(function(){
         createLoadingImage();
-        if(getCookie("atk")==null || getCookie("username")==null){
+        if(getCookie("ATK")==null || getCookie("username")==null){
             alert("로그인이 필요한 서비스입니다.");
             window.location.href = "/memberLogin";
         }
@@ -162,7 +162,6 @@
             .done(function (response) {
                 JSONtoForm(response.apt_item_req);
                 createUploadedPhotos(response.s3_files);
-                //alert("성공");
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
@@ -207,6 +206,7 @@
 
     }
     function post(){
+        showLoadingImage();
         var formData = new FormData();
         var form = $("#form").serializeArray();
         var data = formToJSONObject(form);
@@ -241,9 +241,9 @@
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
-                hideLoadImage();
                 else alert("실패 : "+jqXHR.responseText);
             })
+        hideLoadImage();
     }
     function formToJSONObject(formData){
         var data = {};
