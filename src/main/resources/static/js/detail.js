@@ -21,7 +21,7 @@ function delete_item(item_id){
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             hideLoadImage();
-            if(jqXHR.status === 401) reissue();
+            if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
             else alert("실패 : "+jqXHR.responseText);
         })
 }
@@ -213,7 +213,7 @@ function post_bookmark(item_id){
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             hideLoadImage();
-            if(jqXHR.status === 401) reissue();
+            if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
             else alert("실패 : "+jqXHR.responseText);
         })
 }
@@ -235,7 +235,7 @@ function delete_bookmark(item_id){
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             hideLoadImage();
-            if(jqXHR.status === 401) reissue();
+            if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
             else alert("실패 : "+jqXHR.responseText);
         })
 }

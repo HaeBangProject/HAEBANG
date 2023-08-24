@@ -44,7 +44,7 @@
                 }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                if(jqXHR.status === 401) reissue();
+                if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
                 else alert("실패 : "+jqXHR.responseText);
             })
     }
