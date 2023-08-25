@@ -69,7 +69,7 @@ console.log([[${list}]])
                 for (let i = 0; i <response.length; i++) {
                     if(response[i].username === username || username === "admin"){
                         html += '<ul>'+
-                        `<a style="text-decoration-line: none;" href="chat/room/${response[i].roomId}">${response[i].name}</a>`+
+                        `<a style="text-decoration-line: none;" href="/chat/room?roomId=${response[i].roomId}">${response[i].name}</a>`+
                     '</ul>';
                     }
                 }
