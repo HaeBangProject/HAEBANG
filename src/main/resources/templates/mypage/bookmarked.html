@@ -25,6 +25,7 @@
         findMyBookmarks();
     })
     function findMyBookmarks(){
+        showLoadingImage();
         $.ajax({
             type: "GET",
             url: "/api/bookmark",
@@ -34,8 +35,10 @@
             .done(function (response) {
                 if(response.length){
                     document.body.appendChild( makeCardElement(response, false, true) );
+                    hideLoadImage();
                 }
                 else{
+                    hideLoadImage();
                     alert("등록된 북마크가 없습니다.");
                     window.location.href="/";
                 }

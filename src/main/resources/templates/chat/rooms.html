@@ -20,13 +20,8 @@ console.log([[${list}]])
 <br>
     <th:block th:fragment="content">
         <div id="container">
-            <ul th:each="room : ${list}">
-                <th:block th:if="${cookie_name =='admin' or room.username == cookie_name}">
-                    <a style="text-decoration-line: none;" th:href="@{/chat/room(roomId=${room.roomId})}">[[${room.name}]]</a>
-                </th:block>
-            </ul>
-            <br>
         </div>
+        <br>
         <form style="display: flex;" th:action="@{/chat/room}" method="post">
             <input type="text" placeholder="채팅방 이름 설정" name="name" style="width: 150px; " class="form-control">
             <button class="btn btn-secondary">개설하기</button>
@@ -59,16 +54,31 @@ console.log([[${list}]])
     });
 
     function getChatRooms() {
+        showLoadingImage();
         $.ajax({
-            type: "GET",
+            type: "POST",
             url: "/chat/rooms",
             headers: {'Authorization':'Bearer '+getCookie("ATK").substring(4)},
+            dataType: "json"
         })
             .done(function (response){
                 console.log(response);
+                var containerDiv = document.getElementById("container");
+                var html = '';
+                const username = getCookie("username").substring(9);
+                for (let i = 0; i <response.length; i++) {
+                    if(response[i].username === username || username === "admin"){
+                        html += '<ul>'+
+                        `<a style="text-decoration-line: none;" href="chat/room/${response[i].roomId}">${response[i].name}</a>`+
+                    '</ul>';
+                    }
+                }
+                containerDiv.innerHTML = html;
+                hideLoadImage();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
+                hideLoadImage();
                 alert("실패 : "+jqXHR.responseText);
             })
     }

@@ -35,16 +35,18 @@
             .done(function (response) {
                 if(response.length){
                     document.body.appendChild( makeCardElement(response, false, true));
+                    hideLoadImage();
                 }
                 else{
+                    hideLoadImage();
                     alert("등록된 매물이 없습니다.");
                     window.location.href="/";
                 }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
+                hideLoadImage();
                 alert("실패 : "+jqXHR.responseText);
             })
-        hideLoadImage();
     }
 
     /*]]>*/

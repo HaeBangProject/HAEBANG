@@ -236,6 +236,7 @@
             enctype : 'multipart/form-data',  // * 중요 *
         })
             .done(function (response) {
+                hideLoadImage();
                 alert("성공");
                 window.location.href = '/apt';
             })
@@ -243,7 +244,6 @@
                 if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
                 else alert("실패 : "+jqXHR.responseText);
             })
-        hideLoadImage();
     }
     function formToJSONObject(formData){
         var data = {};

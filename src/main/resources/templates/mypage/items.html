@@ -27,6 +27,7 @@
         findMyItems();
     })
     function findMyItems(){
+        showLoadingImage();
         $.ajax({
             type: "GET",
             url: "/api/apt/myitems",
@@ -36,8 +37,10 @@
             .done(function (response) {
                 if(response.length){
                     document.body.appendChild( makeCardElement(response, true, true)  );
+                    hideLoadImage();
                 }
                 else{
+                    hideLoadImage();
                     alert("등록된 매물이 없습니다.");
                     window.location.href="/";
                 }
