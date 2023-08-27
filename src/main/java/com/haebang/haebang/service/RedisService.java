@@ -16,10 +16,6 @@ public class RedisService {
     private final StringRedisTemplate redisTemplate;
 
     public void ranking(String content){
-        ZSetOperations<String,String> stringStringZSetOperations = redisTemplate.opsForZSet();
-
-        double score = 0.0;
-
         try{
         // 검색을하면 해당검색어(content)를 value에 저장하고, score에 1을 주어 score를 올려준다.
             redisTemplate.opsForZSet().incrementScore("ranking",content,1);
@@ -51,17 +47,23 @@ public class RedisService {
 
             }
         }
-        // score = {8.0=1, 2.0=3, 1.0=10, 5.0=1, 3.0=2}
+        List<Map.Entry<Double, Integer>> sortedList = new ArrayList<>(score.entrySet());
+        // key인 double값을 기준으로 정렬
+        sortedList.sort(Collections.reverseOrder(Map.Entry.comparingByKey()));
         int same_score=0;
-        for(Double key : score.keySet()){
-            if(score.get(key)>1){ //같은 score를 가진 데이터가 2개이상일때,
-                same_score += score.get(key) - 1;
+
+        // 인덱스 0부터 4까지 출력
+        //score가 top5 안에 들어가고 ,같은 score를 가진 데이터가 2개이상일때
+        for (int i = 0; i <= 4 && i < sortedList.size(); i++) {
+            Map.Entry<Double, Integer> entry = sortedList.get(i);
+            if(entry.getValue()>1) {
+                same_score += entry.getValue() - 1;
+                System.out.println("Score: " + entry.getKey() + ", Value: " + entry.getValue());
             }
         }
+        
+        // 공동 순위 처리한 top5 랭킹
         Set<String> scoreRange = stringStringZSetOperations.reverseRange("ranking",0,4+same_score);
-        // same_score = 12
-        // scoreRange = [논현동, 상계동, 방학동, 길동, 창동, 쌍문동, 신림동, 수유동,
-        // 석촌동, 삼성동, 번동, 둔촌동, 독산동, 대치동, 노량진동, 공릉동, 고덕동]
 
         List<Integer> scoreRange_score = new ArrayList<>();
 
@@ -86,7 +88,6 @@ public class RedisService {
             }
         });
         System.out.println(entryList);
-        // entryList = [논현동=8, 상계동=5, 길동=3, 방학동=3, 창동=2, 신림동=2, 쌍문동=2, 수유동=1, 석촌동=1, 공릉동=1, 번동=1, 삼성동=1, 노량진동=1, 독산동=1, 대치동=1, 고덕동=1, 둔촌동=1]
 
         return entryList;
 
