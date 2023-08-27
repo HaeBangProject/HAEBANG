@@ -237,7 +237,7 @@
 ### CD
 
 * 젠킨스 파이프라인을 이용해 배포 서버에서 Dockerhub를 통해 이미지를 pull받아 3대의 서버로 나눠 분산환경으로 실행되게 구현
-  - 3개의 서버를 nginx의 라운드로빈 방식으로 로드밸런싱
+  - 3개의 서버를 nginx의 최소연결 알고리즘 방식으로 로드밸런싱 (현재 연결수가 가장 적은 서버로 요청을 전송)
 - https 프로토콜 사용을 위해 aws의 ALB(application load balancer)와 ACM(AWS Certificate Manager)를 생성해 사용
   - Let's Encrypt 인증서를 사용해 SSL까지 nginx에서 수행하는 것보다 AWS에서 편리하게 관리하기 위해 나누어 진행
 - 무중단 배포

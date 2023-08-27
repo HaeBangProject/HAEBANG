@@ -25,6 +25,7 @@ function login_or_logout(){
 
     if(getCookie('ATK').length>0 && getCookie('user_id').length>0 && getCookie('username').length>0){
         // 필요한게 다 있으면 로그아웃 보이게
+        logout_btn.innerText = getCookie("username").substring(9)+'님 로그아웃';
         logout_btn.hidden = false;
         to_login.hidden = true;
     }
