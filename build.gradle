@@ -59,6 +59,9 @@ dependencies {
 	implementation group: 'org.springframework', name: 'spring-test'
 	implementation 'org.springframework:spring-messaging'
 
+	// for health check
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 //	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359' //데이터 타입 컨버터 문제
 
 }
