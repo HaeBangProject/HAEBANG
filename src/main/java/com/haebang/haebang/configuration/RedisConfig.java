@@ -23,7 +23,7 @@ public class RedisConfig {
     @Value("${spring.redis.password}") // 비밀번호 필드 추가
     private String password;
 
-
+    //서버에 있는 redis 컨테이너와 연결
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(host, port);

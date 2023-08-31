@@ -48,11 +48,10 @@ public class RedisService {
             }
         }
         List<Map.Entry<Double, Integer>> sortedList = new ArrayList<>(score.entrySet());
-        // key인 double값을 기준으로 정렬
+        // key인 double값을 기준으로 내림차순 정렬
         sortedList.sort(Collections.reverseOrder(Map.Entry.comparingByKey()));
-        int same_score=0;
 
-        // 인덱스 0부터 4까지 출력
+        int same_score=0;
         //score가 top5 안에 들어가고 ,같은 score를 가진 데이터가 2개이상일때
         for (int i = 0; i <= 4 && i < sortedList.size(); i++) {
             Map.Entry<Double, Integer> entry = sortedList.get(i);

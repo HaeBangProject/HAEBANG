@@ -19,12 +19,12 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-
-        if(accessor.getCommand() == StompCommand.CONNECT) {// 세션과 username 정보 연결만 함
+        // connect 또는 send 상황이면 유효한 토큰인지 검증
+        if(accessor.getCommand() == StompCommand.CONNECT) {
             if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
                 throw new AccessDeniedException("");
         }
-        else if(accessor.getCommand() == StompCommand.SEND){// 이후 모든 요청은 저장된 정보에서 user가져옴
+        else if(accessor.getCommand() == StompCommand.SEND){
             if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
                 throw new AccessDeniedException("");
         }

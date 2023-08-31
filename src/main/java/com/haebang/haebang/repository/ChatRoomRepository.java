@@ -46,6 +46,7 @@ public class ChatRoomRepository {
      */
     public ChatRoom createChatRoom(String name,String username) {
         ChatRoom chatRoom = ChatRoom.create(name,username);
+        // CHAT_ROOM 키에 대한 redis hash 구조에 채팅방의 id를 key로 하고 , 해당 채팅방객체(chatRoom)를 value로 저장
         opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
         return chatRoom;
     }

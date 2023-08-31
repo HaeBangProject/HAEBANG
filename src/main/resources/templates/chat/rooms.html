@@ -56,7 +56,7 @@ console.log([[${list}]])
     function getChatRooms() {
         showLoadingImage();
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "/chat/rooms",
             headers: {'Authorization':'Bearer '+getCookie("ATK").substring(4)},
             dataType: "json"
@@ -79,7 +79,7 @@ console.log([[${list}]])
             .fail(function (jqXHR, textStatus, errorThrown) {
                 if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
                 hideLoadImage();
-                alert("실패 : "+jqXHR.responseText);
+                //alert("실패 : "+jqXHR.responseText);
             })
     }
 </script>

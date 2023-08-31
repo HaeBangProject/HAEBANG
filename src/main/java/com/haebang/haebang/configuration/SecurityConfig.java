@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/static/css/**", "/static/js/**", "/static/img/**", "/*").permitAll()
-                .antMatchers(  "/chat/**").permitAll()
+                .antMatchers(HttpMethod.GET,  "/chat/**").authenticated() //채팅 페이지 접근권한 설정
                 .antMatchers("/main", "/map").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/apt/item/*", "/api/apt/items", "/api/apt/items?**").permitAll()
                 .antMatchers("/api/apt/item**").authenticated()
@@ -38,7 +38,6 @@ public class SecurityConfig {
                 .antMatchers("/api/mypage/**").authenticated()
                 .antMatchers("/api/member/*").anonymous()
                 .antMatchers("/api/bookmark**").authenticated()
-                .antMatchers("/chat/rooms").permitAll()
                 .and()
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

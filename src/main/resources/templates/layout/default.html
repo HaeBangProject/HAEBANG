@@ -28,7 +28,11 @@
         <div class="navbar-nav" style="font-size: 18px">
           <div><a class="nav-link " href="/apt">매물보기</a></div>
           <div><a class="nav-link " href="/item/write">집내놓기</a></div>
-          <div><a class="nav-link " href="/chat/rooms">문의하기</a></div>
+          <div>
+            <form action="/chat/rooms" method="POST" id="chatForm">
+              <button class="nav-link" type="submit">문의하기</button>
+            </form>
+          </div>
           <div class="nav-link dropdown">
             <span class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 1px; margin: 0">
             마이페이지

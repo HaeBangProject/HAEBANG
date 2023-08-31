@@ -30,13 +30,13 @@ public class RoomController {
     private final ChatRoomRepository repository;
     private final JwtProvider jwtProvider;
 
-    @RequestMapping(value = "rooms")
+    @RequestMapping(value = "rooms",method = RequestMethod.POST)
     public ModelAndView rooms(){
         return new ModelAndView("chat/rooms");
     }
 
     //채팅방 목록 조회
-    @PostMapping(value = "rooms")
+    @GetMapping(value = "rooms")
     @ResponseBody
     public ResponseEntity rooms(HttpServletRequest request){
         log.info("# All Chat Rooms");
@@ -64,6 +64,7 @@ public class RoomController {
         }
         return new ResponseEntity(repository.findAllRoom(), HttpStatus.OK);
     }
+
 
     //채팅방 개설
     @PostMapping(value = "room")
