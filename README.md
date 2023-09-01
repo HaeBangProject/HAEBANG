@@ -39,9 +39,13 @@
     <td align="center"><a href="https://github.com/jisoo615"><img src="https://avatars.githubusercontent.com/u/57720285?v=4" width="100px" /></a></td>
   </tr>
   <tr>
-    <td align="center"><b>Web Developer</b></td>
-    <td align="center"><b>Web Developer</b></td>
+    <td align="center"><b>Backend Developer</b></td>
+    <td align="center"><b>Backend Developer</b></td>
 </table>
+
+
+
+
 
 
 
@@ -213,7 +217,7 @@
 - Redis를 이용해 관리자 채팅방을 Topic으로 설정해 여러 서버(Scale-out 분산환경)에서도 채팅방이 유지되도록 구현
   - Redis의 공통으로 사용할 수 있는 pub/sub 시스템을 구축해 모든 서버들이 해당 시스템을 통해 pub/sub 메세지를 주고받도록 구현
   - Redis Hash를 이용해 공통 Topic(채팅방)을 생성하고 서버별로 채팅방에 매치되는 topic정보를 Map에 넣어 roomId로 찾을수 있게 구현
-  -  stomp 헤더에 토큰을 보내면서 stomphandler를 거쳐 유효한 토큰인지 검증해 유저 여부를 구분하며 websocket의 통신 보안을 강화
+  - stomp 헤더에 토큰을 보내면서 stomphandler를 거쳐 유효한 토큰인지 검증해 유저 여부를 구분하며 websocket의 통신 보안을 강화
 
 ### 검색어 자동완성
 
@@ -237,38 +241,250 @@
 ### CD
 
 * 젠킨스 파이프라인을 이용해 배포 서버에서 Dockerhub를 통해 이미지를 pull받아 3대의 서버로 나눠 분산환경으로 실행되게 구현
-  - 3개의 서버를 nginx의 최소연결 알고리즘 방식으로 로드밸런싱 (현재 연결수가 가장 적은 서버로 요청을 전송)
+  - 3개의 서버를 nginx의 라운드로빈 방식으로 로드밸런싱
+
 - https 프로토콜 사용을 위해 aws의 ALB(application load balancer)와 ACM(AWS Certificate Manager)를 생성해 사용
   - Let's Encrypt 인증서를 사용해 SSL까지 nginx에서 수행하는 것보다 AWS에서 편리하게 관리하기 위해 나누어 진행
 - 무중단 배포
   - 3개의 서버 중 하나를 backup서버로 두어 나머지 2개의 서버가 동작하지 않을 경우 backup서버로 로드밸런싱한 뒤, backup서버의 업데이트를 30초 늦춰 진행
+
 ## Trouble Shooting
 
-- Redis의 sorted set 자료구조를 이용해 인기 지역 검색 순위를 구현하는 과정에서 동점처리를 못해 공동 순위를 구현하지 못하는 문제가 발생
-  - [Map 자료구조를 이용해 score값을 기준으로 다시 검색데이터를 분류해 같은 score값을 가진 데이터를 카운트 해 reverseRange()를 이용해 동점처리 된 데이터도 공동순위에 들어가게 구현](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/service/RedisService.java#L40)
-- 관리자 문의 채팅 기능에서 WebSocket과 Stomp만으로 여러 서버에서 채팅방 접속과 메세지를 주고받지 못하는 문제가 발생
+- 인기 지역 검색 순위를 구현하는 과정에서 Redis의 Zset 자료구조는 동점처리를 지원해주지 않아 공동 순위를 구현하지 못하는 문제가 발생
 
-- 채팅방의 메인 저장소가 없어 서버 재시작할때마다 채팅방이 초기화 되는 문제와 여러 서버에서 채팅방 접속과 메세지를 주고받지 못하는 문제가 발생
+  - Map.Entity 자료구조를 이용해 score값을 기준으로 다시 검색데이터를 분류한 뒤, 같은 score값을 가진 데이터를 카운트 해 reverseRange()를 이용해 동점처리 된 데이터도 공동순위에 들어가게 구현
+
+  ```java
+  List<Map.Entry<Double, Integer>> sortedList = new ArrayList<>(score.entrySet());
+          //key인 score값을 기준으로 정렬
+          sortedList.sort(Collections.reverseOrder(Map.Entry.comparingByKey()));
+          int same_score=0;
+  
+      
+          //score가 TOP 5 안에 들어가고 ,같은 score를 가진 데이터가 2개이상일때
+  				//same_score 변수에 카운트
+          for (int i = 0; i <= 4 && i < sortedList.size(); i++) {
+              Map.Entry<Double, Integer> entry = sortedList.get(i);
+              if(entry.getValue()>1) {
+                  same_score += entry.getValue() - 1;
+                  System.out.println("Score: " + entry.getKey() + ", Value: " + entry.getValue());
+              }
+          }
+          // 공동순위를 포함한 TOP5
+          Set<String> scoreRange = stringStringZSetOperations.reverseRange("ranking",0,4+same_score);
+  ```
+
+
+
+- Scale-out 분산환경에서 채팅방의 메인 저장소 없이 DTO로 채팅방을 설정해 서버 재시작할때마다 채팅방이 초기화 되는 문제와 여러 서버에서 채팅방 접속과 메세지를 주고받지 못하는 문제가 발생
+
   - Redis를 이용해 채팅방을 공통 Topic으로 구현한 뒤 pub/sub 시스템을 구축해 메세지를 주고받도록 구현해 해결
-    - 채팅방 정보가 초기화 되지 않도록 생성시 redis 해시 테이터 구조인 HashOperations에  고유 채팅방 id를 저장해 채팅방의 정보를 저장하고 조회
+    - 채팅방 정보가 초기화 되지 않도록 생성시 redis HashOperations 구조를 이용해 ‘CHATROOM’을 Hash key값으로 갖고, 채팅방 id을 Hash Field로 , 채팅방 객체를 Hash Value로 저장해 채팅방의 정보를 저장하고 조회
     - 채팅방 입장시에는 채팅방 id로 redis topic(채팅방)을 조회해 pub/sub메세지 리스너와 연동
 
-- CI/CD가 될때마다 redis 컨테이너의 저장된 데이터 값이 삭제되는 문제가 발생
-  - [redis-cli를 설정할때 --requirepass [password] 명령어를 사용해서 비밀번호를 설정해 데이터가 초기화 되는 문제를 해결](https://lemonade99.tistory.com/8)
+  ```java
+  public class ChatRoomRepository {
+      // 채팅방(topic)에 발행되는 메시지를 처리할 Listner
+      private final RedisMessageListenerContainer redisMessageListener;
+      // 구독 처리 서비스
+      private final RedisSubscriber redisSubscriber;
+      // Redis
+      private static final String CHAT_ROOMS = "CHAT_ROOM";
+      private final RedisTemplate<String, Object> redisTemplate;
+      private HashOperations<String, String, ChatRoom> opsHashChatRoom;
+      // 채팅방의 대화 메시지를 발행하기 위한 redis topic 정보
+  		// 서버별로 채팅방에 매치되는 topic정보를 Map에 넣어 roomId로 찾을수 있도록 구현
+      private Map<String, ChannelTopic> topics;
+  
+      @PostConstruct
+      private void init() {
+          opsHashChatRoom = redisTemplate.opsForHash();
+          topics = new HashMap<>();
+      }
+      public List<ChatRoom> findAllRoom() {
+          return opsHashChatRoom.values(CHAT_ROOMS);
+      }
+      public ChatRoom findRoomById(String id) {
+          return opsHashChatRoom.get(CHAT_ROOMS, id);
+      }
+      // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
+      public ChatRoom createChatRoom(String name,String username) {
+          ChatRoom chatRoom = ChatRoom.create(name,username);
+          // CHAT_ROOM 키에 대한 redis hash 구조에 채팅방의 id를 key로 하고 , 해당 채팅방객체(chatRoom)를 value로 저장
+          opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+          return chatRoom;
+      }
+  ```
+
+
+
+- 배포가 업데이트 될때마다 redis 컨테이너의 저장된 key 값이 사라지는 문제가 발생
+
+  - redis 기본포트가 열려있고, 인증없이 접근할 수 있는 환경일때, 크롤러봇이 해당되는 redis에 접근하여 모든 키를 지우고 스크립트를 심는 문제가 원인
+  - redis-cli를 설정할때 --requirepass [password] 명령어를 사용해서 비밀번호를 설정해 문제를 해결
+
+  ```shell
+  docker run -v /path/on/host:/data \ 
+  --name my-redis \
+  -p 6379:6379 \ 
+  -d redis:latest redis-server --appendonly yes --requirepass '비밀번호'
+  ```
+
+
 
 - spring Security 5.7 & JWT 변경사항
-  - [spring boot 2.7.3 은 spring security 5.7 버전을 포함한다. 5.7버전은 어댑터를 사용하지 않고 bean 등록방식을 사용하도록 바뀌었기 때문에 오버라이드 해서 구현했던 방식 대신 bean으로 등록하여 사용하면 된다. WebSecurityConfigurerAdapter (기존) → FilterChain (변경)](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/configuration/SecurityConfig.java#L20))
-  - [new release 1.0.x 부터 parse 대신 builder()로, <u>signWith( 알고리즘, 세가지형태시크릿키)</u>에서 <u>signWith( byte[]형만되는시크릿키, 알고리즘 )</u> 으로 변경. ](https://github.com/HaeBangProject/HAEBANG/blob/bfe7e36905e51443391b8d21349d4b6a16618360/src/main/java/com/haebang/haebang/utils/JwtProvider.java#L29))
-    signWith에 필요한 시크릿키는 Keys.hmacShaKeyFor('keyBytes')로 인코딩 된 키로 sign하도록 변경됨 ('keybytes'는 32byte보다 길어야 함)
 
-- 웹소켓 통신시에도 보안을 위해 기존의 http통신처럼 jwt인증을 적용하는 문제
-  - [stomp의 헤더에 access_token을 넣어 전송하면 stomp hadler에서 `CONNECT`,`SEND`의 경우 토큰을 검증](https://github.com/HaeBangProject/HAEBANG/blob/19f77a023c8d561d5899bc2715c33faed6ae40f9/src/main/java/com/haebang/haebang/utils/StompHandler.java#L18)
+  - spring boot 2.7.3 은 spring security 5.7 버전을 포함
+  - 5.7버전은 어댑터를 사용하지 않고 bean 등록방식을 사용하도록 바뀌었기 때문에 오버라이드 해서 구현했던 방식 대신 bean으로 등록하여 사용 WebSecurityConfigurerAdapter (기존) → FilterChain (변경)
+
+  ``` java 
+  @Configuration
+  @EnableWebSecurity
+  @RequiredArgsConstructor
+  public class SecurityConfig {
+   private final JwtProvider jwtProvider;
+  
+  @Bean
+  SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+      http
+              .httpBasic().disable()
+              .csrf().disable() // cross site 도메인 다를때 허용
+              .cors() //cross site
+              .and()
+              .formLogin().disable()
+              .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+              .and()
+              .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+              // UsernamePasswordAuthenticationFilter 필터를 거치기 전에 jwt필터를 거치도록 설정
+      return http.build();
+    }
+  
+  @Bean
+  public HttpFirewall defaultHttpFirewall(){
+      return new DefaultHttpFirewall();
+    }
+  }
+  ```
+
+  - new release 1.0.x 부터 parse 대신 builder()로, <u>signWith( 알고리즘, 세가지형태시크릿키)</u>에서 <u>signWith( byte[]형만되는시크릿키, 알고리즘 )</u> 으로 변경
+  - signWith에 필요한 시크릿키는 Keys.hmacShaKeyFor('keyBytes')로 인코딩 된 키로 sign하도록 변경 ('keybytes'는 32byte보다 길어야 함)
+
+  ``` java 
+  public class JwtProvider {
+   private final Key key;
+   private final RedisService redisService;
+   private final MemberRepository memberRepository;
+  
+      public JwtProvider(@Value("${jwt.secret}") String secretKey, RedisService redisService, MemberRepository memberRepository){
+          byte[] keyBytes = Base64.getDecoder().decode(secretKey);
+          key = Keys.hmacShaKeyFor(keyBytes);
+  
+          this.redisService = redisService;
+          this.memberRepository = memberRepository;
+      }
+  }
+  ```
+
+- 유효하지 않은 token에 대해서 채팅방접속과 메시지 처리를 하지 못하는 문제 발생해 SpringSecuirty로 접근 권한과 Jwt를 인증해 Websocket 통신 보안을 강화해줌
+
+  - SecurityFilterChain에서 .antMatchers(  "/chat/**").authenticated() 으로 접근 권한을 설정
+  - stomp의 헤더에 access_token을 넣어 전송하면 stomp hadler에서 CONNECT, SEND의 경우 토큰을 검증
+
+  ```java
+  public class StompHandler implements ChannelInterceptor {
+  
+      private final JwtProvider jwtProvider;
+      @Override
+      public Message<?> preSend(Message<?> message, MessageChannel channel) {
+          StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+  		// connect 또는 send이면 유효한 토큰인지 검증
+          if(accessor.getCommand() == StompCommand.CONNECT) {
+              if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
+                  throw new AccessDeniedException("");
+          }
+          else if(accessor.getCommand() == StompCommand.SEND){
+              if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
+                  throw new AccessDeniedException("");
+          }
+  
+          return message;
+      }
+  
+  }
+  ```
 
 - JPA 양방향 연관 관계를 가진 객체들을 응답 시에 JSON 직렬화하는 과정에서 순환 참조 문제가 발생
+
   - @JsonIgnore 어노테이션을 추가해 필요하지 않는 객체는 제외
-  - [지연로딩 옵션을 선택했을 시 발생하는 문제 해결 위해 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 추가](https://github.com/HaeBangProject/HAEBANG/blob/bf32b9907e2d811f7b2a99d1e651d1f5a0a930b0/src/main/java/com/haebang/haebang/entity/Member.java#L24C63-L24C63)
-  - [복잡한 Entity의 경우 @JsonIgnore로 해결이 불가해 새로운 response 용 Dto를 만들어 필요한 정보만 넣어 반환](https://github.com/HaeBangProject/HAEBANG/blob/bf32b9907e2d811f7b2a99d1e651d1f5a0a930b0/src/main/java/com/haebang/haebang/dto/AptItemRes.java#L14)
+  - 지연로딩 옵션을 선택했을 경우 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 추가
+
+  ``` java
+  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+  @Getter
+  @NoArgsConstructor(force = true)
+  @AllArgsConstructor
+  @Builder
+  @Entity
+  public class Member implements UserDetails {// user은 ddl예약어로 member로 변경
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long userId;
+   @JsonIgnore
+   @NotNull
+   private String password;
+  // 중략
+   @JsonIgnore
+   @Builder.Default
+   @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   List<Item> items = new ArrayList<>(); 
+  // 중략
+  }
+  ```
+
+  - 복잡한 Entity의 경우 @JsonIgnore 만으로 해결이 불가해 새로운 response 용 Dto를 만들어 필요한 정보만 넣어 반환
+
+  ``` java 
+  @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+  @Data
+  public class AptItemRes {
+  @JoinColumn(name = "data")
+  AptItemReq aptItemReq;
+  List<S3File> s3Files = new ArrayList<>();
+  } 
+  ```
 
 - 연관된 Entity가 삭제/생성시 연동되지 않는 문제
-  - [bookmark 에 item과 memeber가 있어서 item 삭제시 bookmark 때문에 지워지지 않는 현상 & item 삭제시 S3File이 남아있는 현상 - item삭제시 관련된 bookmark와 S3File이 지워지도록 설정 cascade.REMOVE](https://github.com/HaeBangProject/HAEBANG/blob/bf32b9907e2d811f7b2a99d1e651d1f5a0a930b0/src/main/java/com/haebang/haebang/entity/Item.java#L52)
-  - [Apt가 자식이 없을때 삭제하기 위해 카운트를 만들어 0이 될때 Apt와 AptDocument (elastic search)를 삭제시켜줌](https://github.com/HaeBangProject/HAEBANG/blob/bf32b9907e2d811f7b2a99d1e651d1f5a0a930b0/src/main/java/com/haebang/haebang/service/AptService.java#L121)
+
+  - bookmark 에 item, memeber가 있어 item 삭제시 bookmark 때문에 지워지지 않는 현상 & item 삭제시 S3File이 남아있는 현상
+  - item삭제시 관련된 bookmark와 S3File이 지워지도록 설정 cascade = CascadeType.REMOVE, CascadeType.ALL
+
+  ``` java
+  @Builder.Default
+  @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+  List<S3File> s3Files = new ArrayList<>();
+  
+  @Builder.Default
+  @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
+  List<Bookmark> bookmarks = new ArrayList<>(); 
+  ```
+  - 매물이 존재하지 않는 아파트 데이터가 남아았고 검색어 자동완성에 뜨는 문제
+  - Apt에 Item생성/삭제시 증가/감소하는 카운트를 만들어 0이 될때 Apt와 AptDocument (elastic search)를 삭제
+
+  ``` java 
+  public boolean deleteItem(String username, Long idx){
+      Item item = itemRepository.findById(idx).orElseThrow();
+  
+        if(!item.getUsername().equals(username)) throw new CustomException(CustomErrorCode.INVALID_EDIT_USER);
+        itemRepository.deleteById(idx);
+        item.getApt().decreaseCnt();
+  
+        if(item.getApt().getCnt() > 0){
+            aptRepository.save(item.getApt());
+        }else{
+            // 더이상 존재하는 item 이없는 apt 일 경우 - db 애서 지우고, 검색에 안뜨게 elastic search 애서도 지우기
+            aptRepository.delete(item.getApt());
+            aptSearchRepository.delete(AptDocument.from(item.getApt()));
+        }
+        return true;
+    } 
+  ```
