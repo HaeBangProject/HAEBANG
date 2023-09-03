@@ -43,21 +43,12 @@ public class RoomController {
         try{
             String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
             String token = authorization!=null ?authorization.split(" ")[1] : null;
-            if (token != null && token.length() > 0 && jwtProvider.validateToken(token)) {
-                // 유효한 토큰 일때
 
-                String type = jwtProvider.getTokenType(token);
-                if (type.equals("ATK")) {// 엑세스 토큰 일떄
-                    log.info("유효한 엑세스 토큰요청");
-                    if ( jwtProvider.getValueFromToken(token) == null) {
-                        // 로그아웃되지 않은 ATK라면 정상 작동 하도록
-                        Long restTime = jwtProvider.getExpireTime(token) - new Date(System.currentTimeMillis()).getTime();
-                        if(restTime < 10*1000*60L){// 10분 이내로 남았으면 재발급 하도록 하기 위해
-                            log.info("10분 이내로 남음");
-                            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-                        }
-                    }
-                }
+            String type = jwtProvider.getTokenType(token);
+            Long restTime = jwtProvider.getExpireTime(token) - new Date(System.currentTimeMillis()).getTime();
+            if(restTime < 10*1000*60L){// 10분 이내로 남았으면 재발급 하도록 하기 위해 401
+                log.info("10분 이내로 남음");
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
         }catch (JwtException e){
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
