@@ -1,9 +1,9 @@
 #private ip
 MY_IP=$(hostname -i)
 
-NGINX_PORT='nginx port'
-PORTS=('server_port' 'server_port' 'server_port')
-SERVERS=("server_name" "server_name" "server_name")
+NGINX_PORT=8080
+PORTS=( 8081 8082 8083 )
+SERVERS=("server1" "server2" "server3")
 
 echo "도커 이미지 pull"
 docker pull haebang/haebang:jenkins
