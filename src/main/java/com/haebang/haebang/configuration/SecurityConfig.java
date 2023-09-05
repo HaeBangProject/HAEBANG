@@ -29,7 +29,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/static/css/**", "/static/js/**", "/static/img/**", "/*").permitAll()
-                .antMatchers(HttpMethod.GET,  "/chat/**").authenticated() //채팅 페이지 접근권한 설정
+                .antMatchers(HttpMethod.GET, "/chat/room").permitAll()
+                .antMatchers(HttpMethod.GET,  "/chat/rooms").authenticated() //채팅 페이지 접근권한 설정
                 .antMatchers("/main", "/map").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/apt/item/*", "/api/apt/items", "/api/apt/items?**").permitAll()
                 .antMatchers("/api/apt/item**").authenticated()
