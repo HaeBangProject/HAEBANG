@@ -248,7 +248,7 @@
 
 
 - 무중단 배포 ( 롤링 배포 )
-  - 롤링배포 방식을 위해 [스크립트]()로 3개의 서버를 차례로 배포후 health check 에서 up이면 다음 배포 진행
+  - 롤링배포 방식을 위해 [스크립트](https://github.com/HaeBangProject/HAEBANG/blob/5694f437389f620e76f97a57a0180739bc6ec2d2/deploy.sh)로 3개의 서버를 차례로 배포후 health check 에서 up이면 다음 배포 진행
   - 버전 호환을 위해 1 배포 후 up이면 나머지 서버 down 하여 트래픽이 가지 않도록 함
 
 ## Trouble Shooting
