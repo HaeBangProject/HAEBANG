@@ -240,7 +240,7 @@
 
 ### CD
 
-* 젠킨스 파이프라인을 이용해 배포 서버에서 Dockerhub를 통해 이미지를 pull받아 3대의 서버로 나눠 분산환경으로 실행되게 구현
+* 젠킨스 파이프라인을 이용해 배포 서버에서 deploy 스크립트 파일을 실행해 이미지를 pull받아 3대의 서버로 나눠 분산환경으로 실행되게 구현
   - 3개의 도커 컨테이너 서버를 nginx의 최소연결(least_conn) 방식으로 로드밸런싱
 
 - https 프로토콜 사용을 위해 aws의 ALB(application load balancer)와 ACM(AWS Certificate Manager)를 생성해 사용

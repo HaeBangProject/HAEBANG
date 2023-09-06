@@ -19,12 +19,15 @@ pipeline {
                 sed -i "s/redis_host/${redis_host}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
                 sed -i "s/redis_pw/${redis_pw}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
                 sed -i "s/elastic_host/${elastic_host}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
+                sed -i "s/s3_bucket/${s3_bucket}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/application.yml"
                 sed -i "s/admin_token/${admin_token}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
                 sed -i "s/admin_username/${admin_username}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
                 sed -i "s/admin_mail/${admin_mail}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
                 sed -i "s/admin_role/${admin_role}/g" "/var/jenkins_home/workspace/haebang/src/main/resources/data.sql"
 
+
                 """
+
             }
         }
         stage('build') {
@@ -49,6 +52,9 @@ pipeline {
                         // Push Docker image to DockerHub
                         docker.image(imageName).push()
                     }
+
+                    // Clean up unused images, volumes, and builders
+                    sh "docker system prune -f"
                 }
             }
         }
@@ -60,12 +66,8 @@ pipeline {
             steps {
                 script {
 
-                    // EC2 인스턴스로 도커 이미지받고, 컨테이너 실행
-                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE 'docker pull haebang/haebang:jenkins'"
-                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE 'docker stop server1 && docker rm server1 && docker run -d --name server1 -p 8081:8080 haebang/haebang:jenkins'"
-                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE 'docker stop server2 && docker rm server2 && docker run -d --name server2 -p 8082:8080 haebang/haebang:jenkins'"
-                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE 'docker stop server3 && docker rm server3 && docker run -d --name server3 -p 8083:8080 haebang/haebang:jenkins'"
-                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE 'docker rmi \$(docker images -f 'dangling=true' -q)'" // none images 삭제
+                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE '/home/nginx-docker/deploy.sh'"
+                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY $EC2_INSTANCE 'docker system prune -f'" //사용하지 않은 docker 오브젝트 전체 삭제
                 }
             }
         }
