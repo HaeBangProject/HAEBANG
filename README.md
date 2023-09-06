@@ -400,19 +400,19 @@
       @Override
       public Message<?> preSend(Message<?> message, MessageChannel channel) {
           StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-  		// connect 또는 send이면 유효한 토큰인지 검증
-          if(accessor.getCommand() == StompCommand.CONNECT) {
-              if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
-                  throw new AccessDeniedException("");
-          }
-          else if(accessor.getCommand() == StompCommand.SEND){
-              if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
-                  throw new AccessDeniedException("");
-          }
+          // 토큰 유효성 검사
+          validateToken(accessor, "token");
   
           return message;
       }
-  
+      private void validateToken(StompHeaderAccessor accessor, String headerName) {
+          if (accessor.getCommand() == StompCommand.CONNECT || accessor.getCommand() == StompCommand.SEND) {
+              String token = accessor.getFirstNativeHeader(headerName);
+              if (!jwtProvider.validateToken(token)) {
+                  throw new AccessDeniedException("");
+              }
+          }
+      }
   }
   ```
 
