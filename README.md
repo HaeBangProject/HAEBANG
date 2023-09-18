@@ -53,6 +53,7 @@
 
 
 
+
 ## 소개
 
 **HAEBANG**는 서울시 내 아파트 매매 정보를 제공하고 우리나라 전역의 매물 등록 및 거래 할수 있는 웹서비스를 개발하는 프로젝트입니다. <br>
@@ -115,13 +116,9 @@
 
 ## 시퀀스 다이어그램
 
-## 
-
 | [![login_diagram](https://github.com/HaeBangProject/HAEBANG/assets/59076085/474f9f7c-c200-4403-ac30-de25bd83e036)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/474f9f7c-c200-4403-ac30-de25bd83e036) | [![apt_diagram](https://github.com/HaeBangProject/HAEBANG/assets/59076085/69795092-4be2-4e59-ab3d-d36cf499ec63)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/69795092-4be2-4e59-ab3d-d36cf499ec63) | [![chat_diagram](https://github.com/HaeBangProject/HAEBANG/assets/59076085/1423830f-0f48-458d-a6ca-e41e259bc4ed)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/1423830f-0f48-458d-a6ca-e41e259bc4ed) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 로그인                                                       | 매물                                                         | 채팅                                                         |
-
-## 
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                            로그인                            |                             매물                             |                             채팅                             |
 
 ## API 명세서
 
@@ -138,16 +135,16 @@
 ## 화면 구성
 
 | [![main_haebang](https://github.com/HaeBangProject/HAEBANG/assets/59076085/17664fab-72c8-4a5c-b3a4-b7ce603bbb21)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/17664fab-72c8-4a5c-b3a4-b7ce603bbb21) | [![login_haebang](https://github.com/HaeBangProject/HAEBANG/assets/59076085/8de9e11e-f82f-4943-a255-d54f2ddffa16)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/8de9e11e-f82f-4943-a255-d54f2ddffa16) | [![haebang_1](https://github.com/HaeBangProject/HAEBANG/assets/59076085/68a06f62-4e25-4d7d-9351-1b56a850c29a)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/68a06f62-4e25-4d7d-9351-1b56a850c29a) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 메인 페이지                                                  | 로그인/회원가입                                              | 매물보기 페이지                                              |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                         메인 페이지                          |                       로그인/회원가입                        |                       매물보기 페이지                        |
 
 | [![mypage_1](https://github.com/HaeBangProject/HAEBANG/assets/59076085/54b3109d-430d-4b45-b077-a13447386334)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/54b3109d-430d-4b45-b077-a13447386334) | [![haebang_bookmark](https://github.com/HaeBangProject/HAEBANG/assets/59076085/b69c1a91-13d7-4d22-8957-c986ac37f9fb)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/b69c1a91-13d7-4d22-8957-c986ac37f9fb) | [![crud_haebang](https://github.com/HaeBangProject/HAEBANG/assets/59076085/923d88d4-a3a4-41f0-aa3c-cba9b1a1717e)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/923d88d4-a3a4-41f0-aa3c-cba9b1a1717e) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 마이 페이지->내가 작성한 글                                  | 마이페이지->북마크한 글                                      | 집 내놓기 페이지                                             |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                 마이 페이지->내가 작성한 글                  |                   마이페이지->북마크한 글                    |                       집 내놓기 페이지                       |
 
 | [![search_2](https://github.com/HaeBangProject/HAEBANG/assets/59076085/f2793768-b763-4eca-9b31-050efdfb77d5)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/f2793768-b763-4eca-9b31-050efdfb77d5) | [![chatroom_haebang](https://github.com/HaeBangProject/HAEBANG/assets/59076085/5e23ed46-2388-4f05-b680-c7773f4f413e)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/5e23ed46-2388-4f05-b680-c7773f4f413e) | [![chat_haebang](https://github.com/HaeBangProject/HAEBANG/assets/59076085/2028042b-a779-4474-8c7d-b223c123a322)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/2028042b-a779-4474-8c7d-b223c123a322) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 메인페이지-> 검색어 자동완성                                 | 문의하기 페이지                                              | 문의하기 페이지 -> 채팅                                      |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                 메인페이지-> 검색어 자동완성                 |                       문의하기 페이지                        |                   문의하기 페이지 -> 채팅                    |
 
 ## HAEBANG 회고
 
