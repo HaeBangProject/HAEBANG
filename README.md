@@ -11,6 +11,7 @@
 - [소개](#소개)
 - [개발 환경](#개발-환경)
 - [시스템 아키텍처](#시스템-아키텍처)
+- [시퀀스 다이어그램](#시퀀스-다이어그램)
 - [API 명세서](#api-명세서)
 - [프로젝트 목적](#프로젝트-목적)
 - [화면 구성](#화면-구성)
@@ -42,6 +43,8 @@
     <td align="center"><b>Backend Developer</b></td>
     <td align="center"><b>Backend Developer</b></td>
 </table>
+
+
 
 
 
@@ -109,6 +112,16 @@
 ## 시스템 아키텍처
 
 ![haebang_archi_final2](https://github.com/HaeBangProject/HAEBANG/assets/59076085/0a2c4597-08dc-4c89-b851-1bc0f2cb7645)
+
+## 시퀀스 다이어그램
+
+## 
+
+| [![login_diagram](https://github.com/HaeBangProject/HAEBANG/assets/59076085/474f9f7c-c200-4403-ac30-de25bd83e036)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/474f9f7c-c200-4403-ac30-de25bd83e036) | [![apt_diagram](https://github.com/HaeBangProject/HAEBANG/assets/59076085/69795092-4be2-4e59-ab3d-d36cf499ec63)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/69795092-4be2-4e59-ab3d-d36cf499ec63) | [![chat_diagram](https://github.com/HaeBangProject/HAEBANG/assets/59076085/1423830f-0f48-458d-a6ca-e41e259bc4ed)](https://github.com/HaeBangProject/HAEBANG/assets/59076085/1423830f-0f48-458d-a6ca-e41e259bc4ed) |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 로그인                                                       | 매물                                                         | 채팅                                                         |
+
+## 
 
 ## API 명세서
 
@@ -247,7 +260,7 @@
 
 
 - 무중단 배포 ( 롤링 배포 )
-  - 롤링배포 방식을 위해 [스크립트](https://github.com/HaeBangProject/HAEBANG/blob/5694f437389f620e76f97a57a0180739bc6ec2d2/deploy.sh)로 3개의 서버를 차례로 배포후 health check 에서 up이면 다음 배포 진행
+  - 롤링배포 방식을 위해 [스크립트]()로 3개의 서버를 차례로 배포후 health check 에서 up이면 다음 배포 진행
   - 버전 호환을 위해 1 배포 후 up이면 나머지 서버 down 하여 트래픽이 가지 않도록 함
 
 ## Trouble Shooting
@@ -399,19 +412,19 @@
       @Override
       public Message<?> preSend(Message<?> message, MessageChannel channel) {
           StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-          // 토큰 유효성 검사
-          validateToken(accessor, "token");
+  		// connect 또는 send이면 유효한 토큰인지 검증
+          if(accessor.getCommand() == StompCommand.CONNECT) {
+              if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
+                  throw new AccessDeniedException("");
+          }
+          else if(accessor.getCommand() == StompCommand.SEND){
+              if(!jwtProvider.validateToken(accessor.getFirstNativeHeader("token")))
+                  throw new AccessDeniedException("");
+          }
   
           return message;
       }
-      private void validateToken(StompHeaderAccessor accessor, String headerName) {
-          if (accessor.getCommand() == StompCommand.CONNECT || accessor.getCommand() == StompCommand.SEND) {
-              String token = accessor.getFirstNativeHeader(headerName);
-              if (!jwtProvider.validateToken(token)) {
-                  throw new AccessDeniedException("");
-              }
-          }
-      }
+  
   }
   ```
 
@@ -469,6 +482,7 @@
   @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
   List<Bookmark> bookmarks = new ArrayList<>(); 
   ```
+
   - 매물이 존재하지 않는 아파트 데이터가 남아았고 검색어 자동완성에 뜨는 문제
   - Apt에 Item생성/삭제시 증가/감소하는 카운트를 만들어 0이 될때 Apt와 AptDocument (elastic search)를 삭제
 
