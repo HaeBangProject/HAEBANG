@@ -77,7 +77,7 @@ console.log([[${list}]])
                 hideLoadImage();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                if(jqXHR.status >=400 && jqXHR.status<=500) reissue();
+                if(jqXHR.status ==401) reissue();
                 hideLoadImage();
                 //alert("실패 : "+jqXHR.responseText);
             })

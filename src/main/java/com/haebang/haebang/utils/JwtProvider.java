@@ -77,12 +77,12 @@ public class JwtProvider {
             log.info("유효하지 않은 Jwt Token");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT Token", e);
-            new CustomException(CustomErrorCode.EXPIRED_ACCESS_TOKEN);
+            throw new CustomException(CustomErrorCode.EXPIRED_ACCESS_TOKEN);
         } catch (UnsupportedJwtException e) {
             log.info("지원하지않는 JWT Token", e);
         } catch (IllegalArgumentException e) {
             log.info("토큰이 비어있는 예외", e);
-            new CustomException(CustomErrorCode.EMPTY_ACCESS_TOKEN);
+            throw new CustomException(CustomErrorCode.EMPTY_ACCESS_TOKEN);
         }
         return false;
     }

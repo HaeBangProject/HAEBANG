@@ -1,9 +1,12 @@
 package com.haebang.haebang.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,13 +23,15 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
     private final JwtProvider jwtProvider;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // authorization 비었으면 로그인 안함
-        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+        try {
+            String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        String token = resolve(authorization);
+            String token = resolve(authorization);
 
             if (token != null && token.length() > 0 && jwtProvider.validateToken(token)) {
                 // 유효한 토큰 일때
@@ -35,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 if (type.equals("ATK")) {// 엑세스 토큰 일떄
                     log.info("유효한 엑세스 토큰요청");
 
-                    if ( jwtProvider.getValueFromToken(token) == null) {
+                    if (jwtProvider.getValueFromToken(token) == null) {
                         // 로그아웃되지 않은 ATK라면 정상 작동 하도록
                         String username = jwtProvider.getUsername(token);
                         UserDetails userDetails = jwtProvider.getUserDetails(username);
@@ -46,11 +51,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                                         userDetails.getAuthorities());
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }else{log.warn("로그아웃된 ATK");}
+                    } else {
+                        log.warn("로그아웃된 ATK");
+                    }
                 }
 
             }
             filterChain.doFilter(request, response);
+        }catch (CustomException exception){
+            response.setStatus(exception.getCustomErrorCode().getCode());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"error\":\"" + exception.getMessage() + "\"}");
+            response.getWriter().flush();
+        }
     }
 
 

@@ -1,4 +1,5 @@
 package com.haebang.haebang.configuration;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.haebang.haebang.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import org.springframework.security.web.firewall.HttpFirewall;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtProvider jwtProvider;
+    private final ObjectMapper objectMapper;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,7 +45,7 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, objectMapper), UsernamePasswordAuthenticationFilter.class);
                 // UsernamePasswordAuthenticationFilter 필터를 거치기 전에 jwt필터를 거치도록 설정
         return http.build();
     }
