@@ -1,6 +1,7 @@
 package com.haebang.haebang.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.haebang.haebang.dto.ErrorDto;
 import com.haebang.haebang.exception.CustomException;
 import com.haebang.haebang.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     private final ObjectMapper objectMapper;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, CustomException {
         // authorization 비었으면 로그인 안함
         try {
             String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -62,8 +63,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             response.setStatus(exception.getCustomErrorCode().getCode());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"error\":\"" + exception.getMessage() + "\"}");
-            response.getWriter().flush();
+            ErrorDto errorDto = ErrorDto.builder()
+                    .code(exception.getCustomErrorCode().getCode())
+                    .message(exception.getMessage())
+                    .build();
+            objectMapper.writeValue(response.getWriter(), errorDto);
         }
     }
 
