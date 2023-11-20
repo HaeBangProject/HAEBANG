@@ -88,6 +88,17 @@ function reissue(){
             alert("새 로그인 필요");
         })
 }
+
+function only_user(){
+    var access_token = getCookie("ATK").substring(4);
+    var refresh_token = localStorage.getItem('RTK');
+    var username = getCookie("username").substring(9);
+    var user_id = getCookie("user_id").substring(8);
+    if(access_token.length == 0 || refresh_token.length == 0 || username.length == 0 || user_id == 0){
+        window.location.href = "/memberLogin";
+        alert("로그인이 필요합니다.")
+    }
+}
 function getCookie(name){
     var search = name +"=";
     if (document.cookie.length>0){
